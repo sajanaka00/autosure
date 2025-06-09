@@ -1,47 +1,55 @@
 // API Service
 const API_BASE_URL = 'http://localhost:3001/api';
 
-export const api = {
-  async register(userData) {
-    const response = await fetch(`${API_BASE_URL}/auth/register`, {
-      method: 'POST',
+class ApiService {
+  async makeRequest(endpoint, options = {}) {
+    const url = `${API_BASE_URL}${endpoint}`;
+    
+    const config = {
       headers: {
         'Content-Type': 'application/json',
+        ...options.headers,
       },
-      body: JSON.stringify(userData),
-    });
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.error || 'Registration failed');
+      ...options,
+    };
+
+    try {
+      const response = await fetch(url, config);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || `HTTP error! status: ${response.status}`);
+      }
+
+      return data;
+    } catch (error) {
+      console.error('API Request failed:', error);
+      throw error;
     }
-    return data;
-  },
+  }
 
   async login(credentials) {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    return this.makeRequest('/auth/login', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       body: JSON.stringify(credentials),
     });
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.error || 'Login failed');
-    }
-    return data;
-  },
+  }
+
+  async register(userData) {
+    return this.makeRequest('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(userData),
+    });
+  }
 
   async getCurrentUser(token) {
-    const response = await fetch(`${API_BASE_URL}/auth/me`, {
+    return this.makeRequest('/auth/me', {
+      method: 'GET',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.error || 'Failed to get user data');
-    }
-    return data;
   }
-};
+}
+
+export const api = new ApiService();

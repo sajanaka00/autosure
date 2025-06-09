@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Eye, EyeOff, User, Mail, Lock, Phone, AlertCircle } from 'lucide-react';
 import { api } from '../../services/api';
 import { tokenManager } from '../../utils/tokenManager';
+import '../../styles/signupForm.css';
 
 export default function SignupForm({ onSignup, onSwitchToLogin }) {
   const [formData, setFormData] = useState({

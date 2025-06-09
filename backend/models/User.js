@@ -6,12 +6,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    lowercase: true
+    lowercase: true,
+    trim: true
   },
   password: {
     type: String,
     required: true,
-    minlength: 6
+    minlength: 6,
+    select: false
   },
   firstName: {
     type: String,
@@ -31,10 +33,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ['customer', 'dealer', 'admin'],
     default: 'customer'
-  },
-  isVerified: {
-    type: Boolean,
-    default: false
   }
 }, {
   timestamps: true
@@ -42,20 +40,33 @@ const userSchema = new mongoose.Schema({
 
 // Hash password before saving
 userSchema.pre('save', async function(next) {
+  // Only hash the password if it has been modified (or is new)
   if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
+  
+  try {
+    // Hash password with cost of 12
+    const hashedPassword = await bcrypt.hash(this.password, 12);
+    this.password = hashedPassword;
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 // Compare password method
 userSchema.methods.comparePassword = async function(candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
+  try {
+    return await bcrypt.compare(candidatePassword, this.password);
+  } catch (error) {
+    throw error;
+  }
 };
 
-// Hide password in JSON responses
+// Transform output to exclude sensitive data
 userSchema.methods.toJSON = function() {
   const user = this.toObject();
   delete user.password;
+  delete user.__v;
   return user;
 };
 

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from 'lucide-react';
 import { api } from '../../services/api';
 import { tokenManager } from '../../utils/tokenManager';
+import '../../styles/loginForm.css';
 
 export default function LoginForm({ onLogin, onSwitchToSignup }) {
   const [formData, setFormData] = useState({
@@ -32,19 +33,29 @@ export default function LoginForm({ onLogin, onSwitchToSignup }) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+    
     if (!validateForm()) return;
     
     setIsLoading(true);
     setApiError('');
     
+    console.log('Attempting login with:', { email: formData.email });
+    
     try {
       const response = await api.login(formData);
+      console.log('Login response:', response);
+      
       tokenManager.setToken(response.token);
       tokenManager.setUser(response.user);
-      onLogin(response.user);
+      
+      if (onLogin) {
+        onLogin(response.user);
+      }
     } catch (error) {
-      setApiError(error.message);
+      console.error('Login error:', error);
+      setApiError(error.message || 'Login failed');
     } finally {
       setIsLoading(false);
     }
@@ -67,7 +78,7 @@ export default function LoginForm({ onLogin, onSwitchToSignup }) {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4">
+    <div className="flex items-center justify-center min-h-screen p-4 bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-gray-800 mb-2">Welcome Back</h2>
@@ -115,6 +126,11 @@ export default function LoginForm({ onLogin, onSwitchToSignup }) {
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSubmit(e);
+                  }
+                }}
                 className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${
                   errors.password ? 'border-red-500' : 'border-gray-300'
                 }`}
@@ -134,9 +150,10 @@ export default function LoginForm({ onLogin, onSwitchToSignup }) {
           </div>
 
           <button
-            type="submit"
+            type="button"
+            onClick={handleSubmit}
             disabled={isLoading}
-            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 font-medium disabled:opacity-50"
+            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? 'Logging in...' : 'Sign In'}
           </button>
