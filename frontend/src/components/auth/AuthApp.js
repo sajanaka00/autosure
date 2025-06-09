@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { api } from '../../services/api';
+import { tokenManager } from '../../utils/tokenManager';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
-import Dashboard from './Dashboard';
+import Dashboard from '../../components/dashboard/Dashboard';
 
 export default function AuthApp() {
   const [currentView, setCurrentView] = useState('login');

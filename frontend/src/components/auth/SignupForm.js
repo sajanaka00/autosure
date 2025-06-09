@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { Eye, EyeOff, User, Mail, Lock } from 'lucide-react';
+import { Eye, EyeOff, User, Mail, Lock, Phone, AlertCircle } from 'lucide-react';
+import { api } from '../../services/api';
+import { tokenManager } from '../../utils/tokenManager';
 
 export default function SignupForm({ onSignup, onSwitchToLogin }) {
   const [formData, setFormData] = useState({
@@ -54,11 +56,15 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
     setApiError('');
     
     try {
+      // Remove confirmPassword before sending to backend
       const { confirmPassword, ...userData } = formData;
       const response = await api.register(userData);
+      
       tokenManager.setToken(response.token);
       tokenManager.setUser(response.user);
-      onSignup(response.user);
+      
+      // Call the onSignup callback with the user data
+      onSignup?.(response.user);
     } catch (error) {
       setApiError(error.message);
     } finally {
@@ -73,12 +79,15 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
       [name]: value
     }));
     
+    // Clear specific field error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
         [name]: ''
       }));
     }
+    
+    // Clear API error when user makes changes
     if (apiError) setApiError('');
   };
 
@@ -92,7 +101,7 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
 
         {apiError && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center">
-            <AlertCircle className="w-5 h-5 text-red-500 mr-2" />
+            <AlertCircle className="w-5 h-5 text-red-500 mr-2 flex-shrink-0" />
             <p className="text-red-700 text-sm">{apiError}</p>
           </div>
         )}
@@ -250,9 +259,9 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
           </div>
 
           <button
-            type="submit"
+            onClick={handleSubmit}
             disabled={isLoading}
-            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 font-medium disabled:opacity-50"
+            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? 'Creating Account...' : 'Sign Up'}
           </button>

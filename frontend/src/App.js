@@ -1,5 +1,5 @@
 import React from 'react';
-import AuthApp from './components/AuthApp';
+import AuthApp from './components/auth/AuthApp';
 
 function App() {
   return (
