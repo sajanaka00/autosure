@@ -1,10 +1,49 @@
 // routes/vehicles.js
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const Vehicle = require('../models/Vehicle');
 const Category = require('../models/Category');
+const mongoose = require('mongoose');
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 
 const router = express.Router();
+
+// Configure multer for image uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadDir = 'uploads/vehicles';
+    // Create directory if it doesn't exist
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    // Generate unique filename
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  // Check if file is an image
+  if (file.mimetype.startsWith('image/')) {
+    cb(null, true);
+  } else {
+    cb(new Error('Only image files are allowed!'), false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB limit
+    files: 10 // Maximum 10 files
+  }
+});
 
 // Get all vehicles with filtering and pagination
 router.get('/', async (req, res) => {
@@ -131,8 +170,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Create new vehicle
-router.post('/', async (req, res) => {
+// Create new vehicle with image upload
+router.post('/', upload.array('images', 10), async (req, res) => {
   try {
     // Validate required fields
     const requiredFields = [
@@ -143,6 +182,14 @@ router.post('/', async (req, res) => {
 
     const missingFields = requiredFields.filter(field => !req.body[field]);
     if (missingFields.length > 0) {
+      // Clean up uploaded files if validation fails
+      if (req.files) {
+        req.files.forEach(file => {
+          fs.unlink(file.path, (err) => {
+            if (err) console.error('Error deleting file:', err);
+          });
+        });
+      }
       return res.status(400).json({
         success: false,
         error: 'Missing required fields',
@@ -156,6 +203,14 @@ router.post('/', async (req, res) => {
     });
     
     if (existingVehicle) {
+      // Clean up uploaded files
+      if (req.files) {
+        req.files.forEach(file => {
+          fs.unlink(file.path, (err) => {
+            if (err) console.error('Error deleting file:', err);
+          });
+        });
+      }
       return res.status(400).json({
         success: false,
         error: 'Vehicle with this number already exists'
@@ -168,6 +223,14 @@ router.post('/', async (req, res) => {
       // It's an ObjectId
       const category = await Category.findById(req.body.category);
       if (!category) {
+        // Clean up uploaded files
+        if (req.files) {
+          req.files.forEach(file => {
+            fs.unlink(file.path, (err) => {
+              if (err) console.error('Error deleting file:', err);
+            });
+          });
+        }
         return res.status(400).json({
           success: false,
           error: 'Invalid category ID'
@@ -178,6 +241,14 @@ router.post('/', async (req, res) => {
       // It's a slug
       const category = await Category.findOne({ slug: req.body.category });
       if (!category) {
+        // Clean up uploaded files
+        if (req.files) {
+          req.files.forEach(file => {
+            fs.unlink(file.path, (err) => {
+              if (err) console.error('Error deleting file:', err);
+            });
+          });
+        }
         return res.status(400).json({
           success: false,
           error: 'Category not found with slug: ' + req.body.category
@@ -186,8 +257,49 @@ router.post('/', async (req, res) => {
       categoryId = category._id;
     }
 
-    // Create vehicle with the resolved category ID
-    const vehicleData = { ...req.body, category: categoryId };
+    // Process uploaded images
+    let images = [];
+    if (req.files && req.files.length > 0) {
+      // Parse image metadata from request body if present
+      const imageMetadata = req.body.imageMetadata ? JSON.parse(req.body.imageMetadata) : [];
+      
+      images = req.files.map((file, index) => {
+        const metadata = imageMetadata[index] || {};
+        return {
+          url: `/uploads/vehicles/${file.filename}`,
+          filename: file.filename,
+          originalName: file.originalname,
+          size: file.size,
+          isPrimary: metadata.isPrimary || index === 0, // First image is primary by default
+          caption: metadata.caption || ''
+        };
+      });
+
+      // Ensure only one primary image
+      const primaryImages = images.filter(img => img.isPrimary);
+      if (primaryImages.length === 0) {
+        images[0].isPrimary = true;
+      } else if (primaryImages.length > 1) {
+        images.forEach((img, index) => {
+          img.isPrimary = index === 0;
+        });
+      }
+    }
+
+    // Parse features if it's a string
+    let features = req.body.features;
+    if (typeof features === 'string') {
+      features = features.split(',').map(feature => feature.trim()).filter(Boolean);
+    }
+
+    // Create vehicle with the resolved category ID and processed images
+    const vehicleData = { 
+      ...req.body, 
+      category: categoryId,
+      images: images,
+      features: features || []
+    };
+
     const vehicle = new Vehicle(vehicleData);
     await vehicle.save();
 
@@ -200,6 +312,16 @@ router.post('/', async (req, res) => {
     });
   } catch (error) {
     console.error('Create vehicle error:', error);
+    
+    // Clean up uploaded files on error
+    if (req.files) {
+      req.files.forEach(file => {
+        fs.unlink(file.path, (err) => {
+          if (err) console.error('Error deleting file:', err);
+        });
+      });
+    }
+
     if (error.name === 'ValidationError') {
       return res.status(400).json({ 
         success: false,
@@ -221,12 +343,20 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Update vehicle by ID
-router.put('/:id', async (req, res) => {
+// Update vehicle by ID with image upload
+router.put('/:id', upload.array('images', 10), async (req, res) => {
   try {
     const vehicle = await Vehicle.findById(req.params.id);
 
     if (!vehicle) {
+      // Clean up uploaded files
+      if (req.files) {
+        req.files.forEach(file => {
+          fs.unlink(file.path, (err) => {
+            if (err) console.error('Error deleting file:', err);
+          });
+        });
+      }
       return res.status(404).json({ 
         success: false, 
         error: 'Vehicle not found' 
@@ -237,6 +367,14 @@ router.put('/:id', async (req, res) => {
     if (req.body.category) {
       const category = await Category.findById(req.body.category);
       if (!category) {
+        // Clean up uploaded files
+        if (req.files) {
+          req.files.forEach(file => {
+            fs.unlink(file.path, (err) => {
+              if (err) console.error('Error deleting file:', err);
+            });
+          });
+        }
         return res.status(400).json({
           success: false,
           error: 'Invalid category ID'
@@ -244,9 +382,65 @@ router.put('/:id', async (req, res) => {
       }
     }
 
+    // Handle image updates
+    let updateData = { ...req.body };
+    
+    if (req.files && req.files.length > 0) {
+      // Process new uploaded images
+      const imageMetadata = req.body.imageMetadata ? JSON.parse(req.body.imageMetadata) : [];
+      
+      const newImages = req.files.map((file, index) => {
+        const metadata = imageMetadata[index] || {};
+        return {
+          url: `/uploads/vehicles/${file.filename}`,
+          filename: file.filename,
+          originalName: file.originalname,
+          size: file.size,
+          isPrimary: metadata.isPrimary || false,
+          caption: metadata.caption || ''
+        };
+      });
+
+      // Handle existing images and image replacement logic
+      if (req.body.replaceImages === 'true') {
+        // Delete old image files
+        vehicle.images.forEach(image => {
+          if (image.filename) {
+            const filePath = path.join('uploads/vehicles', image.filename);
+            fs.unlink(filePath, (err) => {
+              if (err) console.error('Error deleting old file:', err);
+            });
+          }
+        });
+        
+        // Replace with new images
+        updateData.images = newImages;
+      } else {
+        // Append new images to existing ones
+        updateData.images = [...vehicle.images, ...newImages];
+      }
+
+      // Ensure only one primary image
+      if (updateData.images.length > 0) {
+        const primaryImages = updateData.images.filter(img => img.isPrimary);
+        if (primaryImages.length === 0) {
+          updateData.images[0].isPrimary = true;
+        } else if (primaryImages.length > 1) {
+          updateData.images.forEach((img, index) => {
+            img.isPrimary = index === 0;
+          });
+        }
+      }
+    }
+
+    // Parse features if it's a string
+    if (updateData.features && typeof updateData.features === 'string') {
+      updateData.features = updateData.features.split(',').map(feature => feature.trim()).filter(Boolean);
+    }
+
     const updatedVehicle = await Vehicle.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       { new: true, runValidators: true }
     ).populate('category', 'name slug');
 
@@ -257,6 +451,16 @@ router.put('/:id', async (req, res) => {
     });
   } catch (error) {
     console.error('Update vehicle error:', error);
+    
+    // Clean up uploaded files on error
+    if (req.files) {
+      req.files.forEach(file => {
+        fs.unlink(file.path, (err) => {
+          if (err) console.error('Error deleting file:', err);
+        });
+      });
+    }
+
     if (error.name === 'ValidationError') {
       return res.status(400).json({ 
         success: false,
@@ -290,6 +494,18 @@ router.delete('/:id', async (req, res) => {
       });
     }
 
+    // Delete associated image files
+    if (vehicle.images && vehicle.images.length > 0) {
+      vehicle.images.forEach(image => {
+        if (image.filename) {
+          const filePath = path.join('uploads/vehicles', image.filename);
+          fs.unlink(filePath, (err) => {
+            if (err) console.error('Error deleting file:', err);
+          });
+        }
+      });
+    }
+
     await Vehicle.findByIdAndDelete(req.params.id);
 
     res.json({ 
@@ -307,6 +523,62 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ 
       success: false, 
       error: 'Failed to delete vehicle',
+      details: error.message 
+    });
+  }
+});
+
+// Delete specific image from vehicle
+router.delete('/:id/images/:imageIndex', async (req, res) => {
+  try {
+    const { id, imageIndex } = req.params;
+    const vehicle = await Vehicle.findById(id);
+
+    if (!vehicle) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Vehicle not found' 
+      });
+    }
+
+    const index = parseInt(imageIndex);
+    if (index < 0 || index >= vehicle.images.length) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid image index'
+      });
+    }
+
+    const imageToDelete = vehicle.images[index];
+    
+    // Delete the physical file
+    if (imageToDelete.filename) {
+      const filePath = path.join('uploads/vehicles', imageToDelete.filename);
+      fs.unlink(filePath, (err) => {
+        if (err) console.error('Error deleting file:', err);
+      });
+    }
+
+    // Remove from array
+    vehicle.images.splice(index, 1);
+
+    // If the deleted image was primary and there are other images, make the first one primary
+    if (imageToDelete.isPrimary && vehicle.images.length > 0) {
+      vehicle.images[0].isPrimary = true;
+    }
+
+    await vehicle.save();
+
+    res.json({
+      success: true,
+      message: 'Image deleted successfully',
+      vehicle
+    });
+  } catch (error) {
+    console.error('Delete image error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to delete image',
       details: error.message 
     });
   }
