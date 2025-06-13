@@ -6,7 +6,7 @@ import MyCars from '../dashboard/MyCars';
 import AddCar from '../dashboard/AddCar';
 import Orders from '../dashboard/Orders';
 import MyOrders from '../dashboard/MyOrders';
-import '../../styles/dashboard.css';
+// import '../../styles/dashboard.css';
 
 export default function Dashboard({ user, onLogout }) {
   const [activeTab, setActiveTab] = useState('home');
