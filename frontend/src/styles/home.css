@@ -1,182 +1,416 @@
-/* home.css */
-
-.search-bar-container {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
+/* Main wrapper with background */
+.filter-bar-wrapper {
   position: relative;
+  width: 100%;
+  min-height: 100vh;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+}
+
+/* Background image section */
+.image-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: -2;
+}
+
+.image-background img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Overlay for better contrast */
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(49, 49, 49, 0.5);
+  z-index: -1;
+}
+
+/* Container for the filter bar */
+.filter-bar-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
   align-items: center;
+  justify-content: center;
   height: 100vh;
 }
 
-.search-bar {
+/* Filter bar styling */
+.filter-bar {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
   display: flex;
   align-items: center;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(20px);
 }
 
+/* Individual dropdown section */
 .dropdown-section {
   position: relative;
   flex: 1;
+  min-width: 160px;
 }
 
+/* Dropdown button */
 .dropdown-button {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 48px;
-  padding: 0 1rem;
+  padding: 18px 20px;
   background: transparent;
   border: none;
-  color: #2d3748;
-  font-size: 0.9rem;
-  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-.dropdown-button:hover,
-.dropdown-button:focus {
-  background: rgba(0, 0, 0, 0.05);
-  outline: none;
+.dropdown-button:hover {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
 }
 
 .dropdown-text {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #2d3748;
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 15px;
+  letter-spacing: -0.025em;
 }
 
 .dropdown-icon {
-  width: 16px;
-  height: 16px;
-  transition: transform 0.2s ease;
-  color: #718096;
+  width: 18px;
+  height: 18px;
+  color: #64748b;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dropdown-icon.rotated {
   transform: rotate(180deg);
+  color: #3b82f6;
 }
 
-.dropdown-divider {
-  position: absolute;
-  right: 0;
-  top: 8px;
-  bottom: 8px;
+/* Divider between sections */
+.filter-divider {
   width: 1px;
-  background: #e2e8f0;
+  height: 40px;
+  background: linear-gradient(to bottom, transparent, #e2e8f0, transparent);
+  opacity: 0.7;
 }
 
+/* Dropdown menu */
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 4px);
+  top: calc(100% + 8px);
   left: 0;
   right: 0;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  z-index: 10;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  z-index: 50;
   overflow: hidden;
+  animation: slideDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
 }
 
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Dropdown options */
 .dropdown-option {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 14px 20px;
+  text-align: left;
   background: transparent;
   border: none;
-  text-align: left;
-  font-size: 0.9rem;
-  color: #2d3748;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  letter-spacing: -0.025em;
 }
 
 .dropdown-option:hover {
-  background: #f7fafc;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  color: #1d4ed8;
+  transform: translateX(2px);
 }
 
 .dropdown-option:first-child {
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  border-radius: 12px 12px 0 0;
 }
 
 .dropdown-option:last-child {
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
+  border-radius: 0 0 12px 12px;
 }
 
-.search-btn {
+/* Price section */
+.price-section {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  padding: 18px 20px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.price-label {
+  font-weight: 600;
+  color: #475569;
+  margin-right: 12px;
+  font-size: 15px;
+  letter-spacing: -0.025em;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.price-dropdown {
+  position: relative;
+  flex: 1;
+}
+
+.price-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: transparent;
   border: none;
-  color: #fff;
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-.search-btn:hover {
-  opacity: 0.9;
+.price-button:hover .price-text {
+  color: #3b82f6;
 }
 
-.search-btn:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.5);
+.price-text {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 15px;
+  letter-spacing: -0.025em;
+  transition: color 0.2s ease;
 }
 
+.price-icon {
+  width: 18px;
+  height: 18px;
+  color: #64748b;
+  margin-left: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.price-icon.rotated {
+  transform: rotate(180deg);
+  color: #3b82f6;
+}
+
+.price-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  z-index: 50;
+  overflow: hidden;
+  animation: slideDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+}
+
+.price-option {
+  width: 100%;
+  padding: 14px 16px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  letter-spacing: -0.025em;
+}
+
+.price-option:hover {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  color: #1d4ed8;
+  transform: translateX(2px);
+}
+
+.price-option:first-child {
+  border-radius: 12px 12px 0 0;
+}
+
+.price-option:last-child {
+  border-radius: 0 0 12px 12px;
+}
+
+/* Search section */
+.search-section {
+  padding: 5px 5px 5px 15px;
+}
+
+.search-button {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: #ffffff;
+  padding: 14px 30px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.3);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  letter-spacing: -0.025em;
+}
+
+.search-button:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px 0 rgba(59, 130, 246, 0.4);
+}
+
+.search-button:active {
+  transform: translateY(0);
+}
+
+.search-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Overlay */
 .dropdown-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 5;
+  z-index: 40;
+  background: rgba(0, 0, 0, 0.02);
+  backdrop-filter: blur(2px);
 }
 
-/* Responsive Design */
+/* Content section - for ExploreAllVehicles */
+.explore-vehicles-container {
+  position: relative;
+  z-index: 1;
+  background: #ffffff;
+  margin-top: 0;
+  padding: 60px 20px;
+}
+
+/* Responsive design */
 @media (max-width: 768px) {
-  .search-bar {
+  .filter-bar-wrapper {
+    padding: 0;
+  }
+  
+  .filter-bar-container {
+    padding: 16px;
+  }
+  
+  .filter-bar {
     flex-direction: column;
+    align-items: stretch;
     border-radius: 12px;
   }
-
-  .dropdown-section {
+  
+  .filter-divider {
+    width: calc(100% - 40px);
+    height: 1px;
+    margin: 0 20px;
+    background: linear-gradient(to right, transparent, #e2e8f0, transparent);
+  }
+  
+  .dropdown-section,
+  .price-section {
+    min-width: auto;
     width: 100%;
   }
-
-  .dropdown-button {
-    border-bottom: 1px solid #e2e8f0;
+  
+  .search-section {
+    padding: 20px;
+    padding-top: 12px;
   }
-
-  .dropdown-section:last-of-type .dropdown-button {
-    border-bottom: none;
-  }
-
-  .dropdown-divider {
-    display: none;
-  }
-
-  .search-btn {
+  
+  .search-button {
     width: 100%;
-    border-radius: 0 0 12px 12px;
+    justify-content: center;
+    padding: 18px 28px;
+  }
+  
+  .explore-vehicles-container {
+    padding: 40px 16px;
   }
 }
 
-/* Full page background image */
-body {
-  background-image: url('../assets/images/home-bg.png'); /* ✅ Adjust path based on your setup */
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  margin: 0;
-  font-family: sans-serif;
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+  .filter-bar {
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .dropdown-text,
+  .price-text {
+    color: #f1f5f9;
+  }
+  
+  .price-label {
+    color: #cbd5e1;
+  }
+  
+  .dropdown-button:hover {
+    background: linear-gradient(135deg, #334155 0%, #475569 100%);
+  }
+  
+  .dropdown-menu,
+  .price-menu {
+    background: #334155;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .dropdown-option,
+  .price-option {
+    color: #e2e8f0;
+  }
+  
+  .dropdown-option:hover,
+  .price-option:hover {
+    background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+    color: #ffffff;
+  }
 }
