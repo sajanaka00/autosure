@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Gauge, Fuel, Settings, Bookmark } from 'lucide-react';
 import TransmissionImg from '../../assets/images/vectors/transmission.png'
 import MileageImg from '../../assets/images/vectors/mileage.png'
@@ -6,9 +7,15 @@ import FuelImg from '../../assets/images/vectors/fuel.png'
 import '../../styles/explore-all-vehicles.css';
 
 export default function ExploreAllVehicles() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('Recent Cars');
 
   const tabs = ['Recent Cars', 'Featured Cars', 'Popular Cars'];
+
+  const navigateToCarDetail = (carId) => {
+    console.log('Navigating to car:', carId); // Debug log
+    navigate(`/car-listing/${carId}`);
+  };
 
   // Organized car data by category
   const allCarData = {
@@ -203,7 +210,11 @@ export default function ExploreAllVehicles() {
   const currentCars = allCarData[activeTab] || [];
 
   const CarCard = ({ car }) => (
-    <div className="car-card">
+    <div 
+      className="car-card" 
+      onClick={() => navigateToCarDetail(car.id)}
+      style={{ cursor: 'pointer' }} // Make it clear it's clickable
+    >
       {/* Image Container */}
       <div className="car-image-container">
         <img 
@@ -220,7 +231,13 @@ export default function ExploreAllVehicles() {
         )}
         
         {/* Bookmark Icon */}
-        <button className="bookmark-button">
+        <button 
+          className="bookmark-button"
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent card click when bookmarking
+            console.log(`Bookmarked car: ${car.title}`);
+          }}
+        >
           <Bookmark className="bookmark-icon" />
         </button>
       </div>
@@ -238,7 +255,7 @@ export default function ExploreAllVehicles() {
           <div className="spec-item">
             <img 
               src={MileageImg}
-              alt="Fuel"
+              alt="Mileage"
               className="spec-icon mileage-icon"
             />
             <span className="spec-text">{car.mileage}</span>
@@ -264,7 +281,13 @@ export default function ExploreAllVehicles() {
         {/* Price and View Details */}
         <div className="car-footer">
           <span className="car-price">{car.price}</span>
-          <button className="view-details-button">
+          <button 
+            className="view-details-button"
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent card click when clicking button
+              navigateToCarDetail(car.id);
+            }}
+          >
             View Details
             <ArrowRight className="arrow-icon" />
           </button>
