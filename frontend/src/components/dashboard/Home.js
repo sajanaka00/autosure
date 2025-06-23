@@ -1,11 +1,29 @@
 import React, { useState } from 'react';
-import { ChevronDown, Search } from 'lucide-react';
-import backgroundImage from '../../assets/images/home-bg.jpg'; 
+import { ChevronDown, Search, MessageCircle } from 'lucide-react';
+import backgroundImage from '../../assets/images/home-bg4.jpg'; 
+import whatsappIcon from '../../assets/images/vectors/whatsapp.png';
 import ExploreAllVehicles from '../dashboard/ExploreAllVehicles'
 import '../../styles/home.css';
 
 export default function FilterBar() {
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [showWhatsAppCard, setShowWhatsAppCard] = useState(false);
+
+  // WhatsApp configuration for different services
+  const whatsappConfig = {
+    lease: {
+      phoneNumber: '+94773658048',
+      message: 'Hello! I am interested in vehicle leasing options. Can you help me with more information?'
+    },
+    fleet: {
+      phoneNumber: '+94778480921',
+      message: 'Hello! I am interested in fleet management services. Can you help me with more information?'
+    },
+    personal: {
+      phoneNumber: '+1234567892',
+      message: 'Hello! I am interested in purchasing a personal vehicle. Can you help me with more information?'
+    }
+  };
 
   const dropdownOptions = {
     makes: ['Any Makes', 'Toyota', 'Honda', 'Ford', 'BMW', 'Mercedes', 'Audi', 'Volkswagen', 'Nissan', 'Hyundai'],
@@ -29,6 +47,51 @@ export default function FilterBar() {
       [dropdownKey]: option
     }));
     setActiveDropdown(null);
+  };
+
+  // WhatsApp functionality
+  const openWhatsApp = (serviceType) => {
+    const config = whatsappConfig[serviceType];
+    
+    // Create personalized message based on current filters and service type
+    let personalizedMessage = config.message;
+    
+    if (serviceType === 'personal' && (selectedValues.makes !== 'Any Makes' || selectedValues.models !== 'Any Models' || selectedValues.prices !== 'All Prices')) {
+      personalizedMessage = `Hello! I am interested in purchasing a personal vehicle.`;
+      
+      if (selectedValues.makes !== 'Any Makes') {
+        personalizedMessage += ` I'm looking for ${selectedValues.makes}`;
+      }
+      
+      if (selectedValues.models !== 'Any Models') {
+        personalizedMessage += ` ${selectedValues.models}`;
+      }
+      
+      if (selectedValues.prices !== 'All Prices') {
+        personalizedMessage += ` in the ${selectedValues.prices} range`;
+      }
+      
+      personalizedMessage += `. Can you help me with more information?`;
+    }
+
+    // Format phone number (remove any non-digits except +)
+    const formattedNumber = config.phoneNumber.replace(/[^\d+]/g, '');
+    
+    // Encode the message for URL
+    const encodedMessage = encodeURIComponent(personalizedMessage);
+    
+    // Create WhatsApp URL
+    const whatsappURL = `https://wa.me/${formattedNumber}?text=${encodedMessage}`;
+    
+    // Open WhatsApp in new tab/window
+    window.open(whatsappURL, '_blank');
+    
+    // Close the card
+    setShowWhatsAppCard(false);
+  };
+
+  const toggleWhatsAppCard = () => {
+    setShowWhatsAppCard(!showWhatsAppCard);
   };
 
   const DropdownSection = ({ dropdownKey, options, label }) => (
@@ -138,6 +201,74 @@ export default function FilterBar() {
       </div>
 
       <ExploreAllVehicles />
+
+      {/* Floating WhatsApp Button */}
+      <div 
+        className="whatsapp-float-button"
+        onClick={toggleWhatsAppCard}
+        title="Chat with us on WhatsApp"
+      >
+        <img 
+          src={whatsappIcon} 
+          alt="WhatsApp" 
+          className="whatsapp-float-icon"
+        />
+      </div>
+
+      {/* WhatsApp Service Selection Card */}
+      {showWhatsAppCard && (
+        <>
+          <div 
+            className="whatsapp-card-overlay"
+            onClick={() => setShowWhatsAppCard(false)}
+          />
+          <div className="whatsapp-service-card">
+            <div className="whatsapp-card-header">
+              <h3>How can we help you?</h3>
+              <button 
+                className="whatsapp-card-close"
+                onClick={() => setShowWhatsAppCard(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div className="whatsapp-card-content">
+              <button 
+                className="whatsapp-service-option"
+                onClick={() => openWhatsApp('lease')}
+              >
+                <div className="service-icon">🏦</div>
+                <div className="service-text">
+                  <div className="service-title">Vehicle Lease</div>
+                  <div className="service-description">Flexible leasing options for your needs</div>
+                </div>
+              </button>
+              
+              <button 
+                className="whatsapp-service-option"
+                onClick={() => openWhatsApp('fleet')}
+              >
+                <div className="service-icon">🚛</div>
+                <div className="service-text">
+                  <div className="service-title">Fleet Management</div>
+                  <div className="service-description">Comprehensive fleet solutions for businesses</div>
+                </div>
+              </button>
+              
+              <button 
+                className="whatsapp-service-option"
+                onClick={() => openWhatsApp('personal')}
+              >
+                <div className="service-icon">🚗</div>
+                <div className="service-text">
+                  <div className="service-title">Personal Vehicle</div>
+                  <div className="service-description">Find your perfect personal vehicle</div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
