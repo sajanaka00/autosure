@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Heart, Share2, MessageCircle, Star, MapPin, Phone, Calendar, Gauge, Fuel, Users, Palette, Settings, Car, ChevronLeft, ChevronRight, FileText, Check } from 'lucide-react';
 import '../../styles/car-listing.css';
+import Footer from '../common/Footer';
 
 const CarListing = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -113,6 +114,26 @@ const CarListing = () => {
               <p>{carData.description}</p>
             </div>
             <div className="price-info">
+              {/* Action buttons moved here - above the price */}
+              <div className="action-buttons">
+                <button className="action-button">
+                  <Share2 size={16} />
+                  <span>Share</span>
+                </button>
+                <button className="action-button">
+                  <Heart size={16} />
+                  <span>Save</span>
+                </button>
+                <button className="action-button">
+                  <MessageCircle size={16} />
+                  <span>Compare</span>
+                </button>
+                <button className="action-button">
+                  Print
+                </button>
+              </div>
+              
+              {/* Price comes after action buttons */}
               <div className="price">{carData.price}</div>
               <div className="price-label">Make An Offer Price</div>
             </div>
@@ -135,24 +156,6 @@ const CarListing = () => {
               <Fuel size={16} />
               <span>{carData.fuelType}</span>
             </div>
-          </div>
-
-          <div className="action-buttons">
-            <button className="action-button">
-              <Share2 size={16} />
-              <span>Share</span>
-            </button>
-            <button className="action-button">
-              <Heart size={16} />
-              <span>Save</span>
-            </button>
-            <button className="action-button">
-              <MessageCircle size={16} />
-              <span>Compare</span>
-            </button>
-            <button className="action-button">
-              Print
-            </button>
           </div>
         </div>
 
@@ -312,7 +315,240 @@ const CarListing = () => {
             ))}
           </div>
         </div>
+
+        {/* Reviews Section */}
+        <div className="reviews-section">
+          <h2 className="reviews-title">Reviews</h2>
+          
+          <div className="reviews-content">
+            <div className="reviews-summary">
+              <div className="overall-rating">
+                <div className="rating-circle">
+                  <span className="rating-number">4.5</span>
+                  <span className="rating-label">Out of 5</span>
+                  <span className="overall-label">Overall Rating</span>
+                </div>
+              </div>
+              
+              <div className="rating-breakdown">
+                <div className="rating-categories">
+                  <div className="rating-row">
+                    <div className="category-info">
+                      <span className="category-name">Comfort</span>
+                      <span className="category-status">Perfect</span>
+                    </div>
+                    <div className="rating-stars">
+                      <Star className="star filled" />
+                      <span className="rating-value">5.0</span>
+                    </div>
+                  </div>
+                  
+                  <div className="rating-row">
+                    <div className="category-info">
+                      <span className="category-name">Exterior Styling</span>
+                      <span className="category-status">Perfect</span>
+                    </div>
+                    <div className="rating-stars">
+                      <Star className="star filled" />
+                      <span className="rating-value">5.0</span>
+                    </div>
+                  </div>
+                  
+                  <div className="rating-row">
+                    <div className="category-info">
+                      <span className="category-name">Performance</span>
+                      <span className="category-status">Perfect</span>
+                    </div>
+                    <div className="rating-stars">
+                      <Star className="star filled" />
+                      <span className="rating-value">5.0</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="rating-categories">
+                  <div className="rating-row">
+                    <div className="category-info">
+                      <span className="category-name">Interior Design</span>
+                      <span className="category-status">Good</span>
+                    </div>
+                    <div className="rating-stars">
+                      <Star className="star filled" />
+                      <span className="rating-value">4.5</span>
+                    </div>
+                  </div>
+                  
+                  <div className="rating-row">
+                    <div className="category-info">
+                      <span className="category-name">Value For The Money</span>
+                      <span className="category-status">Perfect</span>
+                    </div>
+                    <div className="rating-stars">
+                      <Star className="star filled" />
+                      <span className="rating-value">5.0</span>
+                    </div>
+                  </div>
+                  
+                  <div className="rating-row">
+                    <div className="category-info">
+                      <span className="category-name">Reliability</span>
+                      <span className="category-status">Good</span>
+                    </div>
+                    <div className="rating-stars">
+                      <Star className="star filled" />
+                      <span className="rating-value">4.5</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="reviews-count">
+              <h3>2 Reviews</h3>
+            </div>
+          </div>
+          
+          <div className="individual-reviews">
+            <div className="review-item">
+              <div className="review-header">
+                <div className="reviewer-avatar">D</div>
+                <div className="reviewer-info">
+                  <span className="reviewer-name">Demo</span>
+                  <span className="review-date">November 30, 2023</span>
+                </div>
+              </div>
+              <div className="review-rating">
+                {[...Array(4)].map((_, i) => (
+                  <Star key={i} className="star filled" />
+                ))}
+                <Star className="star empty" />
+                <span className="review-score">4.7</span>
+              </div>
+              <p className="review-text">
+                Etiam sit amet ex pharetra, venenatis ante vehicula, gravida sapien. Fusce eleifend vulputate nibh, non cursus augue placerat pellentesque. Sed venenatis risus nec felis mollis.
+              </p>
+            </div>
+            
+            <div className="review-item">
+              <div className="review-header">
+                <div className="reviewer-avatar">D</div>
+                <div className="reviewer-info">
+                  <span className="reviewer-name">Demo</span>
+                  <span className="review-date">December 16, 2023</span>
+                </div>
+              </div>
+              <div className="review-rating">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="star filled" />
+                ))}
+                <span className="review-score">5.0</span>
+              </div>
+              <p className="review-text">qweqeqeq</p>
+            </div>
+          </div>
+          
+          <div className="add-review-section">
+            <h3 className="add-review-title">Add a review</h3>
+            
+            <div className="review-form">
+              <div className="rating-inputs">
+                <div className="rating-input-row">
+                  <div className="rating-input-group">
+                    <label>Comfort</label>
+                    <div className="star-input">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="star-input-item" />
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="rating-input-group">
+                    <label>Interior Design</label>
+                    <div className="star-input">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="star-input-item" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="rating-input-row">
+                  <div className="rating-input-group">
+                    <label>Exterior Styling</label>
+                    <div className="star-input">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="star-input-item" />
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="rating-input-group">
+                    <label>Value For The Money</label>
+                    <div className="star-input">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="star-input-item" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="rating-input-row">
+                  <div className="rating-input-group">
+                    <label>Performance</label>
+                    <div className="star-input">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="star-input-item" />
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="rating-input-group">
+                    <label>Reliability</label>
+                    <div className="star-input">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="star-input-item" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="form-inputs">
+                <div className="input-row">
+                  <input 
+                    type="text" 
+                    placeholder="Name"
+                    className="form-input"
+                  />
+                  <input 
+                    type="email" 
+                    placeholder="Email"
+                    className="form-input"
+                  />
+                </div>
+                
+                <div className="checkbox-row">
+                  <input type="checkbox" id="save-info" />
+                  <label htmlFor="save-info">Save my name, email, and website in this browser for the next time I comment.</label>
+                </div>
+                
+                <textarea 
+                  placeholder="Review"
+                  className="review-textarea"
+                  rows="4"
+                ></textarea>
+                
+                <button className="submit-review-btn">
+                  Submit Review
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
       </div>
+        
+      <Footer/>
     </div>
   );
 };
