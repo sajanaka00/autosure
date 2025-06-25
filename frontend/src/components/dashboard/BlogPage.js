@@ -1,7 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../../styles/blog.css';
 
 const BlogPage = () => {
+  const navigate = useNavigate();
+
   const blogPosts = [
     {
       id: 1,
@@ -77,6 +80,10 @@ const BlogPage = () => {
     }
   ];
 
+  const handleBlogClick = (blogId) => {
+    navigate(`/blog/${blogId}`);
+  };
+
   return (
     <div className="blog-container">
       <div className="breadcrumb">
@@ -89,7 +96,12 @@ const BlogPage = () => {
       
       <div className="blog-grid">
         {blogPosts.map((post) => (
-          <article key={post.id} className="blog-card">
+          <article 
+            key={post.id} 
+            className="blog-card"
+            onClick={() => handleBlogClick(post.id)}
+            style={{ cursor: 'pointer' }}
+          >
             <div className="blog-card-image">
               <img src={post.image} alt={post.title} />
               <span className="category-tag">{post.category}</span>

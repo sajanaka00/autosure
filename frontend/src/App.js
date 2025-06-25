@@ -4,6 +4,7 @@ import AuthApp from './components/auth/AuthApp';
 import ExploreAllVehicles from './components/dashboard/ExploreAllVehicles';
 import CarListing from './components/dashboard/CarListing';
 import BlogPage from './components/dashboard/BlogPage';
+import BlogDetailPage from './components/dashboard/BlogDetailPage';
 
 function App() {
   return (  
@@ -20,7 +21,9 @@ function App() {
           
           {/* Blog routes */}
           <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:blogId" element={<BlogDetailPage />} />
           <Route path="/news" element={<BlogPage />} />
+          <Route path="/news/:newsId" element={<BlogDetailPage />} />
           
           {/* Fallback route */}
           <Route path="*" element={<AuthApp />} />
