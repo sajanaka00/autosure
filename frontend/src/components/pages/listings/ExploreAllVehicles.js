@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Gauge, Fuel, Settings, Bookmark } from 'lucide-react';
-import TransmissionImg from '../../assets/images/vectors/transmission.png'
-import MileageImg from '../../assets/images/vectors/mileage.png'
-import FuelImg from '../../assets/images/vectors/fuel.png'
-import '../../styles/explore-all-vehicles.css';
+import { ArrowRight, Bookmark } from 'lucide-react';
+import TransmissionImg from '../../../assets/images/vectors/transmission.png'
+import MileageImg from '../../../assets/images/vectors/mileage.png'
+import FuelImg from '../../../assets/images/vectors/fuel.png'
+import '../../../styles/explore-all-vehicles.css';
 
 export default function ExploreAllVehicles() {
   const navigate = useNavigate();

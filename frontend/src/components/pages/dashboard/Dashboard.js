@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import Navbar from '../common/Navbar';
+import Navbar from '../../common/Navbar';
 import Home from '../dashboard/Home';
-import BrowseCars from '../dashboard/BrowseCars';
+import BrowseCars from '../listings/BrowseCars';
 import MyCars from '../dashboard/MyCars';
 import AddCar from '../dashboard/AddCar';
 import Orders from '../dashboard/Orders';

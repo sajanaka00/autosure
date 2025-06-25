@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { api } from '../../services/api'; // Adjust path if needed
-import '../../styles/add-car.css';
+import { api } from '../../../services/api'; // Adjust path if needed
+import '../../../styles/add-car.css';
 
 export default function AddCar({ user }) {
   const [formData, setFormData] = useState({

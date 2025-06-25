@@ -1,5 +1,5 @@
 import { Car } from 'lucide-react';
-import '../../styles/my-cars.css';
+import '../../../styles/my-cars.css';
 
 export default function MyCars({ user }) {
   return (

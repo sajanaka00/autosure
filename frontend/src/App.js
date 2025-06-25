@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AuthApp from './components/auth/AuthApp';
-import ExploreAllVehicles from './components/dashboard/ExploreAllVehicles';
-import CarListing from './components/dashboard/CarListing';
-import BlogPage from './components/dashboard/BlogPage';
-import BlogDetailPage from './components/dashboard/BlogDetailPage';
+import ExploreAllVehicles from './components/pages/listings/ExploreAllVehicles';
+import CarListing from './components/pages/listings/CarListing';
+import BlogPage from './components/pages/blog/BlogPage';
+import BlogDetailPage from './/components/pages/blog/BlogDetailPage';
 
 function App() {
   return (  

@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import { Heart, Share2, MessageCircle, Star, MapPin, Phone, Calendar, Gauge, Fuel, Users, 
   Palette, Settings, Car, ChevronLeft, ChevronRight, FileText, Check } from 'lucide-react';
-import Footer from '../common/Footer';
-import BodyImg from '../../assets/images/vectors/body.png'
-import MileageImg from '../../assets/images/vectors/mileage.png'
-import FuelImg from '../../assets/images/vectors/fuel.png'
-import YearImg from '../../assets/images/vectors/year.png'
-import TransmissionImg from '../../assets/images/vectors/transmission.png'
-import DriveTypeImg from '../../assets/images/vectors/drive-type.png'
-import EngineImg from '../../assets/images/vectors/engine.png'
-import DoorImg from '../../assets/images/vectors/door.png'
-import CylinderImg from '../../assets/images/vectors/cylinder.png'
-import ColorImg from '../../assets/images/vectors/color.png'
-import VINImg from '../../assets/images/vectors/vin.png'
-import DealerImg from '../../assets/images/vectors/dealer.png'
-import MapImg from '../../assets/images/vectors/location.png'
-import CheckImg from '../../assets/images/vectors/check.png'
-import '../../styles/car-listing.css';
+import Footer from '../../common/Footer';
+import BodyImg from '../../../assets/images/vectors/body.png'
+import MileageImg from '../../../assets/images/vectors/mileage.png'
+import FuelImg from '../../../assets/images/vectors/fuel.png'
+import YearImg from '../../../assets/images/vectors/year.png'
+import TransmissionImg from '../../../assets/images/vectors/transmission.png'
+import DriveTypeImg from '../../../assets/images/vectors/drive-type.png'
+import EngineImg from '../../../assets/images/vectors/engine.png'
+import DoorImg from '../../../assets/images/vectors/door.png'
+import CylinderImg from '../../../assets/images/vectors/cylinder.png'
+import ColorImg from '../../../assets/images/vectors/color.png'
+import VINImg from '../../../assets/images/vectors/vin.png'
+import DealerImg from '../../../assets/images/vectors/dealer.png'
+import MapImg from '../../../assets/images/vectors/location.png'
+import CheckImg from '../../../assets/images/vectors/check.png'
+import '../../../styles/car-listing.css';
 
 const CarListing = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);

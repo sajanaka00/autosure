@@ -3,7 +3,7 @@ import { api } from '../../services/api';
 import { tokenManager } from '../../utils/tokenManager';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
-import Dashboard from '../../components/dashboard/Dashboard';
+import Dashboard from '../pages/dashboard/Dashboard';
 
 export default function AuthApp() {
   const [currentView, setCurrentView] = useState('login');

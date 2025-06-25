@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { ChevronDown, Search, MessageCircle } from 'lucide-react';
-import backgroundImage from '../../assets/images/home-bg4.jpg'; 
-import whatsappIcon from '../../assets/images/vectors/whatsapp.png';
-import ExploreAllVehicles from '../dashboard/ExploreAllVehicles'
-import '../../styles/home.css';
+import backgroundImage from '../../../assets/images/home-bg4.jpg'; 
+import whatsappIcon from '../../../assets/images/vectors/whatsapp.png';
+import ExploreAllVehicles from '../listings/ExploreAllVehicles'
+import '../../../styles/home.css';
 
 export default function FilterBar() {
   const [activeDropdown, setActiveDropdown] = useState(null);

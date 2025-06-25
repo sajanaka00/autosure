@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { api } from '../../services/api';
-import '../../styles/browse-cars.css';
+import { api } from '../../../services/api';
+import '../../../styles/browse-cars.css';
 
 const BASE_URL = 'http://localhost:3001';
 

@@ -1,4 +1,4 @@
-import '../../styles/my-orders.css';
+import '../../../styles/my-orders.css';
 
 export default function MyOrders({ user }) {
   return (
