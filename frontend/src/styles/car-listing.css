@@ -308,60 +308,103 @@
 }
 
 .dealer-card {
-  background-color: white;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  text-align: center;
-  position: sticky;
-  top: 2rem;
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-.dealer-avatar {
-  width: 4rem;
-  height: 4rem;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+.dealer-profile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.dealer-image {
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+}
+
+.dealer-info-text .dealer-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.dealer-address {
+  font-size: 14px;
+  color: #6b7280; /* Gray-500 */
+  margin: 2px 0 0 0;
+}
+
+.dealer-contact {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.dealer-contact-item {
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin: 0 auto 1rem;
-}
-
-.dealer-name {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #111827;
-  margin-bottom: 0.5rem;
-}
-
-.rating {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25rem;
-  margin-bottom: 1rem;
-}
-
-.star {
-  width: 14px;
-  height: 14px;
-  fill: #fcd34d;
-  color: #f59e0b;
-}
-
-.rating-text {
-  font-size: 0.875rem;
+  gap: 6px;
   color: #4b5563;
-  margin-left: 0.5rem;
+  font-size: 14px;
 }
 
-.dealer-info {
-  text-align: left;
-  margin-bottom: 1rem;
+.dealer-btn {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 8px;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  transition: all 0.3s;
+}
+
+.dealer-btn.primary {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+}
+
+.dealer-btn.primary:hover {
+  background-color: #2563eb;
+}
+
+.dealer-btn.whatsapp {
+  background-color: #ecfdf5;
+  color: #059669;
+  border: 1px solid #059669;
+}
+
+.dealer-btn.whatsapp:hover {
+  background-color: #d1fae5;
+}
+
+.dealer-stock-link {
+  font-size: 14px;
+  color: #1f2937;
+  margin-top: 10px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.arrow {
+  font-weight: 600;
+  margin-left: 4px;
 }
 
 .info-item {

@@ -1,8 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Heart, Share2, MessageCircle, Star, MapPin, Phone, Calendar, Gauge, Fuel, Users, Palette, Settings, Car, ChevronLeft, ChevronRight, FileText, Check } from 'lucide-react';
-import '../../styles/car-listing.css';
+import React, { useState } from 'react';
+import { Heart, Share2, MessageCircle, Star, MapPin, Phone, Calendar, Gauge, Fuel, Users, 
+  Palette, Settings, Car, ChevronLeft, ChevronRight, FileText, Check } from 'lucide-react';
 import Footer from '../common/Footer';
+import BodyImg from '../../assets/images/vectors/body.png'
+import MileageImg from '../../assets/images/vectors/mileage.png'
+import FuelImg from '../../assets/images/vectors/fuel.png'
+import YearImg from '../../assets/images/vectors/year.png'
+import TransmissionImg from '../../assets/images/vectors/transmission.png'
+import DriveTypeImg from '../../assets/images/vectors/drive-type.png'
+import EngineImg from '../../assets/images/vectors/engine.png'
+import DoorImg from '../../assets/images/vectors/door.png'
+import CylinderImg from '../../assets/images/vectors/cylinder.png'
+import ColorImg from '../../assets/images/vectors/color.png'
+import VINImg from '../../assets/images/vectors/vin.png'
+import DealerImg from '../../assets/images/vectors/dealer.png'
+import MapImg from '../../assets/images/vectors/location.png'
+import CheckImg from '../../assets/images/vectors/check.png'
+import '../../styles/car-listing.css';
 
 const CarListing = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -42,21 +56,21 @@ const CarListing = () => {
 
   // Car overview data for two columns
   const leftOverviewItems = [
-    { icon: Car, label: 'Body', value: carData.body },
-    { icon: Gauge, label: 'Mileage', value: carData.mileage },
-    { icon: Fuel, label: 'Fuel Type', value: carData.fuelType },
-    { icon: Calendar, label: 'Year', value: carData.year },
-    { icon: Settings, label: 'Transmission', value: carData.transmission },
-    { icon: Car, label: 'Drive Type', value: carData.driveType }
+    { icon: BodyImg, label: 'Body', value: carData.body },
+    { icon: MileageImg, label: 'Mileage', value: carData.mileage },
+    { icon: FuelImg, label: 'Fuel Type', value: carData.fuelType },
+    { icon: YearImg, label: 'Year', value: carData.year },
+    { icon: TransmissionImg, label: 'Transmission', value: carData.transmission },
+    { icon: DriveTypeImg, label: 'Drive Type', value: carData.driveType }
   ];
 
   const rightOverviewItems = [
     { icon: Settings, label: 'Condition', value: carData.condition },
-    { icon: Settings, label: 'Engine Size', value: carData.engineSize },
-    { icon: Users, label: 'Door', value: carData.doors },
-    { icon: Settings, label: 'Cylinder', value: carData.cylinders },
-    { icon: Palette, label: 'Color', value: carData.colors },
-    { icon: Settings, label: 'VIN', value: carData.vin }
+    { icon: EngineImg, label: 'Engine Size', value: carData.engineSize },
+    { icon: DoorImg, label: 'Door', value: carData.doors },
+    { icon: CylinderImg, label: 'Cylinder', value: carData.cylinders },
+    { icon: ColorImg, label: 'Color', value: carData.colors },
+    { icon: VINImg, label: 'VIN', value: carData.vin }
   ];
 
   // Features data
@@ -214,7 +228,7 @@ const CarListing = () => {
                 {leftOverviewItems.map((item, index) => (
                   <div key={index} className="overview-item">
                     <div className="overview-left-content">
-                      <item.icon size={16} />
+                      <img src={item.icon} alt={item.label} className="overview-img-icon" />
                       <span>{item.label}</span>
                     </div>
                     <span className="overview-value">{item.value}</span>
@@ -225,7 +239,7 @@ const CarListing = () => {
                 {rightOverviewItems.map((item, index) => (
                   <div key={index} className="overview-item">
                     <div className="overview-left-content">
-                      <item.icon size={16} />
+                      <img src={item.icon} alt={item.label} className="overview-img-icon" />
                       <span>{item.label}</span>
                     </div>
                     <span className="overview-value">{item.value}</span>
@@ -237,38 +251,49 @@ const CarListing = () => {
 
           {/* Dealer Info Column */}
           <div className="dealer-card">
-            <div className="dealer-avatar">
-              J
-            </div>
-            <h3 className="dealer-name">admin</h3>
-            <p className="text-xs text-gray-500 mb-3">863 Broadway, Brooklyn</p>
-            <div className="rating">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="star" />
-              ))}
-              <span className="rating-text">5.0 (2 Reviews)</span>
-            </div>
-            <div className="dealer-info">
-              <div className="info-item">
-                <MapPin size={14} />
-                <span>Get Direction</span>
+            <div className="dealer-profile">
+              <img
+                src={DealerImg}
+                alt="Dealer"
+                className="dealer-image"
+              />
+              <div className="dealer-info-text">
+                <h3 className="dealer-name">admin</h3>
+                <p className="dealer-address">943 Broadway, Brooklyn</p>
               </div>
-              <div className="info-item">
-                <Phone size={14} />
+            </div>
+
+            <div className="dealer-contact">
+              <a
+                href="https://www.google.com/maps/dir/?api=1&destination=943+Broadway,+Brooklyn"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="dealer-contact-item link-item"
+              >
+                {/* <MapPin size={16} /> */}
+                <img
+                  src={MapImg}
+                  alt="Map"
+                  className="map-image"
+                />
+                <span>Get Direction</span>
+              </a>
+              <div className="dealer-contact-item">
+                <Phone size={16} />
                 <span>+88-123456789</span>
               </div>
             </div>
 
-            <button className="message-button">
-              Message Dealer
+            <button className="dealer-btn primary">
+              Message Dealer <span className="arrow">→</span>
             </button>
 
-            <button className="w-full bg-green-100 text-green-700 py-2 rounded-lg font-medium hover:bg-green-200 transition-colors mb-3 text-sm">
-              Chat Via WhatsApp
+            <button className="dealer-btn whatsapp">
+              Chat Via Whatsapp <span className="arrow">→</span>
             </button>
 
-            <a href="#" className="view-stock-link">
-              View All stock at this dealer
+            <a href="#" className="dealer-stock-link">
+              View All stock at this dealer <span className="arrow">→</span>
             </a>
           </div>
         </div>
@@ -306,7 +331,11 @@ const CarListing = () => {
                 <div className="feature-list">
                   {items.map((item, index) => (
                     <div key={index} className="feature-item">
-                      <Check className="feature-check" />
+                      <img
+                        src={CheckImg}
+                        alt="Check"
+                        className="check-image"
+                      />
                       <span>{item}</span>
                     </div>
                   ))}
