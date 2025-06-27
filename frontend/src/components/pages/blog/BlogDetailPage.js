@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import Navbar from '../../common/Navbar';
+import Footer from '../../common/Footer';
 import '../../../styles/blog-detail.css';
 
 const BlogDetailPage = () => {
@@ -159,25 +161,7 @@ const BlogDetailPage = () => {
   return (
     <div className="blog-detail-page">
       {/* Header */}
-      <header className="header">
-        <div className="container">
-          <div className="header-content">
-            <div className="logo">
-              <span className="logo-text">BOXCARS</span>
-            </div>
-            <nav className="nav">
-              <a href="#" className="nav-link">Home</a>
-              <a href="#" className="nav-link">Listings</a>
-              <a href="#" className="nav-link">Blog</a>
-              <a href="#" className="nav-link">Pages</a>
-              <a href="#" className="nav-link">About</a>
-              <a href="#" className="nav-link">Contact</a>
-              <a href="#" className="nav-link">Sign In</a>
-              <button className="add-listing-btn">Add Listing</button>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Navbar />
 
       {/* Main Content */}
       <main className="main-content">
@@ -426,93 +410,7 @@ const BlogDetailPage = () => {
       </main>
 
       {/* Footer */}
-      <footer className="footer">
-        <div className="container">
-          <div className="footer-content">
-            <div className="footer-newsletter">
-              <h3>Join BoxCar</h3>
-              <p>Receive pricing updates, shopping tips & more!</p>
-              <div className="newsletter-form">
-                <input type="email" placeholder="Your email address" className="newsletter-input" />
-                <button className="newsletter-btn">Sign Up</button>
-              </div>
-            </div>
-          </div>
-          
-          <div className="footer-links">
-            <div className="footer-section">
-              <h4>Company</h4>
-              <ul>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Blog</a></li>
-                <li><a href="#">Services</a></li>
-                <li><a href="#">FAQs</a></li>
-                <li><a href="#">Terms</a></li>
-                <li><a href="#">Contact Us</a></li>
-              </ul>
-            </div>
-            <div className="footer-section">
-              <h4>Quick Links</h4>
-              <ul>
-                <li><a href="#">Get in Touch</a></li>
-                <li><a href="#">Help center</a></li>
-                <li><a href="#">Live chat</a></li>
-                <li><a href="#">How it works</a></li>
-              </ul>
-            </div>
-            <div className="footer-section">
-              <h4>Our Brands</h4>
-              <ul>
-                <li><a href="#">Toyota</a></li>
-                <li><a href="#">Porsche</a></li>
-                <li><a href="#">Audi</a></li>
-                <li><a href="#">BMW</a></li>
-                <li><a href="#">Ford</a></li>
-                <li><a href="#">Nissan</a></li>
-                <li><a href="#">Peugeot</a></li>
-                <li><a href="#">Volkswagen</a></li>
-              </ul>
-            </div>
-            <div className="footer-section">
-              <h4>Vehicles Type</h4>
-              <ul>
-                <li><a href="#">Sedan</a></li>
-                <li><a href="#">Hatchback</a></li>
-                <li><a href="#">SUV</a></li>
-                <li><a href="#">Hybrid</a></li>
-                <li><a href="#">Electric</a></li>
-                <li><a href="#">Coupe</a></li>
-                <li><a href="#">Truck</a></li>
-                <li><a href="#">Convertible</a></li>
-              </ul>
-            </div>
-            <div className="footer-section">
-              <h4>Our Mobile App</h4>
-              <div className="app-links">
-                <img src="https://images.unsplash.com/photo-1611944212129-29977ae1398c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=120&h=40&q=80" alt="App Store" />
-                <img src="https://images.unsplash.com/photo-1606857521015-7f9fcf423740?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=120&h=40&q=80" alt="Google Play" />
-              </div>
-              <div className="social-links">
-                <h5>Connect With Us</h5>
-                <div className="social-icons-footer">
-                  <a href="#" className="social-link">f</a>
-                  <a href="#" className="social-link">t</a>
-                  <a href="#" className="social-link">in</a>
-                  <a href="#" className="social-link">ig</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="footer-bottom">
-            <p>© 2023 Boxcarapp. All rights reserved</p>
-            <div className="footer-bottom-links">
-              <a href="#">Terms & Conditions</a>
-              <a href="#">Privacy Notice</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

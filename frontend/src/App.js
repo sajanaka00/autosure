@@ -4,7 +4,9 @@ import AuthApp from './components/auth/AuthApp';
 import ExploreAllVehicles from './components/pages/listings/ExploreAllVehicles';
 import CarListing from './components/pages/listings/CarListing';
 import BlogPage from './components/pages/blog/BlogPage';
-import BlogDetailPage from './/components/pages/blog/BlogDetailPage';
+import BlogDetailPage from './components/pages/blog/BlogDetailPage';
+import BoxCarsAbout from './components/pages/about/AboutUs';
+import ContactPage from './components/pages/contact/ContactPage';
 
 function App() {
   return (  
@@ -18,6 +20,11 @@ function App() {
           {/* Vehicle routes */}
           <Route path="/car-listing/:carId" element={<CarListing />} />
           <Route path="/vehicles" element={<ExploreAllVehicles />} />
+          
+          {/* About route */}
+          <Route path="/about" element={<BoxCarsAbout />} />
+
+          <Route path="/contact" element={<ContactPage />} />
           
           {/* Blog routes */}
           <Route path="/blog" element={<BlogPage />} />

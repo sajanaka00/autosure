@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { tokenManager } from '../../utils/tokenManager';
-import { User, Plus, LogOut, ChevronDown, Phone, Menu, X } from 'lucide-react';
+import { User, Phone, Menu, X, ChevronDown } from 'lucide-react';
+import Logo from '../../assets/images/logo.png'
 import '../../styles/navbar.css';
 
 export default function Navbar({ user, onLogout }) {
@@ -14,14 +15,6 @@ export default function Navbar({ user, onLogout }) {
     tokenManager.removeToken();
     tokenManager.removeUser();
     onLogout();
-  };
-
-  const getRoleColor = (role) => {
-    switch (role) {
-      case 'admin': return 'role-admin';
-      case 'dealer': return 'role-dealer';
-      default: return 'role-user';
-    }
   };
 
   const toggleDropdown = (dropdown) => {
@@ -42,31 +35,29 @@ export default function Navbar({ user, onLogout }) {
       case 'home':
         route = '/';
         break;
-      case 'vehicles':
+      case 'listings':
         route = '/vehicles';
         break;
-      case 'news':
+      case 'blog':
         route = '/blog';
+        break;
+      case 'about':
+        route = '/about';
         break;
       case 'contact':
         route = '/contact';
-        break;
-      case 'add-vehicles':
-        route = '/add-vehicles';
         break;
       default:
         route = '/';
     }
     
-    // Handle dropdown items with query parameters or specific routes
+    // Handle dropdown items with query parameters
     if (dropdownItem) {
       const queryParam = dropdownItem.toLowerCase().replace(/\s+/g, '-');
       route += `?category=${queryParam}`;
     }
     
     navigate(route);
-    
-    // Close any open dropdowns and mobile menu
     setDropdownOpen({});
     setMobileMenuOpen(false);
   };
@@ -74,53 +65,34 @@ export default function Navbar({ user, onLogout }) {
   // Get current active tab based on location
   const getCurrentActiveTab = () => {
     const path = location.pathname;
-    if (path === '/' || path.startsWith('/auth')) return 'home';
-    if (path.startsWith('/vehicles')) return 'vehicles';
-    if (path.startsWith('/blog') || path.startsWith('/news')) return 'news';
+    if (path === '/') return 'home';
+    if (path.startsWith('/vehicles')) return 'listings';
+    if (path.startsWith('/blog')) return 'blog';
+    if (path.startsWith('/about')) return 'about';
     if (path.startsWith('/contact')) return 'contact';
-    if (path.startsWith('/add-vehicles')) return 'add-vehicles';
     return '';
   };
 
   const activeTab = getCurrentActiveTab();
 
-  // Navigation items based on user role
-  const getNavItems = () => {
-    const commonItems = [
-      { 
-        id: 'home', 
-        label: 'Home',
-        hasDropdown: true,
-        dropdownItems: ['Featured Cars', 'New Arrivals', 'Best Deals']
-      },
-      { 
-        id: 'vehicles', 
-        label: 'Vehicles',
-        hasDropdown: true,
-        dropdownItems: ['All Cars', 'By Brand', 'By Price', 'Advanced Search']
-      },
-      { 
-        id: 'news', 
-        label: 'News',
-        hasDropdown: true,
-        dropdownItems: ['Latest Posts', 'Car Reviews', 'Tips & Guides']
-      },
-      { id: 'contact', label: 'Contact' }
-    ];
-
-    if (user.role === 'admin') {
-      return [
-        ...commonItems.slice(0, 2), // Home, Vehicles
-        { id: 'add-vehicles', label: 'Add Vehicles' },
-        ...commonItems.slice(2) // News, Contact
-      ];
-    } else if (user.role === 'dealer') {
-      return commonItems;
-    } else {
-      // Regular user gets same items as dealer
-      return commonItems;
-    }
-  };
+  // Navigation items
+  const navItems = [
+    { 
+      id: 'home', 
+      label: 'Home',
+      hasDropdown: true,
+      dropdownItems: ['Featured Cars', 'New Arrivals', 'Best Deals']
+    },
+    { 
+      id: 'listings', 
+      label: 'Listings',
+      hasDropdown: true,
+      dropdownItems: ['All Cars', 'By Brand', 'By Price', 'Advanced Search']
+    },
+    { id: 'blog', label: 'Blog' },
+    { id: 'about', label: 'About' },
+    { id: 'contact', label: 'Contact' }
+  ];
 
   return (
     <nav className="modern-navbar">
@@ -128,8 +100,10 @@ export default function Navbar({ user, onLogout }) {
         <div className="navbar-content">
           {/* Mobile Layout */}
           <div className="mobile-navbar-content">
-            <div className="mobile-brand-center">
-              <h1 className="brand-title">BOXCARS</h1>
+            <div className="mobile-brand">
+              <img src={Logo} alt="BOXCARS" className="brand-logo" />
+              {/* Fallback text if logo fails to load */}
+              <h1 className="brand-title" style={{ display: 'none' }}>BOXCARS</h1>
             </div>
             
             <div className="mobile-actions">
@@ -146,23 +120,18 @@ export default function Navbar({ user, onLogout }) {
           <div className="desktop-navbar-content">
             {/* Brand */}
             <div className="navbar-brand">    
-              <div className="brand-logo">
-                <h1 className="brand-title">LOGO</h1>
-              </div>
-              
-              <div className="phone-info">
-                <Phone className="phone-icon" />
-                <span className="phone-number">+75 123 456 789</span>
-              </div>
+              <img src="/assets/logo.png" alt="BOXCARS" className="brand-logo" />
+              {/* Fallback text if logo fails to load */}
+              <h1 className="brand-title" style={{ display: 'none' }}>BOXCARS</h1>
             </div>
             
             {/* Navigation Links */}
             <div className="nav-links">
-              {getNavItems().map((item) => (
+              {navItems.map((item) => (
                 <div key={item.id} className="nav-item">
                   <button
                     onClick={() => item.hasDropdown ? toggleDropdown(item.id) : handleNavClick(item.id)}
-                    className={`nav-link ${(activeTab === item.id || (item.id === 'news' && location.pathname.startsWith('/blog'))) ? 'nav-link-active' : ''}`}
+                    className={`nav-link ${activeTab === item.id ? 'nav-link-active' : ''}`}
                   >
                     <span>{item.label}</span>
                     {item.hasDropdown && (
@@ -173,16 +142,8 @@ export default function Navbar({ user, onLogout }) {
                   {/* Dropdown Menu */}
                   {item.hasDropdown && dropdownOpen[item.id] && (
                     <div className="dropdown-menu">
-                      {/* Main navigation item */}
-                      <button
-                        className="dropdown-item dropdown-main-item"
-                        onClick={() => handleNavClick(item.id)}
-                      >
-                        {item.id === 'news' ? 'All Posts' : `All ${item.label}`}
-                      </button>
-                      
                       {/* Dropdown sub-items */}
-                      {item.dropdownItems.map((dropdownItem, index) => (
+                      {item.dropdownItems && item.dropdownItems.map((dropdownItem, index) => (
                         <button
                           key={index}
                           className="dropdown-item"
@@ -199,19 +160,28 @@ export default function Navbar({ user, onLogout }) {
             
             {/* Right Side Actions */}
             <div className="nav-actions">
-              {/* User Info */}
-              <div className="user-info">
-                <User className="user-icon" />
-                <span className="user-name">{user?.firstName}</span>
-                <span className={`user-role ${getRoleColor(user?.role)}`}>
-                  {user?.role}
-                </span>
+              {/* Phone Info */}
+              <div className="phone-info">
+                <Phone className="phone-icon" />
+                <span className="phone-number">+75 123 456 789</span>
               </div>
+              
+              {/* Sign In / User Info */}
+              {user ? (
+                <div className="user-info">
+                  <User className="user-icon" />
+                  <span className="user-name">{user?.firstName}</span>
+                </div>
+              ) : (
+                <button className="sign-in-btn">
+                  <User className="user-icon" />
+                  <span>Sign in</span>
+                </button>
+              )}
               
               {/* Submit Listing Button */}
               <button className="submit-listing-btn">
-                <Plus className="plus-icon" />
-                <span>Submit Listing</span>
+                + Submit Listing
               </button>
             </div>
           </div>
@@ -223,45 +193,33 @@ export default function Navbar({ user, onLogout }) {
         <div className="mobile-menu-overlay" onClick={toggleMobileMenu}>
           <div className="mobile-menu" onClick={(e) => e.stopPropagation()}>
             <div className="mobile-menu-content">
-              {getNavItems().map((item) => (
-                <div key={item.id} className="mobile-nav-item">
-                  <button
-                    onClick={() => handleNavClick(item.id)}
-                    className={`mobile-nav-link ${(activeTab === item.id || (item.id === 'news' && location.pathname.startsWith('/blog'))) ? 'mobile-nav-link-active' : ''}`}
-                  >
-                    {item.label}
-                  </button>
-                  
-                  {/* Mobile dropdown items */}
-                  {item.hasDropdown && (
-                    <div className="mobile-dropdown-items">
-                      {item.dropdownItems.map((dropdownItem, index) => (
-                        <button
-                          key={index}
-                          onClick={() => handleNavClick(item.id, dropdownItem)}
-                          className="mobile-dropdown-item"
-                        >
-                          {dropdownItem}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id)}
+                  className={`mobile-nav-link ${activeTab === item.id ? 'mobile-nav-link-active' : ''}`}
+                >
+                  {item.label}
+                </button>
               ))}
               
               <div className="mobile-user-section">
-                <div className="mobile-user-info">
-                  <div className="mobile-user-details">
-                    <User className="mobile-user-icon" />
-                    <span className="mobile-user-name">{user?.firstName}</span>
-                    <span className={`mobile-user-role ${getRoleColor(user?.role)}`}>
-                      {user?.role}
-                    </span>
+                {user ? (
+                  <div className="mobile-user-info">
+                    <div className="mobile-user-details">
+                      <User className="mobile-user-icon" />
+                      <span className="mobile-user-name">{user?.firstName}</span>
+                    </div>
+                    <button onClick={handleLogout} className="mobile-logout-btn">
+                      Sign Out
+                    </button>
                   </div>
-                  <button onClick={handleLogout} className="mobile-logout-btn">
-                    <LogOut className="mobile-logout-icon" />
+                ) : (
+                  <button className="mobile-sign-in-btn">
+                    <User className="mobile-user-icon" />
+                    <span>Sign in</span>
                   </button>
-                </div>
+                )}
               </div>
             </div>
           </div>

@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Facebook, Twitter, Instagram, Linkedin, ChevronUp } from 'lucide-react';
+// Import vector images from assets folder
+import AppleStoreIcon from '../../assets/images/vectors/apple.png';
+import GooglePlayIcon from '../../assets/images/vectors/google-play.png';
 import '../../styles/footer.css';
 
-export default function BoxCarFooter() {
+export default function Footer() {
   const [email, setEmail] = useState('');
 
   const handleSignUp = () => {
@@ -107,18 +110,18 @@ export default function BoxCarFooter() {
                 {/* App Store Button */}
                 <a href="#" className="app-button">
                   <div className="app-icon">
-                    🍎
+                    <img src={AppleStoreIcon} alt="Apple Store" className="app-icon-img" />
                   </div>
                   <div className="app-text">
                     <div className="app-subtitle">Download on the</div>
-                    <div className="app-title">Apple Store</div>
+                    <div className="app-title">App Store</div>
                   </div>
                 </a>
 
                 {/* Google Play Button */}
                 <a href="#" className="app-button">
                   <div className="app-icon">
-                    ▶
+                    <img src={GooglePlayIcon} alt="Google Play" className="app-icon-img" />
                   </div>
                   <div className="app-text">
                     <div className="app-subtitle">Get it on</div>

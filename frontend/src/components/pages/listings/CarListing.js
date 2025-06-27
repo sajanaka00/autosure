@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Heart, Share2, MessageCircle, Star, MapPin, Phone, Calendar, Gauge, Fuel, Users, 
-  Palette, Settings, Car, ChevronLeft, ChevronRight, FileText, Check } from 'lucide-react';
+import { Heart, Share2, MessageCircle, Star, Phone, Calendar, 
+  Gauge, Fuel, Settings, ChevronLeft, ChevronRight, FileText } from 'lucide-react';
 import Footer from '../../common/Footer';
 import BodyImg from '../../../assets/images/vectors/body.png'
 import MileageImg from '../../../assets/images/vectors/mileage.png'
@@ -16,6 +16,7 @@ import VINImg from '../../../assets/images/vectors/vin.png'
 import DealerImg from '../../../assets/images/vectors/dealer.png'
 import MapImg from '../../../assets/images/vectors/location.png'
 import CheckImg from '../../../assets/images/vectors/check.png'
+import Navbar from '../../common/Navbar';
 import '../../../styles/car-listing.css';
 
 const CarListing = () => {
@@ -110,6 +111,7 @@ const CarListing = () => {
 
   return (
     <div className="car-listing">
+      <Navbar />
       {/* Breadcrumb */}
       <div className="breadcrumb">
         <div className="breadcrumb-content">
