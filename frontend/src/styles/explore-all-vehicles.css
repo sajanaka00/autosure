@@ -4,10 +4,10 @@
 /* Main Container */
 .explore-vehicles-container {
   width: 100%;
-  max-width: 1400px;
+  /* max-width: 1400px; */
   margin: 0 auto;
   padding: 32px 95px;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  /* background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); */
   min-height: 100vh;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
@@ -22,14 +22,14 @@
 
 .main-title {
   font-size: 32px;
-  font-weight: 800;
+  /* font-weight: 800; */
   color: #0f172a;
   margin: 0;
   letter-spacing: -0.025em;
-  background: linear-gradient(135deg, #0f172a 0%, #475569 100%);
+  /* background: linear-gradient(135deg, #0f172a 0%, #475569 100%);
   background-clip: text;
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent; */
 }
 
 .view-all-button {
@@ -110,6 +110,7 @@
     width: 0;
     left: 50%;
   }
+
   to {
     width: 100%;
     left: 0;
@@ -134,10 +135,12 @@
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: rgba(59, 130, 246, 0.3) rgba(241, 245, 249, 0.3);
-  
+
   /* Calculate width to show exactly 4 full cards + partial 5th card */
-  width: calc(4 * 320px + 3 * 20px + 60px); /* 4 cards + 3 gaps + partial width */
-  max-width: calc(100vw - 48px); /* Respect container padding */
+  width: calc(4 * 320px + 3 * 20px + 60px);
+  /* 4 cards + 3 gaps + partial width */
+  max-width: calc(100vw - 48px);
+  /* Respect container padding */
 }
 
 /* Add gradient fade effect to indicate more content */
@@ -409,13 +412,15 @@
 /* Responsive Design */
 @media (max-width: 1400px) {
   .car-scroll {
-    width: calc(3 * 320px + 2 * 20px + 80px); /* Show 3 cards + partial 4th on smaller screens */
+    width: calc(3 * 320px + 2 * 20px + 80px);
+    /* Show 3 cards + partial 4th on smaller screens */
   }
 }
 
 @media (max-width: 1100px) {
   .car-scroll {
-    width: calc(2 * 320px + 1 * 20px + 100px); /* Show 2 cards + partial 3rd */
+    width: calc(2 * 320px + 1 * 20px + 100px);
+    /* Show 2 cards + partial 3rd */
   }
 }
 
@@ -423,32 +428,33 @@
   .explore-vehicles-container {
     padding: 24px 16px;
   }
-  
+
   .car-card {
     flex: 0 0 280px;
     height: 380px;
   }
-  
+
   .car-scroll {
-    width: calc(1 * 280px + 120px); /* Show 1 card + significant partial 2nd card */
+    width: calc(1 * 280px + 120px);
+    /* Show 1 card + significant partial 2nd card */
   }
-  
+
   .car-image-container {
     height: 180px;
   }
-  
+
   .car-content {
     padding: 16px;
   }
-  
+
   .car-title {
     font-size: 16px;
   }
-  
+
   .car-price {
     font-size: 18px;
   }
-  
+
   .main-title {
     font-size: 24px;
   }
@@ -459,12 +465,13 @@
     flex: 0 0 240px;
     height: 350px;
   }
-  
+
   .car-scroll {
     gap: 16px;
-    width: calc(1 * 240px + 100px); /* Show 1 card + partial 2nd */
+    width: calc(1 * 240px + 100px);
+    /* Show 1 card + partial 2nd */
   }
-  
+
   .car-image-container {
     height: 160px;
   }

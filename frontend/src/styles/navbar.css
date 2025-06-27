@@ -4,7 +4,7 @@
   border-bottom: 1px solid #e5e7eb;
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 1000;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
@@ -98,7 +98,7 @@
 }
 
 .brand-logo {
-  height: 2.5rem;
+  height: 1.5rem;
   width: auto;
 }
 
@@ -197,7 +197,7 @@
   padding: 0.75rem 1.25rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #ffffff;
+  color: #4b5563;
   background: none;
   border: none;
   cursor: pointer;
@@ -267,6 +267,20 @@
   color: #374151;
 }
 
+/* User Role Badge */
+.user-role-badge {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  color: #1976d2;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 12px;
+  margin-left: 8px;
+  text-transform: capitalize;
+  letter-spacing: 0.02em;
+  box-shadow: 0 1px 3px rgba(25, 118, 210, 0.2);
+}
+
 .sign-in-btn {
   display: none;
   align-items: center;
@@ -306,6 +320,31 @@
 .submit-listing-btn:hover {
   background-color: #f9fafb;
   border-color: #9ca3af;
+}
+
+/* Logout Button */
+.logout-btn {
+  background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(244, 67, 54, 0.2);
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(244, 67, 54, 0.3);
+}
+
+.logout-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(244, 67, 54, 0.2);
 }
 
 /* Mobile Menu Overlay */
@@ -386,6 +425,34 @@
   border-bottom: none;
 }
 
+/* Mobile Submit Listing Button */
+.mobile-submit-listing-btn {
+  width: 100%;
+  padding: 12px 16px;
+  margin: 8px 0;
+  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(33, 150, 243, 0.2);
+  text-align: center;
+}
+
+.mobile-submit-listing-btn:hover {
+  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(33, 150, 243, 0.3);
+}
+
+.mobile-submit-listing-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(33, 150, 243, 0.2);
+}
+
 .mobile-user-section {
   padding-top: 1rem;
   border-top: 1px solid #f3f4f6;
@@ -396,12 +463,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .mobile-user-details {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex: 1;
 }
 
 .mobile-user-icon {
@@ -416,6 +486,20 @@
   color: #374151;
 }
 
+/* Mobile User Role Badge */
+.mobile-user-role-badge {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  color: #1976d2;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 6px;
+  text-transform: capitalize;
+  letter-spacing: 0.02em;
+  box-shadow: 0 1px 2px rgba(25, 118, 210, 0.2);
+}
+
 .mobile-logout-btn {
   font-size: 0.875rem;
   font-weight: 500;
@@ -423,11 +507,14 @@
   background: none;
   border: none;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: all 0.2s ease;
+  padding: 4px 8px;
+  border-radius: 4px;
 }
 
 .mobile-logout-btn:hover {
   color: #dc2626;
+  background-color: #fef2f2;
 }
 
 .mobile-sign-in-btn {
@@ -443,8 +530,81 @@
   transition: color 0.2s ease;
   width: 100%;
   text-align: left;
+  padding: 8px 0;
 }
 
 .mobile-sign-in-btn:hover {
   color: #111827;
+}
+
+/* Role-specific color variations */
+.user-role-badge.admin {
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  color: #f57c00;
+  box-shadow: 0 1px 3px rgba(245, 124, 0, 0.2);
+}
+
+.user-role-badge.dealer {
+  background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+  color: #388e3c;
+  box-shadow: 0 1px 3px rgba(56, 142, 60, 0.2);
+}
+
+.user-role-badge.customer {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  color: #1976d2;
+  box-shadow: 0 1px 3px rgba(25, 118, 210, 0.2);
+}
+
+.mobile-user-role-badge.admin {
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  color: #f57c00;
+  box-shadow: 0 1px 2px rgba(245, 124, 0, 0.2);
+}
+
+.mobile-user-role-badge.dealer {
+  background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+  color: #388e3c;
+  box-shadow: 0 1px 2px rgba(56, 142, 60, 0.2);
+}
+
+.mobile-user-role-badge.customer {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  color: #1976d2;
+  box-shadow: 0 1px 2px rgba(25, 118, 210, 0.2);
+}
+
+/* Responsive adjustments for nav-actions */
+@media (max-width: 1280px) {
+  .nav-actions {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .nav-actions {
+    gap: 0.75rem;
+  }
+
+  .phone-info {
+    display: none;
+  }
+}
+
+/* Animation for role badge */
+@keyframes roleAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.user-role-badge,
+.mobile-user-role-badge {
+  animation: roleAppear 0.3s ease-out;
 }

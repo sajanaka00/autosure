@@ -75,24 +75,44 @@ export default function Navbar({ user, onLogout }) {
 
   const activeTab = getCurrentActiveTab();
 
-  // Navigation items
-  const navItems = [
-    { 
-      id: 'home', 
-      label: 'Home',
-      hasDropdown: true,
-      dropdownItems: ['Featured Cars', 'New Arrivals', 'Best Deals']
-    },
-    { 
-      id: 'listings', 
-      label: 'Listings',
-      hasDropdown: true,
-      dropdownItems: ['All Cars', 'By Brand', 'By Price', 'Advanced Search']
-    },
-    { id: 'blog', label: 'Blog' },
-    { id: 'about', label: 'About' },
-    { id: 'contact', label: 'Contact' }
-  ];
+  // Check user role - assuming user object has a 'role' property
+  const isCustomer = user?.role === 'customer' || user?.userType === 'customer';
+  const isAdmin = user?.role === 'admin' || user?.userType === 'admin';
+  const isDealer = user?.role === 'dealer' || user?.userType === 'dealer';
+
+  // Navigation items - can be filtered based on role
+  const getNavItems = () => {
+    const baseNavItems = [
+      { 
+        id: 'home', 
+        label: 'Home',
+        hasDropdown: true,
+        dropdownItems: ['Featured Cars', 'New Arrivals', 'Best Deals']
+      },
+      { 
+        id: 'listings', 
+        label: 'Listings',
+        hasDropdown: true,
+        dropdownItems: ['All Cars', 'By Brand', 'By Price', 'Advanced Search']
+      },
+      { id: 'blog', label: 'Blog' },
+      { id: 'about', label: 'About' },
+      { id: 'contact', label: 'Contact' }
+    ];
+
+    // Add role-specific navigation items
+    if (isAdmin) {
+      baseNavItems.push({ id: 'admin', label: 'Admin Dashboard' });
+    }
+    
+    if (isDealer) {
+      baseNavItems.push({ id: 'dealer-dashboard', label: 'Dealer Portal' });
+    }
+
+    return baseNavItems;
+  };
+
+  const navItems = getNavItems();
 
   return (
     <nav className="modern-navbar">
@@ -102,8 +122,6 @@ export default function Navbar({ user, onLogout }) {
           <div className="mobile-navbar-content">
             <div className="mobile-brand">
               <img src={Logo} alt="BOXCARS" className="brand-logo" />
-              {/* Fallback text if logo fails to load */}
-              <h1 className="brand-title" style={{ display: 'none' }}>BOXCARS</h1>
             </div>
             
             <div className="mobile-actions">
@@ -120,9 +138,7 @@ export default function Navbar({ user, onLogout }) {
           <div className="desktop-navbar-content">
             {/* Brand */}
             <div className="navbar-brand">    
-              <img src="/assets/logo.png" alt="BOXCARS" className="brand-logo" />
-              {/* Fallback text if logo fails to load */}
-              <h1 className="brand-title" style={{ display: 'none' }}>BOXCARS</h1>
+              <img src={Logo} alt="BOXCARS" className="brand-logo" />
             </div>
             
             {/* Navigation Links */}
@@ -142,7 +158,6 @@ export default function Navbar({ user, onLogout }) {
                   {/* Dropdown Menu */}
                   {item.hasDropdown && dropdownOpen[item.id] && (
                     <div className="dropdown-menu">
-                      {/* Dropdown sub-items */}
                       {item.dropdownItems && item.dropdownItems.map((dropdownItem, index) => (
                         <button
                           key={index}
@@ -160,17 +175,23 @@ export default function Navbar({ user, onLogout }) {
             
             {/* Right Side Actions */}
             <div className="nav-actions">
-              {/* Phone Info */}
-              <div className="phone-info">
-                <Phone className="phone-icon" />
-                <span className="phone-number">+75 123 456 789</span>
-              </div>
+              {/* Phone Info - Hide for admin users if needed */}
+              {!isAdmin && (
+                <div className="phone-info">
+                  <Phone className="phone-icon" />
+                  <span className="phone-number">+75 123 456 789</span>
+                </div>
+              )}
               
               {/* Sign In / User Info */}
               {user ? (
                 <div className="user-info">
                   <User className="user-icon" />
                   <span className="user-name">{user?.firstName}</span>
+                  {/* Show user role badge if needed */}
+                  {user?.role && (
+                    <span className="user-role-badge">{user.role}</span>
+                  )}
                 </div>
               ) : (
                 <button className="sign-in-btn">
@@ -179,10 +200,19 @@ export default function Navbar({ user, onLogout }) {
                 </button>
               )}
               
-              {/* Submit Listing Button */}
-              <button className="submit-listing-btn">
-                + Submit Listing
-              </button>
+              {/* Submit Listing Button - Only show for customers */}
+              {!isCustomer && (
+                <button className="submit-listing-btn">
+                  + Submit Listing
+                </button>
+              )}
+
+              {/* Logout Button for logged-in users */}
+              {user && (
+                <button onClick={handleLogout} className="logout-btn">
+                  Sign Out
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -202,6 +232,13 @@ export default function Navbar({ user, onLogout }) {
                   {item.label}
                 </button>
               ))}
+
+              {/* Mobile Submit Listing - Only for customers */}
+              {!isCustomer && (
+                <button className="mobile-submit-listing-btn">
+                  + Submit Listing
+                </button>
+              )}
               
               <div className="mobile-user-section">
                 {user ? (
@@ -209,6 +246,9 @@ export default function Navbar({ user, onLogout }) {
                     <div className="mobile-user-details">
                       <User className="mobile-user-icon" />
                       <span className="mobile-user-name">{user?.firstName}</span>
+                      {user?.role && (
+                        <span className="mobile-user-role-badge">{user.role}</span>
+                      )}
                     </div>
                     <button onClick={handleLogout} className="mobile-logout-btn">
                       Sign Out

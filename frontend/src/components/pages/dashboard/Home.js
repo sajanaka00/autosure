@@ -3,6 +3,7 @@ import { ChevronDown, Search, MessageCircle } from 'lucide-react';
 import backgroundImage from '../../../assets/images/home-bg4.jpg'; 
 import whatsappIcon from '../../../assets/images/vectors/whatsapp.png';
 import ExploreAllVehicles from '../listings/ExploreAllVehicles'
+import Footer from '../../common/Footer'
 import '../../../styles/home.css';
 
 export default function FilterBar() {
@@ -269,6 +270,8 @@ export default function FilterBar() {
           </div>
         </>
       )}
+
+      <Footer />
     </div>
   );
 }
