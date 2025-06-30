@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../common/Navbar';
 import Footer from '../../common/Footer';
+import BlogForm from './BlogForm';
 import '../../../styles/blog.css';
 
+// Default fallback images
 import car1Image from '../../../assets/images/cars/car1.png';
 import car2Image from '../../../assets/images/cars/car2.png';
 import car3Image from '../../../assets/images/cars/car3.png';
@@ -14,67 +16,24 @@ import car6Image from '../../../assets/images/cars/car6.png';
 const BlogPage = () => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
-  const [blogPosts, setBlogPosts] = useState([
-    {
-      id: 1,
-      category: "Sound",
-      image: car1Image,
-      title: "2024 BMW ALPINA XB7 with exclusive details, extraordinary",
-      author: "Admin",
-      date: "November 22, 2023",
-      excerpt: "The BMW ALPINA XB7 represents the pinnacle of luxury SUV engineering, combining exceptional performance with unparalleled comfort."
-    },
-    {
-      id: 2,
-      category: "Accessories",
-      image: car2Image,
-      title: "BMW X6 M50i is designed to exceed your sportiest expectations",
-      author: "Admin",
-      date: "November 22, 2023",
-      excerpt: "The BMW X6 M50i stands as a testament to BMW's ability to blend coupe elegance with SUV practicality."
-    },
-    {
-      id: 3,
-      category: "Exterior",
-      image: car3Image,
-      title: "BMW X5 Gold 2024 Sport Review: Light on Sport",
-      author: "Admin",
-      date: "November 22, 2023",
-      excerpt: "The 2024 BMW X5 in its distinctive gold finish represents a bold statement in luxury SUV design."
-    },
-    {
-      id: 4,
-      category: "Body Kit",
-      image: car4Image,
-      title: "2024 Kia Sorento Hybrid Review: Big Vehicle With Small-Vehicle Efficiency",
-      author: "Admin",
-      date: "November 22, 2023",
-      excerpt: "The 2024 Kia Sorento Hybrid showcases how modern manufacturers are successfully balancing size and efficiency."
-    },
-    {
-      id: 5,
-      category: "Fuel Systems",
-      image: car5Image,
-      title: "2024 BMW Hybrid gives up nothing with its optimized performance",
-      author: "Admin",
-      date: "November 22, 2023",
-      excerpt: "BMW's 2024 hybrid lineup represents a masterclass in optimization, where efficiency meets performance without compromise."
-    },
-    {
-      id: 6,
-      category: "Exterior",
-      image: car6Image,
-      title: "2024 BMW X3 M Sport Seats – available as a standalone option",
-      author: "Admin",
-      date: "November 22, 2023",
-      excerpt: "The 2024 BMW X3 M Sport seats represent a significant upgrade in both comfort and style."
-    }
-  ]);
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalBlogs: 0
+  });
+
+  // Default images array for fallback
+  const defaultImages = [car1Image, car2Image, car3Image, car4Image, car5Image, car6Image];
 
   const [formData, setFormData] = useState({
     title: '',
     category: '',
     author: '',
+    authorBio: '',
+    authorAvatar: '',
     excerpt: '',
     content: '',
     heroImage: '',
@@ -82,7 +41,11 @@ const BlogPage = () => {
     keyPoints: [''],
     requirements: [''],
     tags: '',
-    estimatedReadTime: ''
+    estimatedReadTime: '',
+    metaDescription: '',
+    slug: '',
+    featured: false,
+    published: true
   });
 
   const categories = [
@@ -90,16 +53,99 @@ const BlogPage = () => {
     'Oil & Filters', 'Interior', 'Performance', 'Safety', 'Technology'
   ];
 
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+
+  // Fetch blogs from API
+  const fetchBlogs = async (page = 1) => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${API_BASE_URL}/blogs/featured?page=${page}&limit=6`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch blogs');
+      }
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        // Add fallback images for blogs without heroImage
+        const blogsWithImages = data.data.map((blog, index) => ({
+          ...blog,
+          image: blog.heroImage || defaultImages[index % defaultImages.length]
+        }));
+        
+        setBlogPosts(blogsWithImages);
+        
+        if (data.pagination) {
+          setPagination(data.pagination);
+        } else {
+          setPagination({
+            currentPage: 1,
+            totalPages: 1,
+            totalBlogs: blogsWithImages.length
+          });
+        }
+      } else {
+        throw new Error(data.message || 'Failed to fetch blogs');
+      }
+    } catch (err) {
+      console.error('Error fetching blogs:', err);
+      setError(err.message);
+      // Use default data as fallback
+      setBlogPosts([
+        {
+          _id: '1',
+          category: "Sound",
+          image: car1Image,
+          title: "2024 BMW ALPINA XB7 with exclusive details, extraordinary",
+          author: "Admin",
+          createdAt: "2023-11-22T00:00:00.000Z",
+          excerpt: "The BMW ALPINA XB7 represents the pinnacle of luxury SUV engineering, combining exceptional performance with unparalleled comfort."
+        },
+        {
+          _id: '2',
+          category: "Accessories",
+          image: car2Image,
+          title: "BMW X6 M50i is designed to exceed your sportiest expectations",
+          author: "Admin",
+          createdAt: "2023-11-22T00:00:00.000Z",
+          excerpt: "The BMW X6 M50i stands as a testament to BMW's ability to blend coupe elegance with SUV practicality."
+        }
+      ]);
+      // Also reset pagination for fallback
+      setPagination({
+        currentPage: 1,
+        totalPages: 1,
+        totalBlogs: 2
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Format date helper
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
   const handleBlogClick = (blogId) => {
-    // Navigate to blog detail page
     navigate(`/blog/${blogId}`);
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }));
   };
 
@@ -126,7 +172,7 @@ const BlogPage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!formData.title || !formData.category || !formData.author || !formData.excerpt) {
@@ -134,31 +180,45 @@ const BlogPage = () => {
       return;
     }
 
-    const newPost = {
-      id: Math.max(...blogPosts.map(post => post.id)) + 1,
-      title: formData.title,
-      category: formData.category,
-      author: formData.author,
-      excerpt: formData.excerpt,
-      content: formData.content,
-      keyPoints: formData.keyPoints.filter(point => point.trim() !== ''),
-      requirements: formData.requirements.filter(req => req.trim() !== ''),
-      tags: formData.tags,
-      estimatedReadTime: formData.estimatedReadTime,
-      date: new Date().toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-      }),
-      image: formData.heroImage || 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
-    };
+    try {
+      const submitData = {
+        ...formData,
+        keyPoints: formData.keyPoints.filter(point => point.trim() !== ''),
+        requirements: formData.requirements.filter(req => req.trim() !== ''),
+        tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '')
+      };
 
-    setBlogPosts(prev => [newPost, ...prev]);
-    
+      const response = await fetch(`${API_BASE_URL}/blogs`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submitData)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert('Blog post created successfully!');
+        setShowModal(false);
+        resetForm();
+        fetchBlogs(); // Refresh the blog list
+      } else {
+        throw new Error(result.message || 'Failed to create blog post');
+      }
+    } catch (err) {
+      console.error('Error creating blog:', err);
+      alert('Error creating blog post: ' + err.message);
+    }
+  };
+
+  const resetForm = () => {
     setFormData({
       title: '',
       category: '',
       author: '',
+      authorBio: '',
+      authorAvatar: '',
       excerpt: '',
       content: '',
       heroImage: '',
@@ -166,27 +226,35 @@ const BlogPage = () => {
       keyPoints: [''],
       requirements: [''],
       tags: '',
-      estimatedReadTime: ''
+      estimatedReadTime: '',
+      metaDescription: '',
+      slug: '',
+      featured: false,
+      published: true
     });
-    setShowModal(false);
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setFormData({
-      title: '',
-      category: '',
-      author: '',
-      excerpt: '',
-      content: '',
-      heroImage: '',
-      contentImage: '',
-      keyPoints: [''],
-      requirements: [''],
-      tags: '',
-      estimatedReadTime: ''
-    });
+    resetForm();
   };
+
+  const handlePageChange = (page) => {
+    fetchBlogs(page);
+  };
+
+  if (loading) {
+    return (
+      <div className="blog-container">
+        <Navbar />
+        <div className="blog-loading">
+          <div className="loading-spinner"></div>
+          <p>Loading blogs...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="blog-container">
@@ -206,6 +274,11 @@ const BlogPage = () => {
             <div>
               <h1 className="header-title">Latest Automotive News & Reviews</h1>
               <p className="header-subtitle">Stay updated with the latest car reviews, automotive news, and industry insights</p>
+              {error && (
+                <p className="error-message" style={{ color: '#ff4444', fontSize: '14px', marginTop: '8px' }}>
+                  Note: Using fallback data. API Error: {error}
+                </p>
+              )}
             </div>
             <button 
               className="add-post-btn"
@@ -225,17 +298,20 @@ const BlogPage = () => {
         <div className="blog-grid">
           {blogPosts.map((post) => (
             <article 
-              key={post.id} 
+              key={post._id || post.id} 
               className="blog-card"
-              onClick={() => handleBlogClick(post.id)}
+              onClick={() => handleBlogClick(post._id || post.id)}
               style={{ cursor: 'pointer' }}
             >
               {/* Image Container */}
               <div className="blog-image-container">
                 <img 
-                  src={post.image} 
+                  src={post.image || post.heroImage} 
                   alt={post.title}
                   className="blog-image"
+                  onError={(e) => {
+                    e.target.src = defaultImages[0]; // Fallback to first default image
+                  }}
                 />
                 {/* Category Tag */}
                 <div className="blog-category-tag">
@@ -248,7 +324,7 @@ const BlogPage = () => {
                 {/* Author and Date */}
                 <div className="blog-meta">
                   <span className="blog-author">{post.author}</span>
-                  <span>{post.date}</span>
+                  <span>{formatDate(post.createdAt || post.date)}</span>
                 </div>
                 
                 {/* Title */}
@@ -261,16 +337,29 @@ const BlogPage = () => {
         </div>
         
         {/* Pagination */}
-        <div className="pagination">
-          <button className="pagination-btn active">1</button>
-          <button className="pagination-btn">2</button>
-          <button className="pagination-btn">3</button>
-          <button className="pagination-btn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
-            </svg>
-          </button>
-        </div>
+        {pagination && pagination.totalPages > 1 && (
+          <div className="pagination">
+            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(page => (
+              <button 
+                key={page}
+                className={`pagination-btn ${pagination.currentPage === page ? 'active' : ''}`}
+                onClick={() => handlePageChange(page)}
+              >
+                {page}
+              </button>
+            ))}
+            {pagination.hasNext && (
+              <button 
+                className="pagination-btn"
+                onClick={() => handlePageChange(pagination.currentPage + 1)}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                </svg>
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Modal */}
@@ -288,158 +377,13 @@ const BlogPage = () => {
                 </svg>
               </button>
             </div>
-            
             <div className="modal-body">
-              <div className="form-section">
-                {/* Basic Information */}
-                <div className="form-group">
-                  <h3 className="form-section-title">Basic Information</h3>
-                  
-                  <div className="form-grid">
-                    <div className="form-field">
-                      <label className="form-label">Title *</label>
-                      <input
-                        type="text"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleInputChange}
-                        className="form-input"
-                        placeholder="Enter blog post title"
-                        required
-                      />
-                    </div>
-                    
-                    <div className="form-field">
-                      <label className="form-label">Category *</label>
-                      <select
-                        name="category"
-                        value={formData.category}
-                        onChange={handleInputChange}
-                        className="form-select"
-                        required
-                      >
-                        <option value="">Select a category</option>
-                        {categories.map(cat => (
-                          <option key={cat} value={cat}>{cat}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                  
-                  <div className="form-grid">
-                    <div className="form-field">
-                      <label className="form-label">Author *</label>
-                      <input
-                        type="text"
-                        name="author"
-                        value={formData.author}
-                        onChange={handleInputChange}
-                        className="form-input"
-                        placeholder="Enter author name"
-                        required
-                      />
-                    </div>
-                    
-                    <div className="form-field">
-                      <label className="form-label">Hero Image URL</label>
-                      <input
-                        type="url"
-                        name="heroImage"
-                        value={formData.heroImage}
-                        onChange={handleInputChange}
-                        className="form-input"
-                        placeholder="Main image for the blog post"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-field">
-                    <label className="form-label">Excerpt *</label>
-                    <textarea
-                      name="excerpt"
-                      value={formData.excerpt}
-                      onChange={handleInputChange}
-                      rows="3"
-                      className="form-textarea"
-                      placeholder="Brief description of the blog post"
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="form-group">
-                  <h3 className="form-section-title">Content</h3>
-                  
-                  <div className="form-field">
-                    <label className="form-label">Main Content</label>
-                    <textarea
-                      name="content"
-                      value={formData.content}
-                      onChange={handleInputChange}
-                      rows="6"
-                      className="form-textarea"
-                      placeholder="Write the main content of your blog post here..."
-                    />
-                  </div>
-                </div>
-
-                {/* Key Points */}
-                <div className="form-group">
-                  <h3 className="form-section-title">Key Points</h3>
-                  
-                  {formData.keyPoints.map((point, index) => (
-                    <div key={index} className="array-input-container">
-                      <input
-                        type="text"
-                        value={point}
-                        onChange={(e) => handleArrayChange('keyPoints', index, e.target.value)}
-                        className="form-input array-input"
-                        placeholder={`Key point ${index + 1}`}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeArrayItem('keyPoints', index)}
-                        className="array-remove-btn"
-                        disabled={formData.keyPoints.length === 1}
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ))}
-                  
-                  <button
-                    type="button"
-                    onClick={() => addArrayItem('keyPoints')}
-                    className="array-add-btn"
-                  >
-                    + Add Key Point
-                  </button>
-                </div>
-                
-                <div className="modal-footer">
-                  <button 
-                    type="button" 
-                    onClick={handleCloseModal}
-                    className="btn-secondary"
-                  >
-                    Cancel
-                  </button>
-                  <button 
-                    type="button"
-                    onClick={handleSubmit}
-                    className="btn-primary"
-                  >
-                    Create Post
-                  </button>
-                </div>
-              </div>
+              <BlogForm onClose={handleCloseModal} onCreated={fetchBlogs} />
             </div>
           </div>
         </div>
       )}
 
-      {/* Newsletter Section */}
       <Footer />
     </div>
   );
