@@ -19,228 +19,148 @@ const BlogPage = () => {
   const [blogPosts, setBlogPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedTag, setSelectedTag] = useState(null); // Added tag filter state
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
     totalBlogs: 0
   });
 
-  // Default images array for fallback
   const defaultImages = [car1Image, car2Image, car3Image, car4Image, car5Image, car6Image];
-
-  const [formData, setFormData] = useState({
-    title: '',
-    category: '',
-    author: '',
-    authorBio: '',
-    authorAvatar: '',
-    excerpt: '',
-    content: '',
-    heroImage: '',
-    contentImage: '',
-    keyPoints: [''],
-    requirements: [''],
-    tags: '',
-    estimatedReadTime: '',
-    metaDescription: '',
-    slug: '',
-    featured: false,
-    published: true
-  });
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 
   const categories = [
-    'Sound', 'Accessories', 'Exterior', 'Body Kit', 'Fuel Systems', 
+    'All', 'Sound', 'Accessories', 'Exterior', 'Body Kit', 'Fuel Systems',
     'Oil & Filters', 'Interior', 'Performance', 'Safety', 'Technology'
   ];
 
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
-
   // Fetch blogs from API
-  const fetchBlogs = async (page = 1) => {
+  const fetchBlogs = async (page = 1, category = 'All', tag = null) => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/blogs/featured?page=${page}&limit=6`);
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch blogs');
-      }
-      
+      let url = `${API_BASE_URL}/blogs?page=${page}&limit=6`;
+
+      if (category !== 'All') url += `&category=${encodeURIComponent(category)}`;
+      if (tag) url += `&tag=${encodeURIComponent(tag)}`; // Added tag filter
+
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Failed to fetch blogs');
+
       const data = await response.json();
-      
       if (data.success) {
-        // Add fallback images for blogs without heroImage
         const blogsWithImages = data.data.map((blog, index) => ({
           ...blog,
           image: blog.heroImage || defaultImages[index % defaultImages.length]
         }));
-        
+
         setBlogPosts(blogsWithImages);
-        
-        if (data.pagination) {
-          setPagination(data.pagination);
-        } else {
-          setPagination({
-            currentPage: 1,
-            totalPages: 1,
-            totalBlogs: blogsWithImages.length
-          });
-        }
+        setPagination(data.pagination || {
+          currentPage: page,
+          totalPages: Math.ceil(blogsWithImages.length / 6),
+          totalBlogs: blogsWithImages.length
+        });
       } else {
         throw new Error(data.message || 'Failed to fetch blogs');
       }
     } catch (err) {
       console.error('Error fetching blogs:', err);
       setError(err.message);
-      // Use default data as fallback
-      setBlogPosts([
+
+      // Fallback data
+      const fallbackData = [
         {
-          _id: '1',
-          category: "Sound",
-          image: car1Image,
-          title: "2024 BMW ALPINA XB7 with exclusive details, extraordinary",
-          author: "Admin",
-          createdAt: "2023-11-22T00:00:00.000Z",
-          excerpt: "The BMW ALPINA XB7 represents the pinnacle of luxury SUV engineering, combining exceptional performance with unparalleled comfort."
+          _id: '1', category: "Sound", image: car1Image, title: "2024 BMW ALPINA XB7 with exclusive details",
+          author: "Admin", createdAt: "2023-11-22T00:00:00.000Z", excerpt: "Luxury SUV engineering at its peak.", tags: ['luxury', 'sound']
         },
         {
-          _id: '2',
-          category: "Accessories",
-          image: car2Image,
-          title: "BMW X6 M50i is designed to exceed your sportiest expectations",
-          author: "Admin",
-          createdAt: "2023-11-22T00:00:00.000Z",
-          excerpt: "The BMW X6 M50i stands as a testament to BMW's ability to blend coupe elegance with SUV practicality."
+          _id: '2', category: "Accessories", image: car2Image, title: "BMW X6 M50i exceeds expectations",
+          author: "Admin", createdAt: "2023-11-22T00:00:00.000Z", excerpt: "Elegance meets performance.", tags: ['accessories']
+        },
+        {
+          _id: '3', category: "Technology", image: car3Image, title: "Driver Assistance Systems",
+          author: "Tech Expert", createdAt: "2023-11-20T00:00:00.000Z", excerpt: "Latest safety tech.", tags: ['technology', 'safety']
         }
-      ]);
-      // Also reset pagination for fallback
+      ];
+
+      const filteredData = category === 'All' ? fallbackData :
+        fallbackData.filter(blog => blog.category === category);
+
+      const finalFiltered = tag ? filteredData.filter(b => b.tags?.includes(tag)) : filteredData;
+
+      setBlogPosts(finalFiltered);
       setPagination({
-        currentPage: 1,
-        totalPages: 1,
-        totalBlogs: 2
+        currentPage: page,
+        totalPages: Math.ceil(finalFiltered.length / 6),
+        totalBlogs: finalFiltered.length
       });
     } finally {
       setLoading(false);
     }
   };
 
-  // Format date helper
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   };
 
   useEffect(() => {
-    fetchBlogs();
-  }, []);
+    fetchBlogs(1, selectedCategory, selectedTag);
+  }, [selectedCategory, selectedTag]); // Add selectedTag to useEffect dependencies
 
-  const handleBlogClick = (blogId) => {
-    navigate(`/blog/${blogId}`);
+  const handleBlogClick = (blogId) => navigate(`/blog/${blogId}`);
+  const handleCategoryFilter = (category) => {
+    setSelectedCategory(category);
+    setPagination(prev => ({ ...prev, currentPage: 1 }));
   };
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-
-  const handleArrayChange = (field, index, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: prev[field].map((item, i) => i === index ? value : item)
-    }));
-  };
-
-  const addArrayItem = (field) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: [...prev[field], '']
-    }));
-  };
-
-  const removeArrayItem = (field, index) => {
-    if (formData[field].length > 1) {
-      setFormData(prev => ({
-        ...prev,
-        [field]: prev[field].filter((_, i) => i !== index)
-      }));
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!formData.title || !formData.category || !formData.author || !formData.excerpt) {
-      alert('Please fill in all required fields');
-      return;
-    }
-
-    try {
-      const submitData = {
-        ...formData,
-        keyPoints: formData.keyPoints.filter(point => point.trim() !== ''),
-        requirements: formData.requirements.filter(req => req.trim() !== ''),
-        tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '')
-      };
-
-      const response = await fetch(`${API_BASE_URL}/blogs`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(submitData)
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        alert('Blog post created successfully!');
-        setShowModal(false);
-        resetForm();
-        fetchBlogs(); // Refresh the blog list
-      } else {
-        throw new Error(result.message || 'Failed to create blog post');
-      }
-    } catch (err) {
-      console.error('Error creating blog:', err);
-      alert('Error creating blog post: ' + err.message);
-    }
-  };
-
-  const resetForm = () => {
-    setFormData({
-      title: '',
-      category: '',
-      author: '',
-      authorBio: '',
-      authorAvatar: '',
-      excerpt: '',
-      content: '',
-      heroImage: '',
-      contentImage: '',
-      keyPoints: [''],
-      requirements: [''],
-      tags: '',
-      estimatedReadTime: '',
-      metaDescription: '',
-      slug: '',
-      featured: false,
-      published: true
-    });
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    resetForm();
+  const handleTagClick = (tag) => {
+    setSelectedTag(tag);
+    setPagination(prev => ({ ...prev, currentPage: 1 }));
   };
 
   const handlePageChange = (page) => {
-    fetchBlogs(page);
+    if (page >= 1 && page <= pagination.totalPages) {
+      fetchBlogs(page, selectedCategory, selectedTag);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const renderPaginationButtons = () => {
+    const { currentPage, totalPages } = pagination;
+    const buttons = [];
+
+    if (currentPage > 1) {
+      buttons.push(<button key="prev" className="pagination-btn pagination-nav" onClick={() => handlePageChange(currentPage - 1)}>&laquo;</button>);
+    }
+
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, currentPage + 2);
+
+    if (currentPage <= 3) endPage = Math.min(5, totalPages);
+    if (currentPage >= totalPages - 2) startPage = Math.max(1, totalPages - 4);
+
+    if (startPage > 1) {
+      buttons.push(<button key={1} className="pagination-btn" onClick={() => handlePageChange(1)}>1</button>);
+      if (startPage > 2) buttons.push(<span key="ellipsis1" className="pagination-ellipsis">...</span>);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      buttons.push(
+        <button key={i} className={`pagination-btn ${currentPage === i ? 'active' : ''}`} onClick={() => handlePageChange(i)}>{i}</button>
+      );
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) buttons.push(<span key="ellipsis2" className="pagination-ellipsis">...</span>);
+      buttons.push(<button key={totalPages} className="pagination-btn" onClick={() => handlePageChange(totalPages)}>{totalPages}</button>);
+    }
+
+    if (currentPage < totalPages) {
+      buttons.push(<button key="next" className="pagination-btn pagination-nav" onClick={() => handlePageChange(currentPage + 1)}>&raquo;</button>);
+    }
+
+    return buttons;
   };
 
   if (loading) {
@@ -259,126 +179,108 @@ const BlogPage = () => {
   return (
     <div className="blog-container">
       <Navbar />
-      
-      {/* Header */}
+
       <div className="blog-header">
         <div className="blog-header-content">
-          {/* Breadcrumb */}
           <div className="breadcrumb">
             <span className="breadcrumb-home">Home</span>
             <span className="breadcrumb-separator">/</span>
             <span>Blog</span>
           </div>
-          
           <div className="header-flex">
             <div>
               <h1 className="header-title">Latest Automotive News & Reviews</h1>
-              <p className="header-subtitle">Stay updated with the latest car reviews, automotive news, and industry insights</p>
+              <p className="header-subtitle">Stay updated with the latest car reviews, automotive news, and insights</p>
               {error && (
-                <p className="error-message" style={{ color: '#ff4444', fontSize: '14px', marginTop: '8px' }}>
-                  Note: Using fallback data. API Error: {error}
+                <p className="error-message" style={{ color: '#ff4444' }}>
+                  API Error: {error}. Showing fallback data.
+                </p>
+              )}
+              {selectedTag && (
+                <p className="selected-tag">
+                  Filtering by tag: <strong>{selectedTag}</strong>{' '}
+                  <button onClick={() => setSelectedTag(null)} className="clear-tag-btn">Clear</button>
                 </p>
               )}
             </div>
-            <button 
-              className="add-post-btn"
-              onClick={() => setShowModal(true)}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-              </svg>
-              Add New Post
-            </button>
+            <button className="add-post-btn" onClick={() => setShowModal(true)}>+ Add New Post</button>
           </div>
         </div>
       </div>
 
-      {/* Blog Grid */}
       <div className="blog-main">
+        <div className="category-filters">
+          <div className="category-filters-container">
+            {categories.map((category) => (
+              <button key={category} className={`category-tag ${selectedCategory === category ? 'active' : ''}`} onClick={() => handleCategoryFilter(category)}>
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="results-info">
+          <p>
+            {selectedCategory === 'All'
+              ? `Showing ${blogPosts.length} of ${pagination.totalBlogs} posts`
+              : `Showing ${blogPosts.length} posts in "${selectedCategory}"`
+            }
+          </p>
+        </div>
+
         <div className="blog-grid">
           {blogPosts.map((post) => (
-            <article 
-              key={post._id || post.id} 
-              className="blog-card"
-              onClick={() => handleBlogClick(post._id || post.id)}
-              style={{ cursor: 'pointer' }}
-            >
-              {/* Image Container */}
+            <article key={post._id} className="blog-card" onClick={() => handleBlogClick(post._id)} style={{ cursor: 'pointer' }}>
               <div className="blog-image-container">
-                <img 
-                  src={post.image || post.heroImage} 
-                  alt={post.title}
-                  className="blog-image"
-                  onError={(e) => {
-                    e.target.src = defaultImages[0]; // Fallback to first default image
-                  }}
-                />
-                {/* Category Tag */}
-                <div className="blog-category-tag">
-                  {post.category}
-                </div>
+                <img src={post.image || post.heroImage} alt={post.title} className="blog-image" />
+                <div className="blog-category-tag">{post.category}</div>
               </div>
-
-              {/* Content */}
               <div className="blog-content">
-                {/* Author and Date */}
                 <div className="blog-meta">
                   <span className="blog-author">{post.author}</span>
-                  <span>{formatDate(post.createdAt || post.date)}</span>
+                  <span>{formatDate(post.createdAt)}</span>
                 </div>
-                
-                {/* Title */}
-                <h3 className="blog-title">
-                  {post.title}
-                </h3>
+                <h3 className="blog-title">{post.title}</h3>
+
+                {/* Tag rendering */}
+                <div className="blog-tags">
+                  {post.tags?.map(tag => (
+                    <button key={tag} className="tag-btn" onClick={(e) => {
+                      e.stopPropagation(); // prevent blog card click
+                      handleTagClick(tag);
+                    }}>
+                      #{tag}
+                    </button>
+                  ))}
+                </div>
               </div>
             </article>
           ))}
         </div>
-        
-        {/* Pagination */}
-        {pagination && pagination.totalPages > 1 && (
+
+        {blogPosts.length === 0 && (
+          <div className="no-results">
+            <h3>No posts found</h3>
+            <p>Try a different category or tag.</p>
+          </div>
+        )}
+
+        {pagination.totalPages > 1 && blogPosts.length > 0 && (
           <div className="pagination">
-            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(page => (
-              <button 
-                key={page}
-                className={`pagination-btn ${pagination.currentPage === page ? 'active' : ''}`}
-                onClick={() => handlePageChange(page)}
-              >
-                {page}
-              </button>
-            ))}
-            {pagination.hasNext && (
-              <button 
-                className="pagination-btn"
-                onClick={() => handlePageChange(pagination.currentPage + 1)}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
-                </svg>
-              </button>
-            )}
+            <div className="pagination-controls">{renderPaginationButtons()}</div>
           </div>
         )}
       </div>
 
-      {/* Modal */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
             <div className="modal-header">
-              <h2 className="modal-title">Create New Blog Post</h2>
-              <button 
-                onClick={handleCloseModal}
-                className="modal-close-btn"
-              >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                </svg>
-              </button>
+              <h2>Create New Blog Post</h2>
+              <button onClick={() => setShowModal(false)} className="modal-close-btn">X</button>
             </div>
             <div className="modal-body">
-              <BlogForm onClose={handleCloseModal} onCreated={fetchBlogs} />
+              <BlogForm onClose={() => setShowModal(false)} onCreated={() => fetchBlogs(1, selectedCategory)} />
             </div>
           </div>
         </div>

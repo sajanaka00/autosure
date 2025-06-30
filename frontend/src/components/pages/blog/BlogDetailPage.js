@@ -1,162 +1,293 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import Navbar from '../../common/Navbar';
 import Footer from '../../common/Footer';
 import '../../../styles/blog-detail.css';
 
 const BlogDetailPage = () => {
-  // const { id } = useParams();
+  const { blogId } = useParams();
+  const [blogData, setBlogData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [relatedPosts, setRelatedPosts] = useState([]);
   const [comment, setComment] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [saveInfo, setSaveInfo] = useState(false);
+  const [commentLoading, setCommentLoading] = useState(false);
+  const [commentError, setCommentError] = useState(null);
+  const [likeLoading, setLikeLoading] = useState(false);
 
-  // Blog data based on ID
-  const blogData = {
-    1: {
-      title: "2024 BMW ALPINA XB7 with exclusive details, extraordinary",
-      category: "Sound",
-      image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-      secondImage: "https://images.unsplash.com/photo-1621135802920-133df287f89c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-      date: "November 22, 2023",
-      content: {
-        paragraph1: "The BMW ALPINA XB7 represents the pinnacle of luxury SUV engineering, combining exceptional performance with unparalleled comfort. This extraordinary vehicle showcases ALPINA's commitment to creating the ultimate driving machine for those who demand excellence.",
-        paragraph2: "Every detail of the XB7 has been meticulously crafted to deliver an experience that transcends ordinary driving. From its hand-finished interior to its precision-tuned suspension system, the ALPINA XB7 sets new standards in the luxury SUV segment.",
-        quote: "The BMW ALPINA XB7 doesn't just meet expectations – it redefines what's possible in a luxury SUV, delivering performance that thrills and comfort that coddles."
+  // Base API URL - adjust this to match your backend URL
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+
+  // Fetch blog data by ID or slug
+  useEffect(() => {
+    const fetchBlogData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // Try to fetch by ID first, then by slug if ID fails
+        let response;
+        if (blogId.match(/^[0-9a-fA-F]{24}$/)) {
+          // It's a MongoDB ObjectId
+          response = await fetch(`${API_BASE_URL}/blogs/${blogId}`);
+        } else {
+          // It's likely a slug
+          response = await fetch(`${API_BASE_URL}/blogs/slug/${blogId}`);
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        
+        if (result.success) {
+          setBlogData(result.data);
+          // Fetch related posts
+          fetchRelatedPosts(result.data._id);
+        } else {
+          throw new Error(result.message || 'Failed to fetch blog');
+        }
+      } catch (err) {
+        setError(err.message);
+        console.error('Error fetching blog:', err);
+      } finally {
+        setLoading(false);
       }
-    },
-    2: {
-      title: "BMW X6 M50i is designed to exceed your sportiest.",
-      category: "Accessories",
-      image: "https://images.unsplash.com/photo-1617886903355-9354bb57751f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-      secondImage: "https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-      date: "November 22, 2023",
-      content: {
-        paragraph1: "The BMW X6 M50i stands as a testament to BMW's ability to blend coupe elegance with SUV practicality. This sports activity coupe delivers thrilling performance while maintaining the versatility that modern drivers demand.",
-        paragraph2: "With its distinctive silhouette and aggressive stance, the X6 M50i commands attention on every road. The vehicle's advanced engineering ensures that every drive is an adventure, whether navigating city streets or conquering mountain passes.",
-        quote: "The BMW X6 M50i redefines the boundaries between luxury, performance, and practicality in ways that continuously surprise and delight."
+    };
+
+    if (blogId) {
+      fetchBlogData();
+    }
+  }, [blogId, API_BASE_URL]);
+
+  // Fetch related posts
+  const fetchRelatedPosts = async (currentBlogId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/blogs/${currentBlogId}/related?limit=3`);
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          setRelatedPosts(result.data);
+        }
       }
-    },
-    3: {
-      title: "BMW X5 Gold 2024 Sport Review: Light on Sport",
-      category: "Exterior",
-      image: "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-      secondImage: "https://images.unsplash.com/photo-1571607388263-1044f9ea01dd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-      date: "November 22, 2023",
-      content: {
-        paragraph1: "The 2024 BMW X5 in its distinctive gold finish represents a bold statement in luxury SUV design. While the sport package adds visual appeal, the real story lies in the vehicle's refined approach to performance and comfort.",
-        paragraph2: "This particular configuration prioritizes elegance over aggressive sportiness, making it an ideal choice for those who appreciate understated luxury. The gold exterior finish adds a touch of exclusivity that sets it apart from standard offerings.",
-        quote: "Sometimes the most powerful statement is made not through aggressive styling, but through sophisticated restraint and timeless elegance."
-      }
-    },
-    4: {
-      title: "2024 Kia Sorento Hybrid Review: Big Vehicle With Small-Vehicle",
-      category: "Body Kit",
-      image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-      secondImage: "https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-      date: "November 22, 2023",
-      content: {
-        paragraph1: "The 2024 Kia Sorento Hybrid showcases how modern manufacturers are successfully balancing size and efficiency. This three-row SUV proves that you don't have to sacrifice fuel economy for space and comfort, delivering impressive hybrid technology in a family-friendly package.",
-        paragraph2: "What sets the Sorento Hybrid apart is its intelligent powertrain management and spacious interior design. The vehicle seamlessly transitions between electric and gasoline power, providing both environmental benefits and the confidence of extended range for longer journeys.",
-        quote: "The Kia Sorento Hybrid demonstrates that eco-consciousness and family practicality can coexist beautifully in today's automotive landscape."
-      }
-    },
-    5: {
-      title: "2024 BMW Hybrid gives up nothing with its optimized",
-      category: "Fuel Systems",
-      image: "https://images.unsplash.com/photo-1571607388263-1044f9ea01dd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-      secondImage: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-      date: "November 22, 2023",
-      content: {
-        paragraph1: "BMW's 2024 hybrid lineup represents a masterclass in optimization, where efficiency meets performance without compromise. The sophisticated hybrid system delivers the driving dynamics BMW is renowned for while significantly reducing environmental impact.",
-        paragraph2: "The seamless integration of electric and combustion technologies creates a driving experience that feels both familiar and revolutionary. BMW's commitment to maintaining their signature driving characteristics while embracing electrification sets new industry standards.",
-        quote: "BMW proves that the future of performance doesn't require sacrificing the joy of driving – it enhances it through intelligent engineering."
-      }
-    },
-    6: {
-      title: "2024 BMW X3 M Sport Seats – available as a standalone option",
-      category: "Exterior",
-      image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-      secondImage: "https://images.unsplash.com/photo-1502877338535-766e1452684a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-      date: "November 22, 2023",
-      content: {
-        paragraph1: "The 2024 BMW X3 M Sport seats represent a significant upgrade in both comfort and style, now available as individual options for customization. These performance-oriented seats combine ergonomic excellence with BMW's signature sporty aesthetic.",
-        paragraph2: "Designed with input from motorsport engineers, these seats provide exceptional support during dynamic driving while maintaining comfort for daily commuting. The premium materials and precise craftsmanship reflect BMW's commitment to interior excellence.",
-        quote: "Great seats don't just support your body – they enhance your connection to the vehicle and elevate every driving experience."
-      }
-    },
-    7: {
-      title: "2023 Carnival Standard blind-spot & forward collision avoidance",
-      category: "Body Kit",
-      image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-      secondImage: "https://images.unsplash.com/photo-1606220838315-056192d5e927?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-      date: "November 22, 2023",
-      content: {
-        paragraph1: "The 2023 Kia Carnival sets new standards for family vehicle safety with its comprehensive suite of advanced driver assistance systems. The standard inclusion of blind-spot monitoring and forward collision avoidance demonstrates Kia's commitment to protecting families.",
-        paragraph2: "These safety technologies work seamlessly in the background, providing peace of mind without being intrusive. The system's reliability and accuracy make it an invaluable co-pilot for busy parents navigating today's complex traffic environments.",
-        quote: "Advanced safety features should be standard, not optional – the Carnival proves that family protection doesn't have to come at a premium price."
-      }
-    },
-    8: {
-      title: "Golf vs Polo: A Comparison of Two Volkswagen Classics",
-      category: "Sound",
-      image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-      secondImage: "https://images.unsplash.com/photo-1486326658981-ed68abe5868e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-      date: "September 19, 2023",
-      content: {
-        paragraph1: "The Volkswagen Golf and Polo represent two different approaches to compact car excellence, each with distinct personalities and target audiences. While sharing Volkswagen's commitment to quality, these models serve different lifestyle needs and preferences.",
-        paragraph2: "The Golf offers a more premium experience with enhanced performance and technology, while the Polo focuses on efficiency and value. Both vehicles showcase German engineering excellence, but their market positioning creates interesting choices for consumers.",
-        quote: "Choosing between the Golf and Polo isn't about better or worse – it's about finding the perfect match for your driving needs and lifestyle."
-      }
-    },
-    9: {
-      title: "Battle of the SUVs – Kia Sportage vs Hyundai Tucson",
-      category: "Oil & Filters",
-      image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-      secondImage: "https://images.unsplash.com/photo-1593941707874-ef25b8b4a92b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-      date: "September 19, 2023",
-      content: {
-        paragraph1: "The Kia Sportage and Hyundai Tucson represent a fascinating sibling rivalry in the compact SUV segment. Despite sharing platforms and powertrains, these Korean siblings have developed distinct personalities that appeal to different types of buyers.",
-        paragraph2: "Both vehicles offer excellent value propositions with comprehensive warranties and modern features. The choice often comes down to design preferences and brand loyalty, as both deliver reliable performance and impressive feature sets for their price points.",
-        quote: "When siblings compete this closely, consumers win – both the Sportage and Tucson prove that excellence comes in multiple flavors."
-      }
+    } catch (err) {
+      console.error('Error fetching related posts:', err);
     }
   };
 
-  const { blogId } = useParams();
-  const id = parseInt(blogId); // convert to number
-  const currentBlog = blogData[id] ?? blogData[1];
+  // Handle like functionality
+  const handleLike = async () => {
+    if (!blogData || likeLoading) return;
 
-  // Related posts data with real images
-  const relatedPosts = [
-    {
-      id: 4,
-      image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
-      title: "2024 Kia Sorento Hybrid Review: Big Vehicle With Small Wants",
-      date: "November 23, 2023"
-    },
-    {
-      id: 5,
-      image: "https://images.unsplash.com/photo-1571607388263-1044f9ea01dd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
-      title: "2024 BMW Hybrid gives up nothing with its optimized performance",
-      date: "November 23, 2023"
-    },
-    {
-      id: 6,
-      image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
-      title: "2024 BMW X3 M Sport Seats – available as a standalone option",
-      date: "November 23, 2023"
+    try {
+      setLikeLoading(true);
+      const response = await fetch(`${API_BASE_URL}/blogs/${blogData._id}/like`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          setBlogData(prev => ({
+            ...prev,
+            likes: result.likes
+          }));
+        }
+      }
+    } catch (err) {
+      console.error('Error liking blog:', err);
+    } finally {
+      setLikeLoading(false);
     }
-  ];
-
-  const handleSubmitComment = () => {
-    // Handle comment submission
-    console.log('Comment submitted:', { name, email, comment });
-    setComment('');
-    setName('');
-    setEmail('');
-    setSaveInfo(false);
   };
+
+  // Handle comment submission
+  const handleSubmitComment = async (e) => {
+    e.preventDefault();
+    
+    if (!name.trim() || !email.trim() || !comment.trim()) {
+      setCommentError('Please fill in all required fields');
+      return;
+    }
+
+    if (!blogData) return;
+
+    try {
+      setCommentLoading(true);
+      setCommentError(null);
+
+      const response = await fetch(`${API_BASE_URL}/blogs/${blogData._id}/comments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          author: name,
+          email: email,
+          content: comment
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        // Clear form
+        setComment('');
+        if (!saveInfo) {
+          setName('');
+          setEmail('');
+        }
+        setSaveInfo(false);
+        
+        // Show success message with better UX
+        setCommentError(null);
+        // You could add a success state here instead of alert
+        alert('Comment submitted successfully! It will appear after approval.');
+        
+        // Optionally refresh the blog data to show updated comments
+        // You might want to implement a more sophisticated state update here
+      } else {
+        throw new Error(result.message || 'Failed to submit comment');
+      }
+    } catch (err) {
+      setCommentError(err.message);
+      console.error('Error submitting comment:', err);
+    } finally {
+      setCommentLoading(false);
+    }
+  };
+
+  // Handle social sharing
+  const handleShare = (platform) => {
+    if (!blogData) return;
+    
+    const url = window.location.href;
+    const title = blogData.title;
+    const text = blogData.excerpt || blogData.title;
+    
+    let shareUrl = '';
+    
+    switch (platform) {
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+        break;
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+        break;
+      case 'linkedin':
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+        break;
+      case 'pinterest':
+        shareUrl = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(url)}&description=${encodeURIComponent(text)}`;
+        break;
+      default:
+        return;
+    }
+    
+    window.open(shareUrl, '_blank', 'width=600,height=400');
+  };
+
+  // Copy link to clipboard
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      // You could show a toast notification here
+      alert('Link copied to clipboard!');
+    } catch (err) {
+      console.error('Failed to copy link:', err);
+    }
+  };
+
+  // Format date helper
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  // Calculate reading time
+  const getReadingTime = (content) => {
+    if (!content) return 'N/A';
+    const wordsPerMinute = 200;
+    const wordCount = content.replace(/<[^>]*>/g, '').split(/\s+/).length;
+    const readingTime = Math.ceil(wordCount / wordsPerMinute);
+    return `${readingTime} min read`;
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="blog-detail-page">
+        <Navbar />
+        <main className="main-content">
+          <div className="container">
+            <div className="loading-state">
+              <div className="loading-spinner">⟳</div>
+              <h2>Loading article...</h2>
+              <p>Please wait while we fetch the content</p>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="blog-detail-page">
+        <Navbar />
+        <main className="main-content">
+          <div className="container">
+            <div className="error-state">
+              <div className="error-icon">⚠️</div>
+              <h2>Oops! Something went wrong</h2>
+              <p>{error}</p>
+              <button 
+                onClick={() => window.location.reload()} 
+                className="retry-btn"
+              >
+                Try Again
+              </button>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // No blog data
+  if (!blogData) {
+    return (
+      <div className="blog-detail-page">
+        <Navbar />
+        <main className="main-content">
+          <div className="container">
+            <div className="not-found-state">
+              <div className="not-found-icon">🔍</div>
+              <h2>Article not found</h2>
+              <p>The article you're looking for doesn't exist or has been removed.</p>
+              <Link to="/blog" className="back-to-blog-btn">
+                Back to Blog
+              </Link>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="blog-detail-page">
@@ -169,192 +300,212 @@ const BlogDetailPage = () => {
           <div className="blog-content">
             {/* Blog Header */}
             <div className="blog-header">
-              <h1 className="blog-title">{currentBlog.title}</h1>
+              <div className="breadcrumb">
+                <Link to="/">Home</Link>
+                <span>›</span>
+                <Link to="/blog">Blog</Link>
+                <span>›</span>
+                <span>{blogData.category}</span>
+              </div>
+              <h1 className="blog-title">{blogData.title}</h1>
               <div className="blog-meta">
                 <div className="author-info">
-                  <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=40&h=40&q=80" alt="Admin" className="author-avatar" />
-                  <span className="author-name">Admin</span>
-                  <span className="category">{currentBlog.category}</span>
-                  <span className="date">{currentBlog.date}</span>
+                  <img 
+                    src={blogData.authorAvatar || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=40&h=40&q=80"} 
+                    alt={blogData.author} 
+                    className="author-avatar" 
+                  />
+                  <span className="author-name">{blogData.author}</span>
+                  <span className="category">{blogData.category}</span>
+                  <span className="date">{formatDate(blogData.createdAt)}</span>
+                  <span className="views">{blogData.views} views</span>
+                  <button 
+                    onClick={handleLike} 
+                    className="like-btn"
+                    disabled={likeLoading}
+                    aria-label="Like this post"
+                  >
+                    ❤️ {blogData.likes || 0} {likeLoading && '...'}
+                  </button>
                 </div>
               </div>
             </div>
 
             {/* Featured Image */}
-            <div className="featured-image">
-              <img src={currentBlog.image} alt={currentBlog.title} className="blog-image" />
-            </div>
+            {blogData.heroImage && (
+              <div className="featured-image">
+                <img src={blogData.heroImage} alt={blogData.title} className="blog-image" />
+              </div>
+            )}
+
+            {/* Blog Excerpt */}
+            {blogData.excerpt && (
+              <div className="blog-excerpt">
+                <p>{blogData.excerpt}</p>
+              </div>
+            )}
 
             {/* Blog Content */}
             <div className="blog-text">
-              <p>{currentBlog.content.paragraph1}</p>
-              
-              <p>{currentBlog.content.paragraph2}</p>
-
-              <blockquote className="quote">
-                {currentBlog.content.quote}
-              </blockquote>
-
-              <p className="last-paragraph">Continue reading to discover more insights about this exceptional vehicle.</p>
+              <div dangerouslySetInnerHTML={{ __html: blogData.content }} />
             </div>
 
-            {/* What You'll Learn Section */}
-            <div className="learning-section">
-              <h3>What you'll learn</h3>
-              <div className="learning-content">
-                <div className="learning-column">
-                  <div className="learning-item">
-                    <span className="check-icon">✓</span>
-                    <span>Performance specifications and capabilities</span>
-                  </div>
-                  <div className="learning-item">
-                    <span className="check-icon">✓</span>
-                    <span>Interior and exterior design features</span>
-                  </div>
-                  <div className="learning-item">
-                    <span className="check-icon">✓</span>
-                    <span>Technology and safety innovations</span>
-                  </div>
-                  <div className="learning-item">
-                    <span className="check-icon">✓</span>
-                    <span>Driving experience and handling</span>
-                  </div>
-                  <div className="learning-item">
-                    <span className="check-icon">✓</span>
-                    <span>Comparison with competitors</span>
-                  </div>
-                </div>
-                <div className="learning-column">
-                  <div className="learning-item">
-                    <span className="check-icon">✓</span>
-                    <span>Fuel efficiency and environmental impact</span>
-                  </div>
-                  <div className="learning-item">
-                    <span className="check-icon">✓</span>
-                    <span>Pricing and value proposition</span>
-                  </div>
-                  <div className="learning-item">
-                    <span className="check-icon">✓</span>
-                    <span>Maintenance and ownership costs</span>
-                  </div>
-                  <div className="learning-item">
-                    <span className="check-icon">✓</span>
-                    <span>Best use cases and target audience</span>
-                  </div>
-                  <div className="learning-item">
-                    <span className="check-icon">✓</span>
-                    <span>Future updates and model evolution</span>
+            {/* Key Points Section */}
+            {blogData.keyPoints && blogData.keyPoints.length > 0 && (
+              <div className="learning-section">
+                <h3>Key Takeaways</h3>
+                <div className="learning-content">
+                  <div className="learning-column">
+                    {blogData.keyPoints.map((point, index) => (
+                      <div key={index} className="learning-item">
+                        <span className="check-icon">✓</span>
+                        <span>{point}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
-            </div>
+            )}
 
-            {/* Second Image */}
-            <div className="second-image">
-              <img src={currentBlog.secondImage} alt="Additional view" className="blog-image" />
-            </div>
+            {/* Content Image */}
+            {blogData.contentImage && (
+              <div className="second-image">
+                <img src={blogData.contentImage} alt="Additional content" className="blog-image" />
+              </div>
+            )}
 
             {/* Requirements Section */}
-            <div className="requirements-section">
-              <h3>Key Considerations</h3>
-              <ul className="requirements-list">
-                <li>Understanding your specific driving needs and preferences before making a decision on luxury vehicle features.</li>
-                <li>Budget considerations including purchase price, insurance, and maintenance costs</li>
-                <li>Familiarity with advanced automotive technologies and driver assistance systems</li>
-              </ul>
-            </div>
+            {blogData.requirements && blogData.requirements.length > 0 && (
+              <div className="requirements-section">
+                <h3>Prerequisites</h3>
+                <ul className="requirements-list">
+                  {blogData.requirements.map((requirement, index) => (
+                    <li key={index}>{requirement}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Tags Section */}
+            {blogData.tags && blogData.tags.length > 0 && (
+              <div className="tags-section">
+                <span className="tags-label">Tags:</span>
+                <div className="tags-list">
+                  {blogData.tags.map((tag, index) => (
+                    <span key={index} className="tag" onClick={() => console.log(`Search tag: ${tag}`)}>{tag}</span>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Share Section */}
             <div className="share-section">
-              <span className="share-text">Share this post:</span>
-              <div className="social-icons">
-                <a href="#" className="social-icon facebook">f</a>
-                <a href="#" className="social-icon twitter">t</a>
-                <a href="#" className="social-icon linkedin">in</a>
-                <a href="#" className="social-icon pinterest">p</a>
+              <div className="share-left">
+                <span className="share-text">Share this article:</span>
+                <div className="social-icons">
+                  <button 
+                    onClick={() => handleShare('facebook')} 
+                    className="social-icon facebook"
+                    aria-label="Share on Facebook"
+                  >
+                    f
+                  </button>
+                  <button 
+                    onClick={() => handleShare('twitter')} 
+                    className="social-icon twitter"
+                    aria-label="Share on Twitter"
+                  >
+                    t
+                  </button>
+                  <button 
+                    onClick={() => handleShare('linkedin')} 
+                    className="social-icon linkedin"
+                    aria-label="Share on LinkedIn"
+                  >
+                    in
+                  </button>
+                  <button 
+                    onClick={() => handleShare('pinterest')} 
+                    className="social-icon pinterest"
+                    aria-label="Share on Pinterest"
+                  >
+                    p
+                  </button>
+                  <button 
+                    onClick={handleCopyLink} 
+                    className="social-icon copy-link"
+                    aria-label="Copy link"
+                  >
+                    🔗
+                  </button>
+                </div>
               </div>
-              <div className="post-navigation">
-                <span className="nav-text">Post Tags:</span>
-                <span className="nav-text">Recent</span>
+              <div className="post-meta">
+                <span className="reading-time">
+                  📖 {blogData.estimatedReadTime || getReadingTime(blogData.content)}
+                </span>
               </div>
             </div>
 
             {/* Author Section */}
             <div className="author-section">
-              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&h=80&q=80" alt="Admin" className="author-large-avatar" />
+              <img 
+                src={blogData.authorAvatar || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&h=80&q=80"} 
+                alt={blogData.author} 
+                className="author-large-avatar" 
+              />
               <div className="author-details">
-                <h4>Admin</h4>
-                <p>
-                  Will is a well-known automotive journalist with over a decade of experience in the luxury vehicle segment. 
-                  His comprehensive reviews and in-depth analysis have helped thousands of readers make informed decisions 
-                  about their automotive purchases. Follow his latest insights on luxury vehicles and automotive trends.
-                </p>
-              </div>
-            </div>
-
-            {/* Previous/Next Posts */}
-            <div className="post-navigation-section">
-              <div className="prev-post">
-                <span className="nav-label">← Previous post</span>
-                <h5>BMW X4 M40i 2022 Sport Variant – got on board</h5>
-              </div>
-              <div className="next-post">
-                <span className="nav-label">Next Post →</span>
-                <h5>2023 BMW X4 M40i will set ultimate before</h5>
+                <h4>About {blogData.author}</h4>
+                <p>{blogData.authorBio || 'This author hasn\'t provided a bio yet, but their content speaks for itself!'}</p>
+                <div className="author-social">
+                  <button className="author-follow-btn">Follow</button>
+                </div>
               </div>
             </div>
 
             {/* Comments Section */}
             <div className="comments-section">
-              <h3>3 Comments</h3>
+              <h3>
+                {blogData.comments?.filter(comment => comment.approved).length || 0} Comments
+              </h3>
               
-              <div className="comment">
-                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=50&h=50&q=80" alt="Admin" className="comment-avatar" />
-                <div className="comment-content">
-                  <div className="comment-header">
-                    <span className="comment-author">Admin</span>
-                    <span className="comment-date">November 23, 2023</span>
-                    <button className="reply-btn">Reply</button>
+              {blogData.comments?.filter(comment => comment.approved).map((comment, index) => (
+                <div key={comment._id || index} className="comment">
+                  <img 
+                    src={`https://ui-avatars.com/api/?name=${encodeURIComponent(comment.author)}&size=50&background=random`} 
+                    alt={comment.author} 
+                    className="comment-avatar" 
+                  />
+                  <div className="comment-content">
+                    <div className="comment-header">
+                      <span className="comment-author">{comment.author}</span>
+                      <span className="comment-date">{formatDate(comment.createdAt)}</span>
+                    </div>
+                    <p>{comment.content}</p>
+                    <div className="comment-actions">
+                      <button className="comment-reply-btn">Reply</button>
+                      <button className="comment-like-btn">👍 {comment.likes || 0}</button>
+                    </div>
                   </div>
-                  <p>
-                    Great article! The detailed analysis really helps understand the vehicle's positioning in the luxury segment. 
-                    Looking forward to more comprehensive reviews like this one.
-                  </p>
                 </div>
-              </div>
+              ))}
 
-              <div className="comment reply-comment">
-                <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=50&h=50&q=80" alt="Hi Turk" className="comment-avatar" />
-                <div className="comment-content">
-                  <div className="comment-header">
-                    <span className="comment-author">Hi Turk</span>
-                    <span className="comment-date">November 23, 2023</span>
-                    <button className="reply-btn">Reply</button>
-                  </div>
-                  <p>
-                    I've been considering this model for months. Your review provided exactly the insights I needed. 
-                    The performance comparison was particularly helpful.
-                  </p>
+              {blogData.comments?.filter(comment => comment.approved).length === 0 && (
+                <div className="no-comments">
+                  <p>No comments yet. Be the first to share your thoughts!</p>
                 </div>
-              </div>
-
-              <div className="comment">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=50&h=50&q=80" alt="Danny" className="comment-avatar" />
-                <div className="comment-content">
-                  <div className="comment-header">
-                    <span className="comment-author">Danny</span>
-                    <span className="comment-date">January 5, 2023</span>
-                    <button className="reply-btn">Reply</button>
-                  </div>
-                  <p>Excellent review! The detailed breakdown of features and performance metrics is very helpful for potential buyers.</p>
-                </div>
-              </div>
+              )}
             </div>
 
             {/* Comment Form */}
             <div className="comment-form-section">
-              <h3>Leave a Comment</h3>
-              <div className="comment-form">
+              <h3>Join the Discussion</h3>
+              {commentError && (
+                <div className="error-message">
+                  {commentError}
+                </div>
+              )}
+              <form onSubmit={handleSubmitComment} className="comment-form">
                 <div className="form-row">
                   <input
                     type="text"
@@ -362,6 +513,8 @@ const BlogDetailPage = () => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="form-input"
+                    disabled={commentLoading}
+                    required
                   />
                   <input
                     type="email"
@@ -369,13 +522,17 @@ const BlogDetailPage = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="form-input"
+                    disabled={commentLoading}
+                    required
                   />
                 </div>
                 <textarea
-                  placeholder="Your Comment*"
+                  placeholder="Share your thoughts...*"
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                   className="form-textarea"
+                  disabled={commentLoading}
+                  required
                 ></textarea>
                 <div className="form-checkbox">
                   <input
@@ -383,28 +540,67 @@ const BlogDetailPage = () => {
                     id="save-info"
                     checked={saveInfo}
                     onChange={(e) => setSaveInfo(e.target.checked)}
+                    disabled={commentLoading}
                   />
-                  <label htmlFor="save-info">Save my name, email and website in this browser for the next time I comment.</label>
+                  <label htmlFor="save-info">
+                    Save my name and email for next time
+                  </label>
                 </div>
-                <button onClick={handleSubmitComment} className="submit-btn">Submit Comment</button>
-              </div>
+                <button 
+                  type="submit"
+                  className="submit-btn"
+                  disabled={commentLoading}
+                >
+                  {commentLoading ? (
+                    <>
+                      <span className="spinner">⟳</span>
+                      Submitting...
+                    </>
+                  ) : (
+                    'Post Comment'
+                  )}
+                </button>
+              </form>
             </div>
 
             {/* Related Posts */}
-            <div className="related-posts-section">
-              <h3>Related Posts</h3>
-              <div className="related-posts-grid">
-                {relatedPosts.map((post) => (
-                  <div key={post.id} className="related-post">
-                    <img src={post.image} alt={post.title} className="related-post-image" />
-                    <div className="related-post-content">
-                      <span className="related-post-date">{post.date}</span>
-                      <h4>{post.title}</h4>
-                    </div>
-                  </div>
-                ))}
+            {relatedPosts.length > 0 && (
+              <div className="related-posts-section">
+                <h3>You Might Also Like</h3>
+                <div className="related-posts-grid">
+                  {relatedPosts.map((post) => (
+                    <Link 
+                      key={post._id} 
+                      to={`/blog/${post.slug || post._id}`} 
+                      className="related-post"
+                    >
+                      <div className="related-post-image-container">
+                        <img 
+                          src={post.heroImage || "https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"} 
+                          alt={post.title} 
+                          className="related-post-image" 
+                        />
+                        <div className="related-post-overlay">
+                          <span className="read-more">Read More →</span>
+                        </div>
+                      </div>
+                      <div className="related-post-content">
+                        <span className="related-post-category">{post.category}</span>
+                        <span className="related-post-date">{formatDate(post.createdAt)}</span>
+                        <h4>{post.title}</h4>
+                        <p>{post.excerpt}</p>
+                        <div className="related-post-meta">
+                          <span className="reading-time">
+                            {post.estimatedReadTime || getReadingTime(post.content)}
+                          </span>
+                          <span className="views">{post.views} views</span>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </main>
