@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   Facebook, Twitter, Instagram, Linkedin,
-  Phone, Mail, MapPin, ExternalLink, Menu
+  Phone, Mail, MapPin, ExternalLink
 } from 'lucide-react';
 import '../../../styles/contact.css'
 import Navbar from '../../common/Navbar';
@@ -15,23 +15,6 @@ const ContactPage = () => {
     phone: '',
     message: ''
   });
-
-  const mapRef = useRef(null);
-
-  useEffect(() => {
-    if (window.google && mapRef.current) {
-      const map = new window.google.maps.Map(mapRef.current, {
-        center: { lat: -37.807425, lng: 144.978247 }, // Melbourne HQ
-        zoom: 14,
-      });
-
-      new window.google.maps.Marker({
-        position: { lat: -37.807425, lng: 144.978247 },
-        map,
-        title: 'Boxcars HQ',
-      });
-    }
-  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -60,8 +43,18 @@ const ContactPage = () => {
       <div className="contact-hero">
         <h1 className="contact-title">Contact Us</h1>
 
-        {/* Google Map */}
-        <div className="map-container" ref={mapRef}></div>
+        {/* Google Map iframe embed */}
+        <div className="map-container" style={{ height: '400px', width: '100%' }}>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126743.6321540671!2d79.77380331342476!3d6.921831560922283!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo!5e0!3m2!1sen!2slk!4v1751341947324!5m2!1sen!2slk"
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        </div>
       </div>
 
       {/* Contact Content */}
@@ -197,8 +190,8 @@ const ContactPage = () => {
         <h2 className="offices-title">Our Offices</h2>
         <div className="offices-grid">
           <div className="office-card">
-            <h3>San Francisco</h3>
-            <p className="office-address">48 Dorev Blvd, San Francisco, CA 09414, USA</p>
+            <h3>Malabe</h3>
+            <p className="office-address">No. 105, New Kandy Road, Malabe, Sri Lanka</p>
             <div className="office-actions">
               <a href="#" className="office-link">
                 <ExternalLink size={16} /> See on Map
@@ -207,14 +200,14 @@ const ContactPage = () => {
                 <Mail size={16} /> alisan@boxcars.com
               </a>
               <a href="tel:+85656123456" className="office-link">
-                <Phone size={16} /> +85 656 123 456
+                <Phone size={16} /> +94 11 278 9123
               </a>
             </div>
           </div>
 
           <div className="office-card">
-            <h3>New York</h3>
-            <p className="office-address">232–230 Wilson Ave, Brooklyn, NY 11221, USA</p>
+            <h3>Kottawa</h3>
+            <p className="office-address">No. 20, Kottawa Road, Kottawa, Sri Lanka</p>
             <div className="office-actions">
               <a href="#" className="office-link">
                 <ExternalLink size={16} /> See on Map
@@ -223,14 +216,14 @@ const ContactPage = () => {
                 <Mail size={16} /> aliny@boxcars.com
               </a>
               <a href="tel:+76956123456" className="office-link">
-                <Phone size={16} /> +76 956 123 456
+                <Phone size={16} /> +94 11 283 4567
               </a>
             </div>
           </div>
 
           <div className="office-card">
-            <h3>London</h3>
-            <p className="office-address">127-143 Borough High St, London SE1 1NP, UK</p>
+            <h3>Piliyandala</h3>
+            <p className="office-address">No. 15, Piliyandala Rd, Piliyandala, Sri Lanka</p>
             <div className="office-actions">
               <a href="#" className="office-link">
                 <ExternalLink size={16} /> See on Map
@@ -239,7 +232,7 @@ const ContactPage = () => {
                 <Mail size={16} /> alikd@boxcars.com
               </a>
               <a href="tel:+76222333888" className="office-link">
-                <Phone size={16} /> +76 222 333 888
+                <Phone size={16} /> +94 11 234 5678
               </a>
             </div>
           </div>

@@ -7,7 +7,11 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.6;
-  color: #333;
+  background-color: #ffffff;
+}
+
+.contact-page {
+  background-color: #ffffff;
 }
 
 .header {
@@ -79,8 +83,9 @@ body {
   max-width: 1200px;
   margin: 2rem auto;
   padding: 0 2rem;
-  color: #666;
-  font-size: 0.9rem;
+  color: #3a3a3a;
+  font-size: 1rem;
+  background-color: #ffffff;
 }
 
 .breadcrumb a {
@@ -174,7 +179,7 @@ body {
   padding: 0.75rem;
   border: 2px solid #e5e7eb;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   transition: border-color 0.3s;
 }
 
@@ -206,6 +211,13 @@ body {
   background: #4338ca;
 }
 
+.contact-details {
+  border: 2px solid #e4e4e4;
+  padding: 1.5rem;
+  border-radius: 10px;
+  height: 542px;
+}
+
 .contact-details h3 {
   font-size: 1.5rem;
   font-weight: bold;
@@ -232,12 +244,13 @@ body {
 }
 
 .contact-icon {
-  background: #f3f4f6;
+  background: #e6e6e6;    
   padding: 0.75rem;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: rgb(80, 80, 80); 
 }
 
 .contact-text h4 {
@@ -287,6 +300,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 4rem 2rem;
+  margin-top: -35px;
 }
 
 .offices-title {
@@ -294,7 +308,7 @@ body {
   font-weight: bold;
   margin-bottom: 3rem;
   color: #333;
-  text-align: center;
+  text-align: left;
 }
 
 .offices-grid {
