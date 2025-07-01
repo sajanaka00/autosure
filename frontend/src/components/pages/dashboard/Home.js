@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, Search, MessageCircle } from 'lucide-react';
+import { ChevronDown, Search, MessageCircle, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import backgroundImage from '../../../assets/images/home-bg4.jpg'; 
 import whatsappIcon from '../../../assets/images/vectors/whatsapp.png';
 import ExploreAllVehicles from '../listings/ExploreAllVehicles'
@@ -9,6 +9,7 @@ import '../../../styles/home.css';
 export default function FilterBar() {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [showWhatsAppCard, setShowWhatsAppCard] = useState(false);
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
   // WhatsApp configuration for different services
   const whatsappConfig = {
@@ -37,6 +38,34 @@ export default function FilterBar() {
     models: 'Any Models',
     prices: 'All Prices'
   });
+
+  // Testimonials data
+  const testimonials = [
+    {
+      id: 1,
+      title: "Great Work",
+      review: "Amazing design, easy to customize and a design quality superlative account on its cloud platform for the optimized performance. And we didn't on our original designs.",
+      name: "Leslie Alexander",
+      position: "Facebook",
+      avatar: "https://images.unsplash.com/photo-1494790108755-2616b9d32e8e?w=100&h=100&fit=crop&crop=face"
+    },
+    {
+      id: 2,
+      title: "Awesome Design",
+      review: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam sed do eiusmod",
+      name: "Floyd Miles",
+      position: "Designer",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
+    },
+    {
+      id: 3,
+      title: "Good Job",
+      review: "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system.",
+      name: "Dianne Russell",
+      position: "Marketing",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face"
+    }
+  ];
 
   const toggleDropdown = (dropdown) => {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
@@ -93,6 +122,15 @@ export default function FilterBar() {
 
   const toggleWhatsAppCard = () => {
     setShowWhatsAppCard(!showWhatsAppCard);
+  };
+
+  // Testimonial navigation
+  const nextTestimonial = () => {
+    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+  };
+
+  const prevTestimonial = () => {
+    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
   const DropdownSection = ({ dropdownKey, options, label }) => (
@@ -201,7 +239,152 @@ export default function FilterBar() {
         )}
       </div>
 
+      {/* Fair Price Section */}
+      <div className="fair-price-section">
+        <div className="fair-price-container">
+          <div className="fair-price-content">
+            <div className="fair-price-images">
+              <div className="car-image-card car-image-1">
+                <div className="car-image-placeholder">
+                  <div className="car-silhouette">🚗</div>
+                </div>
+              </div>
+              <div className="car-image-card car-image-2">
+                <div className="car-image-placeholder">
+                  <div className="car-silhouette">🚙</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="fair-price-text">
+              <h2 className="fair-price-title">
+                Get A Fair Price For Your Car Sell To Us Today
+              </h2>
+              <p className="fair-price-description">
+                We are committed to providing our customers with exceptional service, 
+                competitive pricing, and a wide range of.
+              </p>
+              
+              <div className="fair-price-features">
+                <div className="feature-item">
+                  <span className="feature-check">✓</span>
+                  <span className="feature-text">We are the UK's largest provider, with more patrols in more places</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-check">✓</span>
+                  <span className="feature-text">You get 24/7 roadside assistance</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-check">✓</span>
+                  <span className="feature-text">We fix 4 out of 5 cars at the roadside</span>
+                </div>
+              </div>
+              
+              <button className="get-started-button">
+                Get Started
+                <ArrowRight className="arrow-icon" />
+              </button>
+            </div>
+          </div>
+          
+          <div className="stats-section">
+            <div className="stat-item">
+              <div className="stat-number">836M</div>
+              <div className="stat-label">CARS FOR SALE</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">738M</div>
+              <div className="stat-label">DEALER REVIEWS</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">100M</div>
+              <div className="stat-label">VISITORS PER DAY</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">238M</div>
+              <div className="stat-label">VERIFIED DEALERS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Hero Section */}
+      <div className="hero-section">
+        <div className="hero-overlay">
+          <div className="hero-content">
+            <h1 className="hero-title">We Make Finding The Right Car Simple</h1>
+            <button className="hero-button">
+              Find Out More <ArrowRight className="hero-arrow-icon" />
+            </button>
+          </div>
+        </div>
+      </div>
+
       <ExploreAllVehicles />
+
+      {/* Customer Testimonials Section */}
+      <div className="testimonials-section">
+        <div className="testimonials-container">
+          <div className="testimonials-header">
+            <h2 className="testimonials-title">What our customers say</h2>
+            <div className="testimonials-rating">
+              <span className="rating-text">Rated 4.7 / 5 based on 28,370 reviews</span>
+              <span className="rating-subtext">Showing our 4 & 5 star reviews</span>
+            </div>
+          </div>
+          
+          <div className="testimonials-content">
+            <div className="testimonials-slider">
+              {testimonials.map((testimonial, index) => (
+                <div 
+                  key={testimonial.id}
+                  className={`testimonial-card ${index === currentTestimonial ? 'active' : ''}`}
+                  style={{
+                    transform: `translateX(${(index - currentTestimonial) * 100}%)`,
+                    opacity: Math.abs(index - currentTestimonial) <= 1 ? 1 : 0
+                  }}
+                >
+                  <div className="testimonial-content">
+                    <div className="testimonial-header">
+                      <h3 className="testimonial-title">{testimonial.title}</h3>
+                      <div className="quote-icon">❝</div>
+                    </div>
+                    <p className="testimonial-review">{testimonial.review}</p>
+                    <div className="testimonial-author">
+                      <img 
+                        src={testimonial.avatar} 
+                        alt={testimonial.name}
+                        className="author-avatar"
+                      />
+                      <div className="author-info">
+                        <div className="author-name">{testimonial.name}</div>
+                        <div className="author-position">{testimonial.position}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <div className="testimonials-navigation">
+              <button 
+                className="nav-button prev-button"
+                onClick={prevTestimonial}
+                disabled={currentTestimonial === 0}
+              >
+                <ChevronLeft className="nav-icon" />
+              </button>
+              <button 
+                className="nav-button next-button"
+                onClick={nextTestimonial}
+                disabled={currentTestimonial === testimonials.length - 1}
+              >
+                <ChevronRight className="nav-icon" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Floating WhatsApp Button */}
       <div 
