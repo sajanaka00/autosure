@@ -12,7 +12,8 @@ const transporter = nodemailer.createTransport({
 });
 
 // POST /api/contact - Handle contact form submission
-router.post('/contact', async (req, res) => {
+// Note: The route is just '/' because it's mounted at '/api/contact' in server.js
+router.post('/', async (req, res) => {
   try {
     const { firstName, lastName, email, phone, message } = req.body;
 
@@ -24,10 +25,30 @@ router.post('/contact', async (req, res) => {
       });
     }
 
+    // Check if email configuration is set
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error('Email configuration missing: EMAIL_USER or EMAIL_PASS not set');
+      return res.status(500).json({
+        success: false,
+        message: 'Email service is not configured. Please contact support.'
+      });
+    }
+
+    // Set recipient email (use COMPANY_EMAIL or fallback to EMAIL_USER)
+    const recipientEmail = process.env.COMPANY_EMAIL || process.env.EMAIL_USER;
+    
+    if (!recipientEmail) {
+      console.error('No recipient email configured');
+      return res.status(500).json({
+        success: false,
+        message: 'Email service is not configured. Please contact support.'
+      });
+    }
+
     // Email content to send to company
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: process.env.COMPANY_EMAIL, // company email to receive inquiries
+      to: recipientEmail, // company email to receive inquiries
       subject: `New Contact Form Inquiry - ${firstName} ${lastName}`,
       html: `
         <h2>New Contact Form Submission</h2>
