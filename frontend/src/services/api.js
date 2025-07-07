@@ -269,6 +269,14 @@ class ApiService {
       },
     });
   }
+
+  // Contact form method
+  async submitContact(contactData) {
+    return this.makeRequest('/contact', {
+      method: 'POST',
+      body: JSON.stringify(contactData),
+    });
+  }
 }
 
 export const api = new ApiService();

@@ -6,6 +6,7 @@ import {
 import '../../../styles/contact.css'
 import Navbar from '../../common/Navbar';
 import BoxCarFooter from '../../common/Footer';
+import { api } from '../../../services/api';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +17,8 @@ const ContactPage = () => {
     message: ''
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -24,9 +27,36 @@ const ContactPage = () => {
     }));
   };
 
-  const handleSubmit = () => {
-    console.log('Form submitted:', formData);
-    alert('Message sent successfully!');
+  const handleSubmit = async () => {
+    // Validate required fields
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.message) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await api.submitContact(formData);
+      
+      if (response.success) {
+        alert('Message sent successfully! We will get back to you soon.');
+        setFormData({
+          firstName: '',
+          lastName: '',
+          email: '',
+          phone: '',
+          message: ''
+        });
+      } else {
+        alert('Failed to send message. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to send message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

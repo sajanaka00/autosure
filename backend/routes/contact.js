@@ -1,89 +1,75 @@
 const express = require('express');
-const Contact = require('../models/Contact');
-const { authenticateToken, authorizeRoles } = require('../middleware/auth');
-
+const nodemailer = require('nodemailer');
 const router = express.Router();
 
-// Submit contact form
-router.post('/', async (req, res) => {
+// Email transporter configuration
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER, // sender email
+    pass: process.env.EMAIL_PASS  // app password
+  }
+});
+
+// POST /api/contact - Handle contact form submission
+router.post('/contact', async (req, res) => {
   try {
-    const contact = new Contact(req.body);
-    await contact.save();
+    const { firstName, lastName, email, phone, message } = req.body;
 
-    if (req.body.vehicleId) {
-      await contact.populate('vehicleId', 'make model year');
-    }
-
-    res.status(201).json({
-      message: 'Contact form submitted successfully',
-      inquiry: contact
-    });
-  } catch (error) {
-    console.error('Contact form error:', error);
-    if (error.name === 'ValidationError') {
-      return res.status(400).json({ 
-        error: 'Validation error', 
-        details: Object.values(error.errors).map(e => e.message) 
+    // Validate required fields
+    if (!firstName || !lastName || !email || !message) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please fill in all required fields'
       });
     }
-    res.status(500).json({ error: 'Failed to submit contact form' });
-  }
-});
 
-// Get all contact inquiries (admin only)
-router.get('/all', authenticateToken, authorizeRoles('admin', 'dealer'), async (req, res) => {
-  try {
-    const { page = 1, limit = 10, status, inquiryType } = req.query;
-    const skip = (page - 1) * limit;
+    // Email content to send to company
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: process.env.COMPANY_EMAIL, // company email to receive inquiries
+      subject: `New Contact Form Inquiry - ${firstName} ${lastName}`,
+      html: `
+        <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
+        <p><strong>Message:</strong></p>
+        <div style="background-color: #f9f9f9; padding: 15px; border-left: 4px solid #007bff; margin: 10px 0;">
+          ${message}
+        </div>
+        <hr>
+        <p><small>Submitted on: ${new Date().toLocaleString()}</small></p>
+        <p><small>Reply directly to: ${email}</small></p>
+      `,
+      replyTo: email // So you can reply directly to the customer
+    };
 
-    const filter = {};
-    if (status) filter.status = status;
-    if (inquiryType) filter.inquiryType = inquiryType;
+    // Send email to company
+    await transporter.sendMail(mailOptions);
 
-    const inquiries = await Contact.find(filter)
-      .populate('vehicleId', 'make model year')
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(Number(limit));
-
-    const total = await Contact.countDocuments(filter);
-
-    res.json({
-      inquiries,
-      pagination: {
-        currentPage: Number(page),
-        totalPages: Math.ceil(total / limit),
-        total
-      }
+    // Return success response
+    res.status(200).json({
+      success: true,
+      message: 'Message sent successfully! We will get back to you soon.'
     });
+
   } catch (error) {
-    console.error('Get contact inquiries error:', error);
-    res.status(500).json({ error: 'Failed to fetch contact inquiries' });
-  }
-});
-
-// Update contact inquiry status (admin only)
-router.put('/:id/status', authenticateToken, authorizeRoles('admin', 'dealer'), async (req, res) => {
-  try {
-    const { status } = req.body;
-
-    const inquiry = await Contact.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new: true, runValidators: true }
-    ).populate('vehicleId', 'make model year');
-
-    if (!inquiry) {
-      return res.status(404).json({ error: 'Contact inquiry not found' });
+    console.error('Contact form error:', error);
+    
+    // Handle email sending errors
+    if (error.code === 'EAUTH' || error.responseCode === 535) {
+      return res.status(500).json({
+        success: false,
+        message: 'Email configuration error. Please contact support.'
+      });
     }
 
-    res.json({
-      message: 'Contact inquiry updated successfully',
-      inquiry
+    // Generic error response
+    res.status(500).json({
+      success: false,
+      message: 'Failed to send message. Please try again later.'
     });
-  } catch (error) {
-    console.error('Update contact inquiry error:', error);
-    res.status(500).json({ error: 'Failed to update contact inquiry' });
   }
 });
 

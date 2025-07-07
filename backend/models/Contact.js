@@ -1,38 +1,31 @@
 const mongoose = require('mongoose');
 
 const contactSchema = new mongoose.Schema({
-  name: {
+  firstName: {
     type: String,
-    required: true,
+    required: [true, 'First name is required'],
+    trim: true
+  },
+  lastName: {
+    type: String,
+    required: [true, 'Last name is required'],
     trim: true
   },
   email: {
     type: String,
-    required: true,
+    required: [true, 'Email is required'],
     lowercase: true,
-    trim: true
+    trim: true,
+    match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
   },
   phone: {
     type: String,
     trim: true
   },
-  subject: {
-    type: String,
-    trim: true
-  },
   message: {
     type: String,
-    required: true,
+    required: [true, 'Message is required'],
     trim: true
-  },
-  inquiryType: {
-    type: String,
-    enum: ['general', 'vehicle', 'trade-in', 'fleet', 'support'],
-    default: 'general'
-  },
-  vehicleId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Vehicle'
   },
   status: {
     type: String,
@@ -41,6 +34,16 @@ const contactSchema = new mongoose.Schema({
   }
 }, {
   timestamps: true
+});
+
+// Virtual for full name
+contactSchema.virtual('fullName').get(function() {
+  return `${this.firstName} ${this.lastName}`;
+});
+
+// Ensure virtual fields are serialized
+contactSchema.set('toJSON', {
+  virtuals: true
 });
 
 module.exports = mongoose.model('Contact', contactSchema);
