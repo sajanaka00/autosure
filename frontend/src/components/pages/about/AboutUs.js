@@ -1,6 +1,18 @@
 import React, { useState } from 'react';
 import Navbar from '../../common/Navbar';
 import Footer from '../../common/Footer';
+import AboutGrid1 from '../../../assets/images/about/about-grid1.jpg'
+import AboutGrid2 from '../../../assets/images/about/about-grid2.jpg'
+import ChooseUs1 from '../../../assets/images/vectors/choose-us1.png'
+import ChooseUs2 from '../../../assets/images/vectors/choose-us2.png'
+import ChooseUs3 from '../../../assets/images/vectors/choose-us3.png'
+import ChooseUs4 from '../../../assets/images/vectors/choose-us4.png'
+import FairPrice from '../../../assets/images/about/fair-price.jpg'
+import PlayBtn from '../../../assets/images/vectors/play-btn.png'
+import Team1 from '../../../assets/images/about/team1.png'
+import Team2 from '../../../assets/images/about/team2.png'
+import Team3 from '../../../assets/images/about/team3.png'
+import Team4 from '../../../assets/images/about/team4.png'
 import '../../../styles/about-us.css';
 
 const BoxCarsAbout = () => {
@@ -61,27 +73,21 @@ const BoxCarsAbout = () => {
             </div>
             
             <div className="about-images">
-              <div className="years-badge">
-                <span className="years-number">45</span>
-                <span className="years-text">Years in Business</span>
-              </div>
-              
               <div className="images-grid">
-                {/* Column 1: Two images stacked */}
+                {/* Column 1: years badge + one image below */}
                 <div className="column-1">
-                  <img 
-                    src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400&h=300&fit=crop" 
-                    alt="Handshake deal"
-                    className="image-1"
-                  />
+                  <div className="years-badge">
+                    <span className="years-number">45</span>
+                    <span className="years-text">Years in Business</span>
+                  </div>
                   <img 
                     src="https://images.unsplash.com/photo-1580654712603-eb43273aff33?w=400&h=300&fit=crop" 
                     alt="Luxury car interior"
                     className="image-2"
                   />
                 </div>
-                
-                {/* Column 2: One large square image */}
+
+                {/* Column 2 */}
                 <div className="column-2">
                   <img 
                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=600&fit=crop&crop=face" 
@@ -89,11 +95,11 @@ const BoxCarsAbout = () => {
                     className="image-3"
                   />
                 </div>
-                
-                {/* Column 3: One long image on top, two smaller below */}
+
+                {/* Column 3 */}
                 <div className="column-3">
                   <img 
-                    src="https://images.unsplash.com/photo-1562141961-4b5a5a5e8f7e?w=500&h=250&fit=crop" 
+                    src={AboutGrid2} 
                     alt="Car showroom interior"
                     className="image-4"
                   />
@@ -117,64 +123,45 @@ const BoxCarsAbout = () => {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="why-choose-section">
-        <div className="container">
-          <h2 className="section-title">Why Choose Us?</h2>
+      <section class="why-choose-section">
+        <div class="container">
+          <h2 class="section-title">Why Choose Us?</h2>
           
-          <div className="features-grid">
-            <div className="feature-item">
-              <div className="feature-icon blue-icon">
-                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                  <rect x="8" y="12" width="32" height="24" rx="4" stroke="currentColor" strokeWidth="2"/>
-                  <path d="M16 20h16M16 24h12M16 28h8" stroke="currentColor" strokeWidth="2"/>
-                  <circle cx="38" cy="10" r="6" fill="currentColor"/>
-                  <path d="M36 10l2 2 4-4" stroke="white" strokeWidth="1.5" fill="none"/>
-                </svg>
+          <div class="features-grid">
+            <div class="feature-item">
+              <div class="feature-icon">
+                <img src={ChooseUs1} alt="Special Financing Offers" />
               </div>
               <h3>Special Financing Offers</h3>
-              <p>Our stress-free finance department that can find financial solutions to save you money.</p>
+              <p>Flexible financing options with competitive rates &  customized payment plans to fit your budget and needs.</p>
             </div>
-            
-            <div className="feature-item">
-              <div className="feature-icon purple-icon">
-                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                  <path d="M24 8l-3 6h-6l5 4-2 6 6-4 6 4-2-6 5-4h-6l-3-6z" stroke="currentColor" strokeWidth="2" fill="none"/>
-                  <circle cx="24" cy="24" r="18" stroke="currentColor" strokeWidth="2" fill="none"/>
-                  <path d="M12 32c4-4 8-6 12-6s8 2 12 6" stroke="currentColor" strokeWidth="2" fill="none"/>
-                </svg>
+
+            <div class="feature-item">
+              <div class="feature-icon">
+                <img src={ChooseUs2} alt="Trusted Car Dealership" />
               </div>
               <h3>Trusted Car Dealership</h3>
-              <p>Our stress-free finance department that can find financial solutions to save you money.</p>
+              <p>Years of experience & thousands of satisfied customers who trust us for honest dealings and reliable service.</p>
             </div>
-            
-            <div className="feature-item">
-              <div className="feature-icon pink-icon">
-                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                  <rect x="8" y="16" width="32" height="20" rx="2" stroke="currentColor" strokeWidth="2"/>
-                  <path d="M16 24h16M20 28h8" stroke="currentColor" strokeWidth="2"/>
-                  <circle cx="36" cy="12" r="8" stroke="currentColor" strokeWidth="2" fill="none"/>
-                  <path d="M32 12h8M36 8v8" stroke="currentColor" strokeWidth="2"/>
-                </svg>
+
+            <div class="feature-item">
+              <div class="feature-icon">
+                <img src={ChooseUs3} alt="Transparent Pricing" />
               </div>
               <h3>Transparent Pricing</h3>
-              <p>Our stress-free finance department that can find financial solutions to save you money.</p>
+              <p>No hidden fees or surprise charges. Clear, upfront pricing with detailed breakdowns so you know exactly what you're paying.</p>
             </div>
-            
-            <div className="feature-item">
-              <div className="feature-icon cyan-icon">
-                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                  <circle cx="24" cy="16" r="8" stroke="currentColor" strokeWidth="2"/>
-                  <path d="M8 40c0-8 7.2-14.4 16-14.4S40 32 40 40" stroke="currentColor" strokeWidth="2" fill="none"/>
-                  <circle cx="36" cy="12" r="8" stroke="currentColor" strokeWidth="2" fill="none"/>
-                  <path d="M32 12l3 3 6-6" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-                </svg>
+
+            <div class="feature-item">
+              <div class="feature-icon">
+                <img src={ChooseUs4} alt="Expert Car Service" />
               </div>
               <h3>Expert Car Service</h3>
-              <p>Our stress-free finance department that can find financial solutions to save you money.</p>
+              <p>Certified technicians providing comprehensive maintenance and repair services to keep your vehicle running smoothly.</p>
             </div>
           </div>
         </div>
-      </section>
+      </section>  
 
       {/* Get Fair Price Section */}
       <section className="fair-price-section">
@@ -182,13 +169,11 @@ const BoxCarsAbout = () => {
           <div className="fair-price-content">
             <div className="fair-price-image">
               <img 
-                src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&h=800&fit=crop" 
+                src={FairPrice} 
                 alt="Luxury car on mountain road"
               />
               <div className="play-button">
-                <svg width="60" height="60" viewBox="0 0 24 24" fill="white">
-                  <polygon points="9,3 20,12 9,21"/>
-                </svg>
+                <img src={PlayBtn} alt="Play Button" />
               </div>
             </div>
             
@@ -199,10 +184,9 @@ const BoxCarsAbout = () => {
               </p>
               
               <ul className="benefits-list">
-                <li>We are the UK's largest retailer of quality used cars</li>
-                <li>Deliver to your door</li>
-                <li>Part-exchange welcome</li>
-                <li>Sell your car and all the options online</li>
+                <li>We are the UK’s largest provider, with more patrols in more places</li>
+                <li>You get 24/7 roadside assistance</li>
+                <li>We fix 4 out of 5 cars at the roadside</li>
               </ul>
               
               <button className="cta-button">Get Started</button>
@@ -211,19 +195,19 @@ const BoxCarsAbout = () => {
           
           <div className="stats-section">
             <div className="stat-item">
-              <h3>836M</h3>
+              <h3>89M</h3>
               <p>Cars for Sale</p>
             </div>
             <div className="stat-item">
-              <h3>738M</h3>
+              <h3>740M</h3>
               <p>Dealer Reviews</p>
             </div>
             <div className="stat-item">
-              <h3>85M</h3>
+              <h3>95M</h3>
               <p>Visitors Per Day</p>
             </div>
             <div className="stat-item">
-              <h3>238M</h3>
+              <h3>225M</h3>
               <p>Verified Dealers</p>
             </div>
           </div>
@@ -272,41 +256,52 @@ const BoxCarsAbout = () => {
         <div className="container">
           <div className="team-header">
             <h2>Our Team</h2>
-            <a href="#" className="view-all-link">View All →</a>
+            <a href="#" className="view-all-link">View All</a>
           </div>
           
           <div className="team-grid">
             <div className="team-member">
               <img 
-                src="https://images.unsplash.com/photo-1494790108755-2616b612b526?w=300&h=300&fit=crop&crop=face" 
+                src={Team1} 
                 alt="Courtney Henry"
               />
-              <h3>Courtney Henry</h3>
-              <p>President of Sales</p>
+              <div className="team-member-info">
+                <h3>Courtney Henry</h3>
+                <p>Development Manager</p>
+              </div>
             </div>
+            
             <div className="team-member">
               <img 
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face" 
+                src={Team2} 
                 alt="Jerome Bell"
               />
-              <h3>Jerome Bell</h3>
-              <p>Manager</p>
+              <div className="team-member-info">
+                <h3>Jerome Bell</h3>
+                <p>Software Tester</p>
+              </div>
             </div>
+            
             <div className="team-member">
               <img 
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face" 
+                src={Team3} 
                 alt="Arlene McCoy"
               />
-              <h3>Arlene McCoy</h3>
-              <p>Manager</p>
+              <div className="team-member-info">
+                <h3>Arlene McCoy</h3>
+                <p>Software Developer</p>
+              </div>
             </div>
+            
             <div className="team-member">
               <img 
-                src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=300&h=300&fit=crop&crop=face" 
+                src={Team4} 
                 alt="Jenny Wilson"
               />
-              <h3>Jenny Wilson</h3>
-              <p>Vice President</p>
+              <div className="team-member-info">
+                <h3>Jenny Wilson</h3>
+                <p>UI/UX Designer</p>
+              </div>
             </div>
           </div>
         </div>
@@ -315,9 +310,13 @@ const BoxCarsAbout = () => {
       {/* Customer Testimonials */}
       <section className="testimonials-section">
         <div className="container">
-          <h2>What our customers say</h2>
-          <p className="testimonials-subtitle">Based on 1,209 reviews on 75+ review channels and 4.6 star average</p>
-          
+          <div className="testimonials-heading">
+            <h2>What our customers say</h2>
+            <p className="testimonials-subtitle">
+              Rated 4.7 / 5 based on 28,370 reviews Showing our 4 & 5 star reviews
+            </p>
+          </div>
+
           <div className="testimonials-grid">
             <div className="testimonial-item">
               <h4>Great Work</h4>
