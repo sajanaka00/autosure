@@ -48,6 +48,12 @@ const BoxCarsAbout = () => {
   return (
     <div className="boxcars-container">
       <Navbar />
+
+      {/* Breadcrumb */}
+      <div className="breadcrumb">
+        <a href="#">Home</a> / About Us Us
+      </div>
+
       {/* About Us Section */}
       <section className="about-section">
         <div className="container">
@@ -344,6 +350,36 @@ const BoxCarsAbout = () => {
                 <div>
                   <strong>Jenna Watson</strong>
                   <span>Audi Driver</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="testimonial-item">
+              <h4>Great Work</h4>
+              <p>"Amazing design, easy to customize and a design quality superlative account on its cloud platform for the optimized performance. And we didn't on our original designs."</p>
+              <div className="testimonial-author">
+                <img 
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face" 
+                  alt="Ralph Edwards"
+                />
+                <div>
+                  <strong>Ralph Edwards</strong>
+                  <span>Tesla Driver</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="testimonial-item">
+              <h4>Great Work</h4>
+              <p>"Amazing design, easy to customize and a design quality superlative account on its cloud platform for the optimized performance. And we didn't on our original designs."</p>
+              <div className="testimonial-author">
+                <img 
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face" 
+                  alt="Ralph Edwards"
+                />
+                <div>
+                  <strong>Ralph Edwards</strong>
+                  <span>Tesla Driver</span>
                 </div>
               </div>
             </div>
