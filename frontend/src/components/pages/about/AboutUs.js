@@ -51,7 +51,7 @@ const BoxCarsAbout = () => {
 
       {/* Breadcrumb */}
       <div className="breadcrumb">
-        <a href="#">Home</a> / About Us Us
+        <a href="#">Home</a> / About Us
       </div>
 
       {/* About Us Section */}
