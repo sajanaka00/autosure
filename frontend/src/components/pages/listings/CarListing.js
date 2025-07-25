@@ -59,28 +59,35 @@ const Breadcrumb = () => (
 const CarHeader = () => (
   <div className="car-header">
     <Breadcrumb />
-    <h1 className="car-header__title">Toyota Camry New</h1>
-    <p className="car-header__subtitle">3.5 D5 PowerPulse Momentum 5dr AWD Geartronic Estate</p>
     
-    <div className="car-header__badges">
-      <Badge text="2023" />
-      <Badge text="20 miles" />
-      <Badge text="Automatic" />
-      <Badge text="Petrol" />
-    </div>
-    
-    <div className="car-header__actions">
-      <IconButton icon="icon4.svg" text="Share" />
-      <IconButton icon="icon5.svg" text="Save" variant="outlined" />
-      <IconButton icon="icon6.svg" text="Compare" variant="outlined" />
-    </div>
-    
-    <div className="car-header__price">
-      <span className="car-header__price-amount">$40,000</span>
-      <a href="#" className="car-header__offer-link">
-        <img className="car-header__offer-icon" src="icon7.svg" alt="" />
-        Make An Offer Price
-      </a>
+    <div className="car-header__main-content">
+      <div className="car-header__left">
+        <h1 className="car-header__title">Toyota Camry New</h1>
+        <p className="car-header__subtitle">3.5 D5 PowerPulse Momentum 5dr AWD Geartronic Estate</p>
+        
+        <div className="car-header__badges">
+          <Badge text="2023" />
+          <Badge text="20 miles" />
+          <Badge text="Automatic" />
+          <Badge text="Petrol" />
+        </div>
+      </div>
+      
+      <div className="car-header__right">
+        <div className="car-header__actions">
+          <IconButton icon="icon4.svg" text="Share" />
+          <IconButton icon="icon5.svg" text="Save" variant="outlined" />
+          <IconButton icon="icon6.svg" text="Compare" variant="outlined" />
+        </div>
+        
+        <div className="car-header__price">
+          <span className="car-header__price-amount">$40,000</span>
+          <a href="#" className="car-header__offer-link">
+            <img className="car-header__offer-icon" src="icon7.svg" alt="" />
+            Make An Offer Price
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 );

@@ -60,7 +60,29 @@
 .car-header {
   display: flex;
   flex-direction: column;
+  gap: 15px;
+}
+
+.car-header__main-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.car-header__left {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1;
+}
+
+.car-header__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   gap: 20px;
+  min-width: 300px;
 }
 
 .car-header__title {
@@ -87,7 +109,6 @@
   display: flex;
   gap: 20px;
   align-items: center;
-  margin-left: auto;
 }
 
 .car-header__price {
@@ -95,7 +116,6 @@
   flex-direction: column;
   align-items: flex-end;
   gap: 10px;
-  margin-left: auto;
 }
 
 .car-header__price-amount {
@@ -931,12 +951,17 @@
 }
 
 /* Responsive Design */
+/* Media Queries - Updated */
 @media (max-width: 1200px) {
   .car-listing-page {
-    grid-template-columns: 1fr;
-    gap: 40px;
+    margin: 0 50px;
+    max-width: none;
   }
-  
+
+  .car-listing-page__content {
+    gap: 30px;
+  }
+
   .car-listing-page__sidebar {
     position: static;
   }
@@ -944,48 +969,134 @@
   .features-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
+    padding: 20px;
+  }
+
+  .reviews-section,
+  .features-section {
+    margin: 30px auto 0;
+    padding: 0 10px;
+  }
+
+  .car-header__main-content {
+    gap: 30px;
+  }
+
+  .car-header__right {
+    min-width: 250px;
   }
 }
 
 @media (max-width: 768px) {
-  .car-header__actions {
-    margin-left: 0;
-    justify-content: flex-start;
+  .car-listing-page {
+    margin: 0 20px;
+    padding: 15px;
   }
-  
+
+  /* Car Header Mobile */
+  .car-header__main-content {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .car-header__right {
+    align-items: flex-start;
+    min-width: auto;
+    width: 100%;
+  }
+
+  .car-header__actions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
   .car-header__price {
     align-items: flex-start;
-    margin-left: 0;
+    width: 100%;
   }
-  
+
+  .car-header__title {
+    font-size: 28px;
+    line-height: 34px;
+  }
+
+  /* Car Overview Mobile */
   .car-overview__content {
     grid-template-columns: 1fr;
-    gap: 30px;
+    gap: 20px;
   }
-  
+
+  .car-overview__column {
+    gap: 20px;
+  }
+
+  /* Image Gallery Mobile */
   .image-gallery {
     grid-template-columns: 1fr;
     height: auto;
+    gap: 15px;
   }
-  
+
+  .image-gallery__main {
+    height: 250px;
+  }
+
   .image-gallery__thumbnails {
     grid-template-columns: repeat(4, 1fr);
-    height: 150px;
+    height: 80px;
+    gap: 8px;
   }
-  
+
+  /* Dealer Card Mobile */
+  .dealer-card {
+    padding: 20px;
+    gap: 20px;
+  }
+
   .dealer-card__contact-row {
     flex-direction: column;
     gap: 15px;
   }
 
+  .dealer-card__contact-item {
+    justify-content: flex-start;
+  }
+
+  /* Features Mobile */
+  .features-section {
+    margin: 20px auto 0;
+    padding: 0 5px;
+  }
+
   .features-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
+    padding: 20px 15px;
+  }
+
+  .feature-category-title {
+    font-size: 15px;
+  }
+
+  .feature-item {
+    font-size: 13px;
+  }
+
+  /* Reviews Mobile */
+  .reviews-section {
+    margin: 20px auto 0;
+    padding: 0 5px;
+  }
+
+  .reviews-title {
+    font-size: 22px;
+    padding-top: 20px;
   }
 
   .reviews-content {
     flex-direction: column;
     gap: 1rem;
+    padding: 0 15px;
   }
 
   .reviews-summary {
@@ -993,9 +1104,34 @@
     gap: 1rem;
   }
 
+  .rating-circle {
+    width: 100px;
+    height: 100px;
+  }
+
+  .rating-number {
+    font-size: 1.5rem;
+  }
+
   .rating-breakdown {
     flex-direction: column;
     gap: 1rem;
+  }
+
+  .rating-categories {
+    gap: 0.75rem;
+  }
+
+  .category-name {
+    font-size: 0.8rem;
+  }
+
+  .individual-reviews {
+    padding: 1rem 15px;
+  }
+
+  .add-review-section {
+    padding: 1rem 15px 20px;
   }
 
   .rating-input-row {
@@ -1005,5 +1141,75 @@
 
   .input-row {
     flex-direction: column;
+  }
+
+  .form-input {
+    padding: 0.65rem;
+  }
+
+  .review-textarea {
+    padding: 0.65rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .car-listing-page {
+    margin: 0 10px;
+    padding: 10px;
+  }
+
+  .car-header__title {
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  .car-header__subtitle {
+    font-size: 14px;
+  }
+
+  .car-header__badges {
+    gap: 8px;
+  }
+
+  .car-header__actions {
+    gap: 15px;
+  }
+
+  .image-gallery__main {
+    height: 200px;
+  }
+
+  .image-gallery__thumbnails {
+    height: 60px;
+    gap: 5px;
+  }
+
+  .dealer-card {
+    padding: 15px;
+  }
+
+  .features-grid {
+    padding: 15px 10px;
+  }
+
+  .reviews-content {
+    padding: 0 10px;
+  }
+
+  .individual-reviews {
+    padding: 1rem 10px;
+  }
+
+  .add-review-section {
+    padding: 1rem 10px 15px;
+  }
+
+  .rating-circle {
+    width: 80px;
+    height: 80px;
+  }
+
+  .rating-number {
+    font-size: 1.25rem;
   }
 }
