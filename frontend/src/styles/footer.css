@@ -1,172 +1,207 @@
-/* BoxCarFooter.css */
+/* Footer.css */
 
-.boxcar-footer {
-  background: linear-gradient(135deg, #1a1f2e 0%, #16213e 100%);
-  color: white;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  width: 100vw;
-  margin: 0;
-  padding: 0;
+.footer {
+  background: #050b20;
+  color: #ffffff;
+  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  width: 100%;
+  position: relative;
 }
 
 .container {
-  max-width: 1200px;
-  width: 100%;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 48px;
+  padding: 0 20px;
 }
 
 /* Newsletter Section */
-.newsletter-section {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 48px 0;
-  background: rgba(255, 255, 255, 0.02);
+.newsletter {
+  background: #050b20;
+  padding: 120px 0 60px 0;
+  position: relative;
+  margin-top: 60px;
+}
+
+.newsletter::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: #050b20;
+}
+
+.newsletter::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: #ffffff;
+  border-radius: 0 0 80px 80px;
 }
 
 .newsletter-content {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 48px;
+  align-items: center;
+  gap: 40px;
+  position: relative;
+  z-index: 2;
 }
 
-.newsletter-text h2 {
-  font-size: 28px;
-  font-weight: 700;
-  margin: 0 0 8px 0;
+.newsletter-text {
+  flex: 1;
+}
+
+.newsletter-title {
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0 0 12px 0;
   color: #ffffff;
 }
 
-.newsletter-text p {
-  color: #b8c5d1;
-  margin: 0;
+.newsletter-subtitle {
   font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+  opacity: 0.9;
+  color: #ffffff;
 }
 
 .newsletter-form {
+  background: rgba(64, 95, 242, 0.15);
+  border-radius: 60px;
+  height: 72px;
   display: flex;
-  gap: 16px;
-  width: 100%;
-  max-width: 480px;
+  align-items: center;
+  padding: 6px;
+  min-width: 450px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(64, 95, 242, 0.3);
 }
 
 .email-input {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 15px;
+  padding: 0 25px;
   flex: 1;
-  padding: 14px 20px;
-  background-color: rgba(31, 41, 55, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  color: white;
-  font-size: 16px;
-  backdrop-filter: blur(10px);
+  outline: none;
+  height: 100%;
 }
 
 .email-input::placeholder {
-  color: #9ca3af;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .email-input:focus {
   outline: none;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
 .signup-btn {
-  padding: 14px 32px;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-  color: white;
+  background: #405ff2;
   border: none;
-  border-radius: 12px;
-  font-weight: 600;
+  border-radius: 50px;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 18px 32px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 16px;
+  white-space: nowrap;
+  height: 60px;
 }
 
 .signup-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+  background: #3549d9;
+  transform: translateY(-1px);
 }
 
 /* Main Footer Content */
 .footer-main {
-  padding: 80px 0;
+  background: #050b20;
+  padding: 35px 0;
 }
 
 .footer-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 48px;
+  gap: 50px;
 }
 
-.footer-column h3 {
-  font-size: 20px;
+.footer-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.section-title {
+  font-size: 20px !important;
   font-weight: 600;
-  margin: 0 0 32px 0;
-  color: #ffffff;
+  line-height: 1.2;
+  margin: 0 0 30px 0;
+  color: #ffffff !important;
+  letter-spacing: 0.5px;
 }
 
-/* Links List for Single Column Layout */
 .links-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.links-list a {
-  color: #b8c5d1;
+.footer-link {
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
-  transition: all 0.3s ease;
   font-size: 15px;
-  line-height: 1.5;
+  line-height: 1.4;
+  transition: all 0.3s ease;
 }
 
-.links-list a:hover {
+.footer-link:hover {
   color: #ffffff;
   transform: translateX(4px);
 }
 
 /* Mobile App Section */
-.mobile-app-section .app-buttons {
+.mobile-app-section {
+  min-width: 250px;
+}
+
+.app-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   margin-bottom: 40px;
 }
 
 .app-button {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
   display: flex;
   align-items: center;
-  gap: 16px;
   padding: 16px 20px;
-  background: rgba(31, 41, 55, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
   text-decoration: none;
-  color: white;
-  margin-bottom: 16px;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .app-button:hover {
-  background: rgba(31, 41, 55, 0.8);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
   transform: translateY(-2px);
 }
 
 .app-icon {
-  width: 40px;
-  height: 40px;
-  /* background-color: #ffffff; */
-  border-radius: 8px;
+  font-size: 28px;
+  margin-right: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-}
-
-.app-icon-img {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
+  width: 32px;
 }
 
 .app-text {
@@ -175,200 +210,183 @@
 }
 
 .app-subtitle {
+  color: rgba(255, 255, 255, 0.7);
   font-size: 12px;
-  color: #b8c5d1;
   line-height: 1.2;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
 
 .app-title {
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.2;
   color: #ffffff;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.2;
 }
 
-/* Social Media */
-.social-section h4 {
-  font-size: 20px;
+/* Social Section */
+.social-section {
+  margin-top: 20px;
+}
+
+.social-title {
+  font-size: 18px;
   font-weight: 600;
-  margin: 0 0 24px 0;
-  color: #ffffff;
+  margin: 0 0 20px 0;
+  color: #ffffff !important;
 }
 
 .social-links {
   display: flex;
-  gap: 16px;
+  gap: 12px;
 }
 
 .social-link {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
   width: 44px;
   height: 44px;
-  background: rgba(31, 41, 55, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #b8c5d1;
   text-decoration: none;
+  color: #ffffff;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .social-link:hover {
-  background: rgba(99, 102, 241, 0.2);
-  border-color: #6366f1;
-  color: #ffffff;
+  background: #405ff2;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(64, 95, 242, 0.3);
 }
 
-/* Bottom Footer */
+/* Footer Bottom */
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: #050b20;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
   padding: 32px 0;
-  background: rgba(0, 0, 0, 0.2);
 }
 
 .footer-bottom-content {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 24px;
+  align-items: center;
 }
 
 .copyright {
-  color: #9ca3af;
-  font-size: 14px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .footer-bottom-links {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 24px;
 }
 
-.footer-bottom-links a {
-  color: #9ca3af;
+.legal-link {
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
-  font-size: 14px;
-  transition: all 0.3s ease;
+  font-size: 15px;
+  line-height: 1.6;
+  transition: color 0.3s ease;
 }
 
-.footer-bottom-links a:hover {
+.legal-link:hover {
   color: #ffffff;
 }
 
 .scroll-top-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
   width: 44px;
   height: 44px;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-  color: white;
-  border: none;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #ffffff;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .scroll-top-btn:hover {
+  background: #405ff2;
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 4px 12px rgba(64, 95, 242, 0.3);
 }
 
 /* Responsive Design */
-@media (max-width: 1024px) {
-  .container {
-    padding: 0 32px;
-  }
-
+@media (max-width: 1200px) {
   .footer-grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
+    gap: 40px;
   }
-
+  
   .mobile-app-section {
-    grid-column: span 3;
-  }
-
-  .newsletter-content {
-    gap: 32px;
+    grid-column: span 1;
   }
 }
 
 @media (max-width: 768px) {
-  .container {
-    padding: 0 24px;
-  }
-
   .newsletter-content {
     flex-direction: column;
     text-align: center;
-    gap: 32px;
+    gap: 30px;
   }
-
-  .newsletter-text h2 {
-    font-size: 24px;
+  
+  .newsletter-form {
+    min-width: auto;
+    width: 100%;
+    max-width: 400px;
   }
-
-  .footer-main {
-    padding: 60px 0;
-  }
-
+  
   .footer-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 40px;
+    gap: 30px;
   }
-
-  .mobile-app-section {
-    grid-column: span 2;
-  }
-
+  
   .footer-bottom-content {
     flex-direction: column;
-    text-align: center;
     gap: 20px;
+    text-align: center;
   }
-
+  
   .footer-bottom-links {
-    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }
 
-@media (max-width: 640px) {
-  .container {
-    padding: 0 16px;
-  }
-
-  .newsletter-section {
-    padding: 40px 0;
-  }
-
-  .footer-main {
-    padding: 48px 0;
-  }
-
+@media (max-width: 480px) {
   .footer-grid {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 40px;
   }
-
-  .mobile-app-section {
-    grid-column: span 1;
-  }
-
+  
   .newsletter-form {
     flex-direction: column;
-    max-width: 100%;
-    gap: 12px;
+    height: auto;
+    padding: 20px;
+    gap: 16px;
   }
-
-  .newsletter-text h2 {
-    font-size: 22px;
+  
+  .email-input {
+    width: 100%;
+    padding: 16px 20px;
+    text-align: center;
   }
-
+  
+  .signup-btn {
+    width: 100%;
+    padding: 16px;
+  }
+  
+  .app-buttons {
+    gap: 8px;
+  }
+  
   .social-links {
     justify-content: center;
   }
