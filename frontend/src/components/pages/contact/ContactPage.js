@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 import '../../../styles/contact.css'
 import Navbar from '../../common/Navbar';
-import BoxCarFooter from '../../common/Footer';
+import Footer from '../../common/Footer';
 import { api } from '../../../services/api';
 
 const ContactPage = () => {
@@ -269,7 +269,7 @@ const ContactPage = () => {
         </div>
       </div>
 
-      <BoxCarFooter/>
+      <Footer/>
     </div>
   );
 };
