@@ -441,10 +441,10 @@
   left: 100%;
 }
 
-.cl-car-header__action--outlined {
+/* .cl-car-header__action--outlined {
   border: 1px solid #e5e7eb;
   background: white;
-}
+} */
 
 .cl-car-header__action:hover {
   background: #f3f4f6;
@@ -459,8 +459,8 @@
 }
 
 .cl-car-header__action-icon {
-  width: 16px;
-  height: 16px;
+  width: 40px;
+  height: 40px;
   transition: transform 0.3s ease;
 }
 

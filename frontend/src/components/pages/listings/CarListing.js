@@ -67,24 +67,24 @@ const CarHeader = () => (
     <div className="cl-car-header__main">
       <div className="cl-car-header__left">
         <h1 className="cl-car-header__title">BMW M235i xDrive Gran Coupé</h1>
-        <p className="cl-car-header__subtitle">3.5 D5 PowerPulse Momentum 5dr AWD Geartronic Estate</p>
+        <p className="cl-car-header__subtitle">2.0L 4-Cylinder TwinPower Turbo All-Wheel Drive 8-Speed Automatic</p>
         
         <div className="cl-car-header__badges">
           <div className="cl-car-header__badge">
             <img className="cl-car-header__badge-icon" src={YearBlue} alt="" />
-            <span className="cl-car-header__badge-text">2023</span>
+            <span className="cl-car-header__badge-text">2024</span>
           </div>
           <div className="cl-car-header__badge">
             <img className="cl-car-header__badge-icon" src={SpeedometerBlue} alt="" />
-            <span className="cl-car-header__badge-text">20 miles</span>
+            <span className="cl-car-header__badge-text">850 miles</span>
           </div>
           <div className="cl-car-header__badge">
             <img className="cl-car-header__badge-icon" src={TransmissionBlue} alt="" />
-            <span className="cl-car-header__badge-text">Automatic</span>
+            <span className="cl-car-header__badge-text">8-Speed Automatic</span>
           </div>
           <div className="cl-car-header__badge">
             <img className="cl-car-header__badge-icon" src={FuelBlueImg} alt="" />
-            <span className="cl-car-header__badge-text">Petrol</span>
+            <span className="cl-car-header__badge-text">Premium Gasoline</span>
           </div>
         </div>
       </div>
@@ -106,7 +106,7 @@ const CarHeader = () => (
         </div>
         
         <div className="cl-car-header__price">
-          <span className="cl-car-header__price-amount">$39,000</span>
+          <span className="cl-car-header__price-amount">$45,900</span>
           <a href="#" className="cl-car-header__offer-link">
             <img className="cl-car-header__offer-icon" src={Tag} alt="" />
             Make An Offer Price
@@ -123,10 +123,10 @@ const ImageGallery = () => (
       <img 
         className="cl-gallery__main-image" 
         src={BMW1} 
-        alt="Toyota Camry"
+        alt="BMW M235i xDrive Gran Coupé"
       />
       <div className="cl-gallery__badges">
-        <Badge text="Featured" variant="primary" />
+        <Badge text="M Performance" variant="primary" />
       </div>
       <div className="cl-gallery__video-btn">
         <img className="cl-gallery__video-icon" src={Video} alt="" />
@@ -137,11 +137,11 @@ const ImageGallery = () => (
     <div className="cl-gallery__thumbnails">
       {[
         BMW2,
-        BMW3,
         BMW4,
-        BMW5
+        BMW5,
+        BMW3
       ].map((src, index) => (
-        <img key={index} className="cl-gallery__thumbnail" src={src} alt={`Car view ${index + 1}`} />
+        <img key={index} className="cl-gallery__thumbnail" src={src} alt={`BMW M235i view ${index + 1}`} />
       ))}
     </div>
   </div>
@@ -149,21 +149,21 @@ const ImageGallery = () => (
 
 const CarOverview = () => {
   const leftColumnItems = [
-    { icon: BodyImg, label: "Body", value: "Sedan", isLink: true },
-    { icon: Speedometer, label: "Mileage", value: "20", isLink: false },
-    { icon: FuelImg, label: "Fuel Type", value: "Petrol", isLink: true },
-    { icon: YearImg, label: "Year", value: "2023", isLink: false },
-    { icon: TransmissionImg, label: "Transmission", value: "Automatic", isLink: true },
-    { icon: DriveTypeImg, label: "Drive Type", value: "All-Wheel Drive (AWD/4WD)", isLink: true }
+    { icon: BodyImg, label: "Body", value: "4-Door Gran Coupé", isLink: true },
+    { icon: Speedometer, label: "Mileage", value: "850", isLink: false },
+    { icon: FuelImg, label: "Fuel Type", value: "Premium Gasoline", isLink: true },
+    { icon: YearImg, label: "Year", value: "2024", isLink: false },
+    { icon: TransmissionImg, label: "Transmission", value: "8-Speed Automatic", isLink: true },
+    { icon: DriveTypeImg, label: "Drive Type", value: "All-Wheel Drive (xDrive)", isLink: true }
   ];
 
   const rightColumnItems = [
-    { icon: "icon15.svg", label: "Condition", value: "New", isLink: true },
-    { icon: EngineImg, label: "Engine Size", value: "3.5", isLink: false },
+    { icon: "icon15.svg", label: "Condition", value: "Used", isLink: true },
+    { icon: EngineImg, label: "Engine Size", value: "2.0L", isLink: false },
     { icon: DoorImg, label: "Door", value: "4 Doors", isLink: true },
-    { icon: CylinderImg, label: "Cylinder", value: "12", isLink: true },
-    { icon: ColorImg, label: "Color", value: "Black, Blue, White", isLink: true },
-    { icon: VINImg, label: "VIN", value: "MCB123818", isLink: false }
+    { icon: CylinderImg, label: "Cylinder", value: "4", isLink: true },
+    { icon: ColorImg, label: "Color", value: "Storm Bay Metallic", isLink: true },
+    { icon: VINImg, label: "VIN", value: "WBA53AK07PCG12345", isLink: false }
   ];
 
   return (
@@ -191,21 +191,21 @@ const Description = () => (
     <h2 className="cl-description__title">Description</h2>
     <div className="cl-description__content">
       <p className="cl-description__paragraph">
-        Quisque imperdiet dignissim enim dictum finibus. Sed consectetutr convallis enim eget laoreet. Aenean vitae nisl mollis, porta risus vel, dapibus lectus. Etiam ac suscipit eros, eget maximus
+        Experience the perfect blend of luxury and performance with this BMW M235i xDrive Gran Coupé. Featuring a 2.0-liter TwinPower Turbo 4-cylinder engine producing 301 horsepower, this vehicle delivers exceptional driving dynamics with the confidence of xDrive all-wheel drive.
       </p>
       <p className="cl-description__paragraph">
-        Etiam sit amet ex pharetra, venenatis ante vehicula, gravida sapien. Fusce eleifend vulputate nibh, non cursus augue placerat pellentesque. Sed venenatis risus nec felis mollis, in pharetra urna euismod. Morbi aliquam ut turpis sit amet ultrices. Vestibulum mattis blandit nisl, et tristique elit scelerisque nec. Fusce eleifend laoreet dui eget aliquet. Ut rutrum risus et nunc pretium scelerisque.
+        This M Performance model comes equipped with premium features including Dakota leather upholstery, M Sport Package, adaptive LED headlights, and the latest BMW iDrive 7.0 infotainment system. The Gran Coupé body style offers a perfect balance of sporty aesthetics and practical functionality with four doors and generous rear seating.
       </p>
     </div>
     
     <div className="cl-description__downloads">
       <a href="#" className="cl-description__download-link">
         <img className="cl-description__download-icon" src={Print} alt="" />
-        Schedule-Test-Drive.pdf
+        BMW-M235i-Brochure.pdf
       </a>
       <a href="#" className="cl-description__download-link">
         <img className="cl-description__download-icon" src={Print} alt="" />
-        Car-Brochure.pdf
+        Vehicle-History-Report.pdf
       </a>
     </div>
     <div className="cl-section-divider"></div>
@@ -216,10 +216,10 @@ const DealerCard = () => (
   <div className="cl-dealer">
     <div className="cl-dealer__header">
       <div className="cl-dealer__avatar">
-        <img className="cl-dealer__avatar-image" src={DealerImg} alt="Admin" />
+        <img className="cl-dealer__avatar-image" src={DealerImg} alt="BMW Dealership" />
       </div>
-      <h3 className="cl-dealer__name">admin</h3>
-      <p className="cl-dealer__address">943 Broadway, Brooklyn</p>
+      <h3 className="cl-dealer__name">BMW of Manhattan</h3>
+      <p className="cl-dealer__address">555 West 57th Street, New York</p>
     </div>
     
     <div className="cl-dealer__actions">
@@ -234,7 +234,7 @@ const DealerCard = () => (
           <div className="cl-dealer__contact-icon">
             <img src={Phone} alt="" />
           </div>
-          <span className="cl-dealer__contact-text">+88-123456789</span>
+          <span className="cl-dealer__contact-text">+1-212-586-8787</span>
         </div>
       </div>
       
@@ -249,7 +249,7 @@ const DealerCard = () => (
       </button>
       
       <a href="#" className="cl-dealer__link">
-        View All stock at this dealer
+        View All BMW inventory
         <img className="cl-dealer__link-icon" src={Arrow} alt="" />
       </a>
     </div>
@@ -326,7 +326,7 @@ const SpecSection = ({ title, leftSpecs, rightSpecs, className = "" }) => (
 
 const MapContainer = () => {
   const MAP_CONFIG = {
-    src: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126743.6321540671!2d79.77380331342476!3d6.921831560922283!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo!5e0!3m2!1sen!2slk!4v1751341947324!5m2!1sen!2slk",
+    src: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3021.7503476847757!2d-73.98194228459467!3d40.76592997932637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes%20Square%2C%20New%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sus!4v1651341947324!5m2!1sen!2sus",
     width: "100%",
     height: "100%",
     style: { border: 0 },
@@ -337,7 +337,7 @@ const MapContainer = () => {
 
   return (
     <div className="cl-map-container" style={{ height: '400px', width: '100%' }}>
-      <iframe {...MAP_CONFIG} title="Office Location Map" />
+      <iframe {...MAP_CONFIG} title="BMW Dealership Location Map" />
     </div>
   );
 };
@@ -348,64 +348,84 @@ const CarFeatures = () => {
     {
       title: "Interior",
       features: [
-        { name: "Air Conditioner" },
-        { name: "Digital Odometer" },
-        { name: "Heater" },
-        { name: "Leather Seats" },
-        { name: "Panoramic Moonroof" },
-        { name: "Tachometer" },
-        { name: "Touchscreen Display", isSpecial: true }
+        { name: "3-Zone Automatic Climate Control" },
+        { name: "Dakota Leather Upholstery" },
+        { name: "Heated Front Seats" },
+        { name: "M Sport Steering Wheel" },
+        { name: "Ambient Lighting" },
+        { name: "Wireless Charging Pad" },
+        { name: "BMW Live Cockpit Professional", isSpecial: true }
       ]
     },
     {
       title: "Safety",
       features: [
-        { name: "Anti-lock Braking" },
-        { name: "Brake Assist" },
-        { name: "Child Safety Locks" },
-        { name: "Driver Air Bag" },
-        { name: "Power Door Locks" },
-        { name: "Stability Control" },
-        { name: "Traction Control" }
+        { name: "Active Driving Assistant" },
+        { name: "Frontal Collision Warning" },
+        { name: "Automatic Emergency Braking" },
+        { name: "Blind Spot Detection" },
+        { name: "Lane Departure Warning" },
+        { name: "Dynamic Stability Control" },
+        { name: "Run-Flat Tires" }
       ]
     },
     {
       title: "Exterior",
       features: [
-        { name: "Fog Lights Front" },
-        { name: "Rain Sensing Wiper" },
-        { name: "Rear Spoiler" },
-        { name: "Windows - Electric" }
+        { name: "Adaptive LED Headlights" },
+        { name: "LED Fog Lights" },
+        { name: "M Aerodynamics Package" },
+        { name: "18-inch M Double-Spoke Wheels" },
+        { name: "Shadowline Exterior Trim" },
+        { name: "Rain-Sensing Wipers" }
       ]
     },
     {
-      title: "Comfort & Convenience",
+      title: "Technology & Convenience",
       features: [
-        { name: "Android Auto" },
-        { name: "Apple CarPlay" },
-        { name: "Bluetooth" },
-        { name: "HomeLink" },
-        { name: "Power Steering" }
+        { name: "Apple CarPlay & Android Auto" },
+        { name: "BMW iDrive 7.0" },
+        { name: "Harman Kardon Sound System" },
+        { name: "Gesture Control" },
+        { name: "BMW ConnectedDrive Services" },
+        { name: "Remote Engine Start" }
       ]
     }
   ];
 
   const dimensionsSpecs = {
     left: [
-      { label: "Length", value: "4950mm" },
-      { label: "Height", value: "1550mm" },
-      { label: "Wheelbase", value: "2580mm" },
-      { label: "Height (including roof rails)", value: "1850mm" },
-      { label: "Luggage Capacity (Seats Up - Litres)", value: "480" },
-      { label: "Luggage Capacity (Seats Down - Litres)", value: "850" }
+      { label: "Length", value: "4,526 mm (178.2 in)" },
+      { label: "Height", value: "1,420 mm (55.9 in)" },
+      { label: "Wheelbase", value: "2,670 mm (105.1 in)" },
+      { label: "Ground Clearance", value: "140 mm (5.5 in)" },
+      { label: "Cargo Capacity", value: "430 liters (15.2 cu ft)" },
+      { label: "Fuel Tank Capacity", value: "51 liters (13.5 gal)" }
     ],
     right: [
-      { label: "Width", value: "2100mm" },
-      { label: "Width (including mirrors)", value: "2140mm" },
-      { label: "Gross Vehicle Weight (kg)", value: "1550" },
-      { label: "Max. Loading Weight (kg)", value: "1200" },
-      { label: "Max. Roof Load (kg)", value: "400" },
-      { label: "No. of Seats", value: "5" }
+      { label: "Width", value: "1,800 mm (70.9 in)" },
+      { label: "Width (including mirrors)", value: "2,020 mm (79.5 in)" },
+      { label: "Curb Weight", value: "1,520 kg (3,351 lbs)" },
+      { label: "Gross Vehicle Weight", value: "1,995 kg (4,398 lbs)" },
+      { label: "Max. Roof Load", value: "75 kg (165 lbs)" },
+      { label: "Seating Capacity", value: "5 passengers" }
+    ]
+  };
+
+  const engineSpecs = {
+    left: [
+      { label: "Engine Type", value: "2.0L TwinPower Turbo I4" },
+      { label: "Horsepower", value: "301 hp @ 5,000-6,500 rpm" },
+      { label: "Torque", value: "332 lb-ft @ 1,400-4,000 rpm" },
+      { label: "Compression Ratio", value: "9.5:1" },
+      { label: "Valvetrain", value: "DOHC, 16 valves" }
+    ],
+    right: [
+      { label: "Transmission", value: "8-Speed Steptronic Automatic" },
+      { label: "Drive Type", value: "xDrive All-Wheel Drive" },
+      { label: "0-60 mph", value: "4.6 seconds" },
+      { label: "Top Speed", value: "155 mph (electronically limited)" },
+      { label: "Fuel Economy (Combined)", value: "26 mpg" }
     ]
   };
 
@@ -433,11 +453,17 @@ const CarFeatures = () => {
         rightSpecs={dimensionsSpecs.right}
       />
 
+      <SpecSection
+        title="Engine & Performance"
+        leftSpecs={engineSpecs.left}
+        rightSpecs={engineSpecs.right}
+      />
+
       {/* Location Section */}
       <div className="cl-location-section">
         <SectionTitle>Location</SectionTitle>
         <div className="cl-location-address">
-          <div className="cl-address-text">329 Kent Ave, Brooklyn</div>
+          <div className="cl-address-text">555 West 57th Street, New York, NY 10019</div>
         </div>
         <div className="cl-directions-link">
           <div className="cl-directions-text">Get Direction</div>
@@ -605,17 +631,17 @@ const ReviewsSection = () => {
   const [reviews, setReviews] = useState([
     {
       id: 1,
-      reviewer: "Demo",
-      date: "November 30, 2023",
-      rating: 4.7,
-      text: "Etiam sit amet ex pharetra, venenatis ante vehicula, gravida sapien. Fusce eleifend vulputate nibh, non cursus augue placerat pellentesque. Sed venenatis risus nec felis mollis."
+      reviewer: "Michael Thompson",
+      date: "January 15, 2024",
+      rating: 4.8,
+      text: "Amazing performance from the M235i! The TwinPower Turbo engine delivers incredible power and the xDrive system provides excellent grip in all conditions. The Gran Coupé styling is stunning and the interior quality is top-notch."
     },
     {
       id: 2,
-      reviewer: "Demo",
-      date: "December 16, 2023",
-      rating: 5.0,
-      text: "qweqeqeq"
+      reviewer: "Sarah Johnson",
+      date: "January 22, 2024",
+      rating: 4.5,
+      text: "Love this BMW! Perfect blend of luxury and sportiness. The 8-speed automatic is smooth and the M Sport package really enhances the driving experience. Only minor complaint is the rear headroom could be better."
     }
   ]);
 
@@ -649,7 +675,7 @@ const ReviewsSection = () => {
     // These would typically come from individual category ratings in reviews
     // For now, I'll create dynamic values based on the overall rating with some variation
     const baseRating = parseFloat(overallRating);
-    const variations = [0.3, -0.2, 0.1, 0.0, 0.2, -0.1];
+    const variations = [0.2, -0.1, 0.3, -0.2, 0.4, 0.1];
     
     const categories = [
       "Comfort", "Interior Design", "Exterior Styling", 
