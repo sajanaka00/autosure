@@ -13,79 +13,69 @@ import car5Image from '../../../assets/images/cars/car5.png';
 import car6Image from '../../../assets/images/cars/car6.png';
 
 // Reusable Breadcrumb Component
-const Breadcrumb = () => (
-  <div className="breadcrumb">
-    <span className="breadcrumb-home">Home</span>
-    <span className="breadcrumb-separator">/</span>
+const BlogBreadcrumb = () => (
+  <div className="blog-page-breadcrumb">
+    <span className="blog-page-breadcrumb-home">Home</span>
+    <span className="blog-page-breadcrumb-separator">/</span>
     <span>Blog</span>
   </div>
 );
 
-// Reusable Category Tag Component
-const CategoryTag = ({ category, onClick }) => (
-  <div className="link" onClick={onClick}>
-    <div className="category-text">{category}</div>
-  </div>
-);
-
-// Reusable Author Component
-const Author = ({ author, date }) => (
-  <div className="link2">
-    <div className="background"></div>
-    <div className="admin">{author}</div>
-  </div>
-);
-
-// Reusable Article Card Component
-const ArticleCard = ({ 
+// Blog Article Card Component - Matching the design from image
+const BlogArticleCard = ({ 
   post,
   onClick,
   onTagClick,
   formatDate
 }) => (
-  <div className="article" onClick={() => onClick(post._id)} style={{ cursor: 'pointer' }}>
-    <div className="container">
-      <div className="figure-link">
-        <img 
-          src={post.image || post.heroImage} 
-          alt={post.title} 
-          className="detail-post-image" 
-          onError={(e) => {
-            // Fallback to a default image if the image fails to load
-            e.target.src = car1Image;
-          }}
-        />
+  <div className="blog-article-card" onClick={() => onClick(post._id)}>
+    <div className="blog-article-image-container">
+      <img 
+        className="blog-article-image"
+        src={post.image || post.heroImage} 
+        alt={post.title}
+        onError={(e) => {
+          e.target.src = car1Image;
+        }}
+      />
+      <div className="blog-article-category-badge">
+        {post.category}
       </div>
-      <CategoryTag category={post.category} />
-    </div>
-    <Author author={post.author} date={formatDate(post.createdAt)} />
-    <div className="date-text">{formatDate(post.createdAt)}</div>
-    <div className="heading-4-link">
-      <div className="blog-title-text">{post.title}</div>
     </div>
     
-    {/* Tags rendering */}
-    {post.tags && post.tags.length > 0 && (
-      <div className="blog-tags">
-        {post.tags.map(tag => (
-          <button 
-            key={tag} 
-            className="tag-btn" 
-            onClick={(e) => {
-              e.stopPropagation();
-              onTagClick(tag);
-            }}
-          >
-            #{tag}
-          </button>
-        ))}
+    <div className="blog-article-content">
+      <div className="blog-article-meta">
+        {/* <div className="blog-article-meta-dot"></div> */}
+        <span className="blog-article-author">{post.author}</span>
+        <span className="blog-article-date-separator">•</span>
+        <span className="blog-article-date">{formatDate(post.createdAt)}</span>
       </div>
-    )}
+      
+      <h3 className="blog-article-title">{post.title}</h3>
+      
+      {/* Tags rendering */}
+      {post.tags && post.tags.length > 0 && (
+        <div className="blog-article-tags">
+          {post.tags.map(tag => (
+            <button 
+              key={tag} 
+              className="blog-article-tag-btn" 
+              onClick={(e) => {
+                e.stopPropagation();
+                onTagClick(tag);
+              }}
+            >
+              #{tag}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   </div>
 );
 
-// Reusable Pagination Component
-const Pagination = ({ pagination, onPageChange }) => {
+// Dynamic Pagination Component - Not hardcoded
+const BlogPagination = ({ pagination, onPageChange }) => {
   const renderPaginationButtons = () => {
     const { currentPage, totalPages } = pagination;
     const buttons = [];
@@ -95,10 +85,13 @@ const Pagination = ({ pagination, onPageChange }) => {
       buttons.push(
         <button 
           key="prev" 
-          className="pagination-btn pagination-nav" 
+          className="blog-page-pagination-btn blog-page-pagination-nav" 
           onClick={() => onPageChange(currentPage - 1)}
+          aria-label="Previous page"
         >
-          &laquo;
+          <svg className="blog-page-pagination-arrow" viewBox="0 0 12 12" fill="none">
+            <path d="M7.5 2L3.5 6L7.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </button>
       );
     }
@@ -107,18 +100,25 @@ const Pagination = ({ pagination, onPageChange }) => {
     let startPage = Math.max(1, currentPage - 2);
     let endPage = Math.min(totalPages, currentPage + 2);
 
+    // Adjust range for better display
     if (currentPage <= 3) endPage = Math.min(5, totalPages);
     if (currentPage >= totalPages - 2) startPage = Math.max(1, totalPages - 4);
 
-    // First page and ellipsis
+    // First page and ellipsis if needed
     if (startPage > 1) {
       buttons.push(
-        <button key={1} className="pagination-btn" onClick={() => onPageChange(1)}>
+        <button 
+          key={1} 
+          className="blog-page-pagination-btn" 
+          onClick={() => onPageChange(1)}
+        >
           1
         </button>
       );
       if (startPage > 2) {
-        buttons.push(<span key="ellipsis1" className="pagination-ellipsis">...</span>);
+        buttons.push(
+          <span key="ellipsis1" className="blog-page-pagination-ellipsis">...</span>
+        );
       }
     }
 
@@ -127,7 +127,7 @@ const Pagination = ({ pagination, onPageChange }) => {
       buttons.push(
         <button 
           key={i} 
-          className={`pagination-btn ${currentPage === i ? 'active' : ''}`} 
+          className={`blog-page-pagination-btn ${currentPage === i ? 'active' : ''}`} 
           onClick={() => onPageChange(i)}
         >
           {i}
@@ -135,13 +135,19 @@ const Pagination = ({ pagination, onPageChange }) => {
       );
     }
 
-    // Last page and ellipsis
+    // Last page and ellipsis if needed
     if (endPage < totalPages) {
       if (endPage < totalPages - 1) {
-        buttons.push(<span key="ellipsis2" className="pagination-ellipsis">...</span>);
+        buttons.push(
+          <span key="ellipsis2" className="blog-page-pagination-ellipsis">...</span>
+        );
       }
       buttons.push(
-        <button key={totalPages} className="pagination-btn" onClick={() => onPageChange(totalPages)}>
+        <button 
+          key={totalPages} 
+          className="blog-page-pagination-btn" 
+          onClick={() => onPageChange(totalPages)}
+        >
           {totalPages}
         </button>
       );
@@ -152,10 +158,13 @@ const Pagination = ({ pagination, onPageChange }) => {
       buttons.push(
         <button 
           key="next" 
-          className="pagination-btn pagination-nav" 
+          className="blog-page-pagination-btn blog-page-pagination-nav" 
           onClick={() => onPageChange(currentPage + 1)}
+          aria-label="Next page"
         >
-          &raquo;
+          <svg className="blog-page-pagination-arrow" viewBox="0 0 12 12" fill="none">
+            <path d="M4.5 2L8.5 6L4.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </button>
       );
     }
@@ -166,10 +175,8 @@ const Pagination = ({ pagination, onPageChange }) => {
   if (pagination.totalPages <= 1) return null;
 
   return (
-    <div className="pagination">
-      <div className="pagination-controls">
-        {renderPaginationButtons()}
-      </div>
+    <div className="blog-page-pagination">
+      {renderPaginationButtons()}
     </div>
   );
 };
@@ -178,6 +185,7 @@ const Pagination = ({ pagination, onPageChange }) => {
 const BlogPage = () => {
   const navigate = useNavigate();
   const [blogPosts, setBlogPosts] = useState([]);
+  const [allPosts, setAllPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -190,22 +198,19 @@ const BlogPage = () => {
 
   const defaultImages = [car1Image, car2Image, car3Image, car4Image, car5Image, car6Image];
   const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+  const ITEMS_PER_PAGE = 6; // 6 items per page for pagination visibility
 
   const categories = [
     'All', 'Sound', 'Accessories', 'Exterior', 'Body Kit', 'Fuel Systems',
     'Oil & Filters', 'Interior', 'Performance', 'Safety', 'Technology'
   ];
 
-  // Fetch blogs from API
-  const fetchBlogs = async (page = 1, category = 'All', tag = null) => {
+  // Fetch blogs from API or use fallback data
+  const fetchBlogs = async () => {
     try {
       setLoading(true);
-      let url = `${API_BASE_URL}/blogs?page=${page}&limit=9`;
-
-      if (category !== 'All') url += `&category=${encodeURIComponent(category)}`;
-      if (tag) url += `&tag=${encodeURIComponent(tag)}`;
-
-      const response = await fetch(url);
+      const response = await fetch(`${API_BASE_URL}/blogs`);
+      
       if (!response.ok) throw new Error('Failed to fetch blogs');
 
       const data = await response.json();
@@ -214,13 +219,7 @@ const BlogPage = () => {
           ...blog,
           image: blog.heroImage || blog.image || defaultImages[index % defaultImages.length]
         }));
-
-        setBlogPosts(blogsWithImages);
-        setPagination(data.pagination || {
-          currentPage: page,
-          totalPages: Math.ceil(blogsWithImages.length / 9),
-          totalBlogs: blogsWithImages.length
-        });
+        setAllPosts(blogsWithImages);
       } else {
         throw new Error(data.message || 'Failed to fetch blogs');
       }
@@ -228,7 +227,7 @@ const BlogPage = () => {
       console.error('Error fetching blogs:', err);
       setError(err.message);
 
-      // Fallback data that matches the original design with proper images
+      // Enhanced fallback data - 12 items to demonstrate pagination
       const fallbackData = [
         {
           _id: '1', 
@@ -237,17 +236,15 @@ const BlogPage = () => {
           title: "2024 BMW ALPINA XB7 with exclusive details, extraordinary",
           author: "admin", 
           createdAt: "2023-11-22T00:00:00.000Z", 
-          excerpt: "Luxury engineering at its peak.", 
           tags: ['luxury', 'sound']
         },
         {
           _id: '2', 
           category: "Accessories", 
           image: car2Image, 
-          title: "BMW X6 M50i is designed to exceed your sportiest.",
+          title: "BMW X6 M50i is designed to exceed your sportiest",
           author: "admin", 
           createdAt: "2023-11-22T00:00:00.000Z", 
-          excerpt: "Performance meets elegance.", 
           tags: ['accessories', 'performance']
         },
         {
@@ -257,7 +254,6 @@ const BlogPage = () => {
           title: "BMW X5 Gold 2024 Sport Review: Light on Sport",
           author: "admin", 
           createdAt: "2023-11-22T00:00:00.000Z", 
-          excerpt: "Comprehensive review of the latest model.", 
           tags: ['exterior', 'review']
         },
         {
@@ -267,7 +263,6 @@ const BlogPage = () => {
           title: "2024 Kia Sorento Hybrid Review: Big Vehicle With Small-Vehicle",
           author: "admin", 
           createdAt: "2023-11-22T00:00:00.000Z", 
-          excerpt: "Efficiency in a spacious package.", 
           tags: ['hybrid', 'efficiency']
         },
         {
@@ -277,27 +272,24 @@ const BlogPage = () => {
           title: "2024 Audi Hybrid gives up nothing with its optimized",
           author: "admin", 
           createdAt: "2023-11-22T00:00:00.000Z", 
-          excerpt: "Advanced fuel system technology.", 
           tags: ['fuel-systems', 'technology']
         },
         {
           _id: '6', 
-          category: "Exterior", 
+          category: "Interior", 
           image: car6Image, 
           title: "2024 BMW X3 M Sport Seats – available as a standalone option",
           author: "admin", 
           createdAt: "2023-11-22T00:00:00.000Z", 
-          excerpt: "Comfort meets sportiness.", 
           tags: ['interior', 'comfort']
         },
         {
           _id: '7', 
-          category: "Body Kit", 
+          category: "Safety", 
           image: car1Image, 
           title: "2023 Carnival Standard blind-spot & forward collision avoidance",
           author: "admin", 
           createdAt: "2023-11-22T00:00:00.000Z", 
-          excerpt: "Safety technology overview.", 
           tags: ['safety', 'technology']
         },
         {
@@ -307,35 +299,80 @@ const BlogPage = () => {
           title: "Golf vs Polo: A Comparison of Two Volkswagen Classics",
           author: "admin", 
           createdAt: "2023-09-19T00:00:00.000Z", 
-          excerpt: "Classic comparison review.", 
           tags: ['comparison', 'volkswagen']
         },
         {
           _id: '9', 
-          category: "Oil & Filters", 
+          category: "Performance", 
           image: car3Image, 
           title: "Battle of the SUVs – Kia Sportage vs Hyundai Tucson",
           author: "admin", 
           createdAt: "2023-09-19T00:00:00.000Z", 
-          excerpt: "SUV showdown comparison.", 
           tags: ['suv', 'comparison']
+        },
+        {
+          _id: '10', 
+          category: "Performance", 
+          image: car4Image, 
+          title: "Mercedes-AMG GT 63 S Review: Ultimate Performance Machine",
+          author: "admin", 
+          createdAt: "2023-08-15T00:00:00.000Z", 
+          tags: ['performance', 'mercedes']
+        },
+        {
+          _id: '11', 
+          category: "Safety", 
+          image: car5Image, 
+          title: "Advanced Driver Assistance Systems: The Future of Road Safety",
+          author: "admin", 
+          createdAt: "2023-08-10T00:00:00.000Z", 
+          tags: ['safety', 'technology', 'adas']
+        },
+        {
+          _id: '12', 
+          category: "Technology", 
+          image: car6Image, 
+          title: "Electric Vehicle Charging Infrastructure: What You Need to Know",
+          author: "admin", 
+          createdAt: "2023-07-28T00:00:00.000Z", 
+          tags: ['electric', 'technology', 'charging']
         }
       ];
 
-      const filteredData = category === 'All' ? fallbackData :
-        fallbackData.filter(blog => blog.category === category);
-
-      const finalFiltered = tag ? filteredData.filter(b => b.tags?.includes(tag)) : filteredData;
-
-      setBlogPosts(finalFiltered);
-      setPagination({
-        currentPage: page,
-        totalPages: Math.ceil(finalFiltered.length / 9),
-        totalBlogs: finalFiltered.length
-      });
+      setAllPosts(fallbackData);
     } finally {
       setLoading(false);
     }
+  };
+
+  // Filter and paginate posts
+  const getFilteredAndPaginatedPosts = () => {
+    let filteredPosts = allPosts;
+
+    // Filter by category
+    if (selectedCategory !== 'All') {
+      filteredPosts = filteredPosts.filter(post => post.category === selectedCategory);
+    }
+
+    // Filter by tag
+    if (selectedTag) {
+      filteredPosts = filteredPosts.filter(post => post.tags?.includes(selectedTag));
+    }
+
+    // Calculate pagination
+    const totalPages = Math.ceil(filteredPosts.length / ITEMS_PER_PAGE);
+    const startIndex = (pagination.currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const paginatedPosts = filteredPosts.slice(startIndex, endIndex);
+
+    // Update pagination state
+    setPagination(prev => ({
+      ...prev,
+      totalPages,
+      totalBlogs: filteredPosts.length
+    }));
+
+    return paginatedPosts;
   };
 
   const formatDate = (dateString) => {
@@ -344,8 +381,13 @@ const BlogPage = () => {
   };
 
   useEffect(() => {
-    fetchBlogs(1, selectedCategory, selectedTag);
-  }, [selectedCategory, selectedTag]);
+    fetchBlogs();
+  }, []);
+
+  useEffect(() => {
+    const filteredPosts = getFilteredAndPaginatedPosts();
+    setBlogPosts(filteredPosts);
+  }, [allPosts, selectedCategory, selectedTag, pagination.currentPage]);
 
   const handleBlogClick = (blogId) => {
     navigate(`/blog/${blogId}`);
@@ -353,7 +395,7 @@ const BlogPage = () => {
 
   const handleCategoryFilter = (category) => {
     setSelectedCategory(category);
-    setSelectedTag(null); // Clear tag filter when changing category
+    setSelectedTag(null);
     setPagination(prev => ({ ...prev, currentPage: 1 }));
   };
 
@@ -364,17 +406,17 @@ const BlogPage = () => {
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= pagination.totalPages) {
-      fetchBlogs(page, selectedCategory, selectedTag);
+      setPagination(prev => ({ ...prev, currentPage: page }));
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   if (loading) {
     return (
-      <div className="blog-container">
+      <div className="blog-page-container">
         <Navbar/>
-        <div className="blog-loading">
-          <div className="loading-spinner"></div>
+        <div className="blog-page-loading">
+          <div className="blog-page-loading-spinner"></div>
           <p>Loading blogs...</p>
         </div>
         <Footer/>
@@ -383,23 +425,23 @@ const BlogPage = () => {
   }
 
   return (
-    <div className="blog-container">
+    <div className="blog-page-container">
       <Navbar/>
-      <div className="blog-header">
-        <div className="blog-header-content">
-          <Breadcrumb />
-          <div className="header-flex">
+      <div className="blog-page-header">
+        <div className="blog-page-header-content">
+          <BlogBreadcrumb />
+          <div className="blog-page-header-flex">
             <div>
-              <h1 className="header-title">Blog</h1>
+              <h1 className="blog-page-title">Blog</h1>
               {error && (
-                <p className="error-message" style={{ color: '#ff4444' }}>
+                <p className="blog-page-error-message" style={{ color: '#ff4444' }}>
                   API Error: {error}. Showing fallback data.
                 </p>
               )}
               {selectedTag && (
-                <p className="selected-tag">
+                <p className="blog-page-selected-tag">
                   Filtering by tag: <strong>{selectedTag}</strong>{' '}
-                  <button onClick={() => setSelectedTag(null)} className="clear-tag-btn">
+                  <button onClick={() => setSelectedTag(null)} className="blog-page-clear-tag-btn">
                     Clear
                   </button>
                 </p>
@@ -409,13 +451,13 @@ const BlogPage = () => {
         </div>
       </div>
 
-      <div className="blog-main">
-        <div className="category-filters">
-          <div className="category-filters-container">
+      <div className="blog-page-main">
+        <div className="blog-page-category-filters">
+          <div className="blog-page-category-filters-container">
             {categories.map((category) => (
               <button 
                 key={category} 
-                className={`category-tag ${selectedCategory === category ? 'active' : ''}`} 
+                className={`blog-page-category-tag ${selectedCategory === category ? 'active' : ''}`} 
                 onClick={() => handleCategoryFilter(category)}
               >
                 {category}
@@ -424,18 +466,18 @@ const BlogPage = () => {
           </div>
         </div>
 
-        <div className="results-info">
+        <div className="blog-page-results-info">
           <p>
             {selectedCategory === 'All'
-              ? `Showing ${blogPosts.length} of ${pagination.totalBlogs} posts`
-              : `Showing ${blogPosts.length} posts in "${selectedCategory}"`
+              ? `Showing ${blogPosts.length} of ${pagination.totalBlogs} posts (Page ${pagination.currentPage} of ${pagination.totalPages})`
+              : `Showing ${blogPosts.length} posts in "${selectedCategory}" (Page ${pagination.currentPage} of ${pagination.totalPages})`
             }
           </p>
         </div>
 
-        <div className="blog-grid">
+        <div className="blog-page-articles-grid">
           {blogPosts.map((post) => (
-            <ArticleCard
+            <BlogArticleCard
               key={post._id}
               post={post}
               onClick={handleBlogClick}
@@ -446,13 +488,13 @@ const BlogPage = () => {
         </div>
 
         {blogPosts.length === 0 && (
-          <div className="no-results">
+          <div className="blog-page-no-results">
             <h3>No posts found</h3>
             <p>Try a different category or tag.</p>
           </div>
         )}
 
-        <Pagination 
+        <BlogPagination 
           pagination={pagination} 
           onPageChange={handlePageChange} 
         />
