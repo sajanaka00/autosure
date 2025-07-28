@@ -33,26 +33,26 @@ const Footer = () => {
   };
 
   return (
-    <footer className="footer">
+    <footer className="boxcar-footer">
       {/* Newsletter Section */}
-      <div className="newsletter">
-        <div className="container">
-          <div className="newsletter-content">
-            <div className="newsletter-text">
-              <h2 className="newsletter-title">Join BoxCar</h2>
-              <p className="newsletter-subtitle">
+      <div className="boxcar-footer-newsletter">
+        <div className="boxcar-footer-container">
+          <div className="boxcar-footer-newsletter-content">
+            <div className="boxcar-footer-newsletter-text">
+              <h2 className="boxcar-footer-newsletter-title">Join BoxCar</h2>
+              <p className="boxcar-footer-newsletter-subtitle">
                 Receive pricing updates, shopping tips & more!
               </p>
             </div>
-            <div className="newsletter-form">
+            <div className="boxcar-footer-newsletter-form">
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your email address"
-                className="email-input"
+                className="boxcar-footer-email-input"
               />
-              <button onClick={handleSignUp} className="signup-btn">
+              <button onClick={handleSignUp} className="boxcar-footer-signup-btn">
                 Sign Up
               </button>
             </div>
@@ -61,15 +61,15 @@ const Footer = () => {
       </div>
 
       {/* Main Footer Content */}
-      <div className="footer-main">
-        <div className="container">
-          <div className="footer-grid">
+      <div className="boxcar-footer-main">
+        <div className="boxcar-footer-container">
+          <div className="boxcar-footer-grid">
             {/* Company Links */}
-            <div className="footer-column">
-              <h3 className="section-title">Company</h3>
-              <div className="links-list">
+            <div className="boxcar-footer-column">
+              <h3 className="boxcar-footer-section-title">Company</h3>
+              <div className="boxcar-footer-links-list">
                 {companyLinks.map((link, index) => (
-                  <a key={index} href="#" className="footer-link">
+                  <a key={index} href="#" className="boxcar-footer-link">
                     {link}
                   </a>
                 ))}
@@ -77,11 +77,11 @@ const Footer = () => {
             </div>
 
             {/* Quick Links */}
-            <div className="footer-column">
-              <h3 className="section-title">Quick Links</h3>
-              <div className="links-list">
+            <div className="boxcar-footer-column">
+              <h3 className="boxcar-footer-section-title">Quick Links</h3>
+              <div className="boxcar-footer-links-list">
                 {quickLinks.map((link, index) => (
-                  <a key={index} href="#" className="footer-link">
+                  <a key={index} href="#" className="boxcar-footer-link">
                     {link}
                   </a>
                 ))}
@@ -89,11 +89,11 @@ const Footer = () => {
             </div>
 
             {/* Our Brands */}
-            <div className="footer-column">
-              <h3 className="section-title">Our Brands</h3>
-              <div className="links-list">
+            <div className="boxcar-footer-column">
+              <h3 className="boxcar-footer-section-title">Our Brands</h3>
+              <div className="boxcar-footer-links-list">
                 {brands.map((brand, index) => (
-                  <a key={index} href="#" className="footer-link">
+                  <a key={index} href="#" className="boxcar-footer-link">
                     {brand}
                   </a>
                 ))}
@@ -101,11 +101,11 @@ const Footer = () => {
             </div>
 
             {/* Vehicle Types */}
-            <div className="footer-column">
-              <h3 className="section-title">Vehicles Type</h3>
-              <div className="links-list">
+            <div className="boxcar-footer-column">
+              <h3 className="boxcar-footer-section-title">Vehicles Type</h3>
+              <div className="boxcar-footer-links-list">
                 {vehicleTypes.map((type, index) => (
-                  <a key={index} href="#" className="footer-link">
+                  <a key={index} href="#" className="boxcar-footer-link">
                     {type}
                   </a>
                 ))}
@@ -113,46 +113,46 @@ const Footer = () => {
             </div>
 
             {/* Mobile App & Social */}
-            <div className="footer-column mobile-app-section">
-              <h3 className="section-title">Our Mobile App</h3>
-              <div className="app-buttons">
+            <div className="boxcar-footer-column boxcar-footer-mobile-app-section">
+              <h3 className="boxcar-footer-section-title">Our Mobile App</h3>
+              <div className="boxcar-footer-app-buttons">
                 {/* App Store Button */}
-                <a href="#" className="app-button">
-                  <div className="app-icon">
+                <a href="#" className="boxcar-footer-app-button">
+                  <div className="boxcar-footer-app-icon">
                     📱
                   </div>
-                  <div className="app-text">
-                    <div className="app-subtitle">Download on the</div>
-                    <div className="app-title">App Store</div>
+                  <div className="boxcar-footer-app-text">
+                    <div className="boxcar-footer-app-subtitle">Download on the</div>
+                    <div className="boxcar-footer-app-title">App Store</div>
                   </div>
                 </a>
 
                 {/* Google Play Button */}
-                <a href="#" className="app-button">
-                  <div className="app-icon">
+                <a href="#" className="boxcar-footer-app-button">
+                  <div className="boxcar-footer-app-icon">
                     📱
                   </div>
-                  <div className="app-text">
-                    <div className="app-subtitle">Get it on</div>
-                    <div className="app-title">Google Play</div>
+                  <div className="boxcar-footer-app-text">
+                    <div className="boxcar-footer-app-subtitle">Get it on</div>
+                    <div className="boxcar-footer-app-title">Google Play</div>
                   </div>
                 </a>
               </div>
 
               {/* Social Media */}
-              <div className="social-section">
-                <h4 className="social-title">Connect With Us</h4>
-                <div className="social-links">
-                  <a href="#" className="social-link">
+              <div className="boxcar-footer-social-section">
+                <h4 className="boxcar-footer-social-title">Connect With Us</h4>
+                <div className="boxcar-footer-social-links">
+                  <a href="#" className="boxcar-footer-social-link">
                     <Facebook size={20} />
                   </a>
-                  <a href="#" className="social-link">
+                  <a href="#" className="boxcar-footer-social-link">
                     <Twitter size={20} />
                   </a>
-                  <a href="#" className="social-link">
+                  <a href="#" className="boxcar-footer-social-link">
                     <Instagram size={20} />
                   </a>
-                  <a href="#" className="social-link">
+                  <a href="#" className="boxcar-footer-social-link">
                     <Linkedin size={20} />
                   </a>
                 </div>
@@ -163,18 +163,18 @@ const Footer = () => {
       </div>
 
       {/* Footer Bottom */}
-      <div className="footer-bottom">
-        <div className="container">
-          <div className="footer-bottom-content">
-            <div className="copyright">
+      <div className="boxcar-footer-bottom">
+        <div className="boxcar-footer-container">
+          <div className="boxcar-footer-bottom-content">
+            <div className="boxcar-footer-copyright">
               © 2025 Boxcars.com. All rights reserved.
             </div>
-            <div className="footer-bottom-links">
-              <a href="#" className="legal-link">Terms & Conditions</a>
-              <a href="#" className="legal-link">Privacy Notice</a>
+            <div className="boxcar-footer-bottom-links">
+              <a href="#" className="boxcar-footer-legal-link">Terms & Conditions</a>
+              <a href="#" className="boxcar-footer-legal-link">Privacy Notice</a>
               <button 
                 onClick={scrollToTop} 
-                className="scroll-top-btn" 
+                className="boxcar-footer-scroll-top-btn" 
                 aria-label="Scroll to top"
               >
                 <ChevronUp size={20} />
