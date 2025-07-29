@@ -3,6 +3,13 @@ import '../../../styles/blog-post.css';
 import Navbar from '../../common/Navbar';
 import Footer from '../../common/Footer';
 
+import CarImg from '../../../assets/images/cars/bmw-series5_1.jpg'
+import CarImg2 from '../../../assets/images/cars/bmw-series5_2.jpg'
+import AdminAvatar from '../../../assets/images/avatars/avatar1.jpg'
+import User1Avatar from '../../../assets/images/avatars/avatar2.jpg'
+import User2Avatar from '../../../assets/images/avatars/avatar3.jpg'
+import User3Avatar from '../../../assets/images/avatars/avatar1.jpg'
+
 // Reusable Components
 const Avatar = ({ src, alt, size = 40 }) => (
   <img 
@@ -101,48 +108,48 @@ const NavigationPost = ({ direction, title, href = "#", icon }) => (
 // Main Component
 const BlogPost = () => {
   const leftColumnItems = [
-    "Become a UI/UX designer.",
-    "You will be able to start earning money Figma skills.",
-    "Build a UI project from beginning to end.",
-    "Work with colors & fonts.",
-    "You will create your own UI Kit."
+    "Powerful inline-6 and V8 engine options.",
+    "Advanced air suspension system.",
+    "Executive-level interior luxury.",
+    "Cutting-edge BMW Driving Assistant Pro.",
+    "Elegant and sophisticated exterior design."
   ];
 
   const rightColumnItems = [
-    "Build & test a complete mobile app.",
-    "Learn to design mobile apps & websites.",
-    "Design 3 different logos.",
-    "Create low-fidelity wireframe.",
-    "Downloadable exercise files."
+    "BMW Live Cockpit Professional.",
+    "Harman Kardon premium sound system.",
+    "Four-zone automatic climate control.",
+    "Gesture control and voice commands.",
+    "Wireless smartphone integration."
   ];
 
   const requirements = [
-    "We do not require any previous experience or pre-defined skills to take this course. A great orientation would be enough to master UI/UX design.",
-    "A computer with a good internet connection.",
-    "Adobe Photoshop (OPTIONAL)"
+    "The BMW 5 Series Sedan requires regular maintenance intervals every 10,000 miles or 12 months to maintain its sophisticated performance and reliability.",
+    "Premium fuel (91+ octane) is strongly recommended for optimal engine performance and fuel efficiency.",
+    "Professional service and genuine BMW parts are essential for maintaining warranty coverage and vehicle integrity."
   ];
 
   const comments = [
     {
       id: 1,
-      avatar: "test-1-150-x-150-jpg1.png",
-      name: "admin",
-      date: "November 22, 2023",
-      content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
+      avatar: User1Avatar,
+      name: "David Mueller",
+      date: "January 15, 2025",
+      content: "The 5 Series continues to set the benchmark for executive sedans. The perfect balance of luxury, performance, and technology makes it an outstanding choice."
     },
     {
       id: 2,
-      avatar: "image0.png",
-      name: "Ali Tufan",
-      date: "November 22, 2023",
-      content: "Duis mattis laoreet neque, et ornare neque sollicitudin at. Proin sagittis dolor sed mi elementum pretium. Donec et justo ante. Vivamus egestas sodales est, eu rhoncus urna semper eu."
+      avatar: User2Avatar,
+      name: "Jennifer Liu",
+      date: "January 12, 2025",
+      content: "Just purchased the 540i xDrive and couldn't be happier. The inline-6 engine is smooth and powerful, while the interior is absolutely luxurious."
     },
     {
       id: 3,
-      avatar: "team-2-150-x-150-jpg0.png",
-      name: "demo",
-      date: "January 3, 2024",
-      content: "سي"
+      avatar: User3Avatar,
+      name: "Carlos Mendez",
+      date: "January 10, 2025",
+      content: "Excellent review! The 5 Series has always been the gold standard in this segment, and this generation raises the bar even higher."
     }
   ];
 
@@ -161,33 +168,33 @@ const BlogPost = () => {
       {/* Header */}
       <header className="bp-hdr">
         <h1 className="bp-title">
-          BMW X6 M50i is designed to exceed your sportiest.
+          BMW 5 Series Sedan: The Ultimate Executive Driving Experience
         </h1>
         
         <div className="bp-meta">
           <div className="bp-author">
             <Avatar 
-              src="test-1-150-x-150-jpg0.png" 
+              src={AdminAvatar}
               alt="Admin avatar"
               size={40}
             />
-            <span className="bp-author-name">admin</span>
+            <span className="bp-author-name">BMW Enthusiast</span>
           </div>
           
           <div className="bp-tags">
-            <Badge className="bp-tag">Accessories</Badge>
-            <Badge className="bp-tag">Exterior</Badge>
+            <Badge className="bp-tag">Executive</Badge>
+            <Badge className="bp-tag">Luxury</Badge>
           </div>
           
-          <time className="bp-date">November 22, 2023</time>
+          <time className="bp-date">January 15, 2025</time>
         </div>
       </header>
 
       {/* Featured Image */}
       <div className="bp-hero">
         <img 
-          src="blog-9-jpg0.png" 
-          alt="BMW X6 M50i"
+          src={CarImg}
+          alt="BMW 2 Series Gran Coupé"
           className="bp-hero-img"
         />
       </div>
@@ -195,32 +202,32 @@ const BlogPost = () => {
       {/* Content */}
       <div className="bp-content">
         <p className="bp-intro">
-          Aliquam hendrerit sollicitudin purus, quis rutrum mi accumsan nec. Quisque
-          bibendum orci ac nibh facilisis, at malesuada orci congue. Nullam tempus 
-          sollicitudin cursus. Ut et adipiscing erat. Curabitur{' '}
-          <a href="#" className="bp-link">this is a text link</a>{' '}
-          libero tempus congue.
+          The BMW 5 Series Sedan represents the pinnacle of executive luxury and driving dynamics. 
+          As BMW's flagship business sedan, it seamlessly combines cutting-edge technology, refined 
+          comfort, and exceptional performance to create the ultimate driving machine for discerning 
+          professionals. The{' '}
+          <a href="#" className="bp-link">seventh generation</a>{' '}
+          sets new standards in sophistication and innovation.
         </p>
 
         <p className="bp-body">
-          Duis mattis laoreet neque, et ornare neque sollicitudin at. Proin sagittis
-          dolor sed mi elementum pretium. Donec et justo ante. Vivamus egestas 
-          sodales est, eu rhoncus urna semper eu. Cum sociis natoque penatibus et 
-          magnis dis parturient montes, nascetur ridiculus mus. Integer tristique 
-          elit lobortis purus bibendum, quis dictum metus mattis. Phasellus posuere 
-          felis sed eros porttitor mattis. Curabitur massa magna, tempor in blandit 
-          id, porta in ligula. Aliquam laoreet nisl massa, at interdum mauris 
-          sollicitudin et.
+          Under the sculpted hood, the 5 Series offers a comprehensive range of powertrains, from the 
+          efficient 530i with its turbocharged 2.0-liter four-cylinder producing 248 horsepower, to the 
+          commanding M550i xDrive with its twin-turbocharged 4.4-liter V8 delivering 523 horsepower. 
+          The intelligent xDrive all-wheel drive system and adaptive air suspension ensure optimal 
+          traction and ride quality in any condition. Inside, the cabin exemplifies German luxury 
+          craftsmanship with premium Nappa leather, real wood trim, and the latest BMW Live Cockpit 
+          Professional, creating an environment that elevates every journey into a first-class experience.
         </p>
 
         <Quote 
-          text="Aliquam hendrerit sollicitudin purus, quis rutrum mi accumsan nec. Quisque bibendum orci ac nibh facilisis, at malesuada orci congue."
-          author="Luis Pickford"
+          text="The BMW 5 Series doesn't just transport you to your destination—it transforms the journey into an experience of refined luxury and dynamic performance that defines executive motoring excellence."
+          author="automotive expert, Automotive News"
         />
 
         {/* Learning Section */}
         <section className="bp-learn">
-          <h2 className="bp-learn-title">What you'll learn</h2>
+          <h2 className="bp-learn-title">Key Features & Benefits</h2>
           
           <div className="bp-learn-grid">
             <LearningList 
@@ -236,9 +243,9 @@ const BlogPost = () => {
 
         {/* Requirements Section */}
         <section className="bp-req">
-          <h2 className="bp-req-title">Requirements</h2>
+          <h2 className="bp-req-title">Ownership Considerations</h2>
           <div className="bp-req-img-wrap">
-            <img src="detail-post-jpg0.png" alt="Course requirements" className="bp-req-img" />
+            <img src={CarImg2} alt="BMW 2 Series interior details" className="bp-req-img" />
           </div>
           <div className="bp-req-list">
             {requirements.map((requirement, index) => (
@@ -258,9 +265,9 @@ const BlogPost = () => {
               <SocialButton icon="📌" href="#pinterest" />
             </div>
             <div className="bp-share-tags">
-              <TagButton>Exterior</TagButton>
-              <TagButton>Fuel System</TagButton>
-              <TagButton>Sound</TagButton>
+              <TagButton>Executive</TagButton>
+              <TagButton>Technology</TagButton>
+              <TagButton>Luxury</TagButton>
             </div>
           </div>
         </section>
@@ -268,15 +275,15 @@ const BlogPost = () => {
         {/* Author Bio Section */}
         <section className="bp-bio">
           <div className="bp-bio-av">
-            <Avatar src="test-1-150-x-150-jpg0.png" alt="Admin" size={70} />
+            <Avatar src={AdminAvatar} alt="BMW Enthusiast" size={70} />
           </div>
           <div className="bp-bio-content">
-            <h3 className="bp-bio-name">admin</h3>
+            <h3 className="bp-bio-name">BMW Enthusiast</h3>
             <p className="bp-bio-desc">
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
-              doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore 
-              veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim 
-              ipsam voluptatem quia voluptas sit.
+              With over a decade of experience in automotive journalism and a passion for German engineering, 
+              I specialize in providing comprehensive reviews and insights into BMW's latest innovations. 
+              From track testing to daily driving experiences, I bring you authentic perspectives on what 
+              makes each BMW model unique and exceptional in today's competitive automotive landscape.
             </p>
           </div>
         </section>
@@ -285,12 +292,12 @@ const BlogPost = () => {
         <nav className="bp-nav">
           <NavigationPost 
             direction="previous"
-            title="BMW X5 Gold 2024 Sport Review: Light on Sport"
+            title="BMW X5 M50i: Luxury SUV Performance Redefined"
             icon="←"
           />
           <NavigationPost 
             direction="next"
-            title="2024 BMW ALPINA XB7 with exclusive details,"
+            title="2025 BMW 7 Series: The Flagship Experience"
             icon="→"
           />
         </nav>
