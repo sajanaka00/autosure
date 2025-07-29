@@ -5,6 +5,7 @@ import ExploreAllVehicles from './components/pages/listings/ExploreAllVehicles';
 import CarListing from './components/pages/listings/CarListing';
 import BlogPage from './components/pages/blog/BlogPage';
 import BlogDetailPage from './components/pages/blog/BlogDetailPage';
+import BlogPost from './components/pages/blog/BlogPost';
 import BoxCarsAbout from './components/pages/about/AboutUs';
 import ContactPage from './components/pages/contact/ContactPage';
 
@@ -28,7 +29,7 @@ function App() {
           
           {/* Blog routes */}
           <Route path="/blog" element={<BlogPage />} />
-          <Route path="/blog/:blogId" element={<BlogDetailPage />} />
+          <Route path="/blog/:blogId" element={<BlogPost />} />
           <Route path="/news" element={<BlogPage />} />
           <Route path="/news/:newsId" element={<BlogDetailPage />} />
           
