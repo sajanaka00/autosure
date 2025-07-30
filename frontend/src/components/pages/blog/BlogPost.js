@@ -8,7 +8,7 @@ import CarImg2 from '../../../assets/images/cars/bmw-series5_2.jpg'
 import AdminAvatar from '../../../assets/images/avatars/avatar1.jpg'
 import User1Avatar from '../../../assets/images/avatars/avatar2.jpg'
 import User2Avatar from '../../../assets/images/avatars/avatar3.jpg'
-import User3Avatar from '../../../assets/images/avatars/avatar1.jpg'
+import User3Avatar from '../../../assets/images/avatars/avatar4.jpg'
 
 // Reusable Components
 const Avatar = ({ src, alt, size = 40 }) => (
