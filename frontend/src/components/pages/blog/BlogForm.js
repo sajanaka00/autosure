@@ -2,65 +2,153 @@ import React, { useState } from 'react';
 import { X, Plus, Minus, Upload, Eye, Save, FileText, User, Tag, Image, Clock, Hash, Edit } from 'lucide-react';
 import '../../../styles/blog-modal.css';
 
-const BlogForm = ({ onClose, onCreated }) => {
+const BlogForm = ({ onClose = () => {}, onCreated = () => {} }) => {
   const [formData, setFormData] = useState({
     title: '',
     category: '',
-    author: '',
-    authorBio: '',
-    authorAvatar: '',
+    author: {
+      name: '',
+      bio: '',
+      avatar: ''
+    },
     excerpt: '',
-    content: '',
-    heroImage: '',
-    contentImage: '',
-    keyPoints: [''],
+    content: {
+      intro: '',
+      body: '',
+      quote: {
+        text: '',
+        author: ''
+      }
+    },
+    images: {
+      hero: '',
+      content: '',
+      alt: ''
+    },
+    keyFeatures: {
+      leftColumn: [''],
+      rightColumn: ['']
+    },
     requirements: [''],
     tags: '',
+    navigation: {
+      previous: {
+        title: '',
+        slug: ''
+      },
+      next: {
+        title: '',
+        slug: ''
+      }
+    },
     estimatedReadTime: '',
     metaDescription: '',
-    slug: '',
     featured: false,
     published: true
   });
+
+  // File upload states
+  const [heroImageFile, setHeroImageFile] = useState(null);
+  const [contentImageFile, setContentImageFile] = useState(null);
+  const [uploadMethod, setUploadMethod] = useState('url'); // 'url' or 'file'
 
   const [activeTab, setActiveTab] = useState('basic');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const categories = [
     'Sound', 'Accessories', 'Exterior', 'Body Kit', 'Fuel Systems', 
-    'Oil & Filters', 'Interior', 'Performance', 'Safety', 'Technology'
+    'Oil & Filters', 'Interior', 'Performance', 'Safety', 'Technology',
+    'Executive', 'Luxury', 'SUV', 'Sedan', 'Reviews'
   ];
 
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-
-  const handleArrayChange = (field, index, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: prev[field].map((item, i) => i === index ? value : item)
-    }));
-  };
-
-  const addArrayItem = (field) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: [...prev[field], '']
-    }));
-  };
-
-  const removeArrayItem = (field, index) => {
-    if (formData[field].length > 1) {
+    
+    // Handle nested objects
+    if (name.includes('.')) {
+      const keys = name.split('.');
+      setFormData(prev => {
+        const newData = { ...prev };
+        let current = newData;
+        for (let i = 0; i < keys.length - 1; i++) {
+          current = current[keys[i]];
+        }
+        current[keys[keys.length - 1]] = type === 'checkbox' ? checked : value;
+        return newData;
+      });
+    } else {
       setFormData(prev => ({
         ...prev,
-        [field]: prev[field].filter((_, i) => i !== index)
+        [name]: type === 'checkbox' ? checked : value
       }));
+    }
+  };
+
+  const handleArrayChange = (field, side, index, value) => {
+    if (field === 'keyFeatures') {
+      setFormData(prev => ({
+        ...prev,
+        keyFeatures: {
+          ...prev.keyFeatures,
+          [side]: prev.keyFeatures[side].map((item, i) => i === index ? value : item)
+        }
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [field]: prev[field].map((item, i) => i === index ? value : item)
+      }));
+    }
+  };
+
+  const addArrayItem = (field, side = null) => {
+    if (field === 'keyFeatures') {
+      setFormData(prev => ({
+        ...prev,
+        keyFeatures: {
+          ...prev.keyFeatures,
+          [side]: [...prev.keyFeatures[side], '']
+        }
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [field]: [...prev[field], '']
+      }));
+    }
+  };
+
+  const removeArrayItem = (field, side, index) => {
+    if (field === 'keyFeatures') {
+      if (formData.keyFeatures[side].length > 1) {
+        setFormData(prev => ({
+          ...prev,
+          keyFeatures: {
+            ...prev.keyFeatures,
+            [side]: prev.keyFeatures[side].filter((_, i) => i !== index)
+          }
+        }));
+      }
+    } else {
+      if (formData[field].length > 1) {
+        setFormData(prev => ({
+          ...prev,
+          [field]: prev[field].filter((_, i) => i !== index)
+        }));
+      }
+    }
+  };
+
+  const handleFileChange = (e, type) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (type === 'hero') {
+        setHeroImageFile(file);
+      } else if (type === 'content') {
+        setContentImageFile(file);
+      }
     }
   };
 
@@ -68,55 +156,109 @@ const BlogForm = ({ onClose, onCreated }) => {
     setFormData({
       title: '',
       category: '',
-      author: '',
-      authorBio: '',
-      authorAvatar: '',
+      author: {
+        name: '',
+        bio: '',
+        avatar: ''
+      },
       excerpt: '',
-      content: '',
-      heroImage: '',
-      contentImage: '',
-      keyPoints: [''],
+      content: {
+        intro: '',
+        body: '',
+        quote: {
+          text: '',
+          author: ''
+        }
+      },
+      images: {
+        hero: '',
+        content: '',
+        alt: ''
+      },
+      keyFeatures: {
+        leftColumn: [''],
+        rightColumn: ['']
+      },
       requirements: [''],
       tags: '',
+      navigation: {
+        previous: {
+          title: '',
+          slug: ''
+        },
+        next: {
+          title: '',
+          slug: ''
+        }
+      },
       estimatedReadTime: '',
       metaDescription: '',
-      slug: '',
       featured: false,
       published: true
     });
+    setHeroImageFile(null);
+    setContentImageFile(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    if (!formData.title || !formData.category || !formData.author || !formData.excerpt) {
+    if (!formData.title || !formData.category || !formData.author.name || !formData.excerpt) {
       alert('Please fill in all required fields');
       setIsSubmitting(false);
       return;
     }
 
     try {
-      const submitData = {
+      let submitData = {
         ...formData,
-        keyPoints: formData.keyPoints.filter(point => point.trim() !== ''),
+        keyFeatures: {
+          leftColumn: formData.keyFeatures.leftColumn.filter(item => item.trim() !== ''),
+          rightColumn: formData.keyFeatures.rightColumn.filter(item => item.trim() !== '')
+        },
         requirements: formData.requirements.filter(req => req.trim() !== ''),
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '')
       };
 
-      const response = await fetch(`${API_BASE_URL}/blogs`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(submitData)
-      });
+      let response;
+
+      if (uploadMethod === 'file' && (heroImageFile || contentImageFile)) {
+        // Use FormData for file uploads
+        const formDataToSend = new FormData();
+        formDataToSend.append('blogData', JSON.stringify(submitData));
+        
+        if (heroImageFile) {
+          formDataToSend.append('heroImage', heroImageFile);
+        }
+        if (contentImageFile) {
+          formDataToSend.append('contentImage', contentImageFile);
+        }
+
+        response = await fetch(`${API_BASE_URL}/blogs`, {
+          method: 'POST',
+          body: formDataToSend
+        });
+      } else {
+        // Use JSON for URL-based images
+        response = await fetch(`${API_BASE_URL}/blogs/json`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(submitData)
+        });
+      }
 
       const result = await response.json();
 
       if (result.success) {
         alert('Blog post created successfully!');
         resetForm();
-        onCreated();
-        onClose();
+        if (typeof onCreated === 'function') {
+          onCreated();
+        }
+        if (typeof onClose === 'function') {
+          onClose();
+        }
       } else {
         throw new Error(result.message || 'Failed to create blog post');
       }
@@ -194,12 +336,12 @@ const BlogForm = ({ onClose, onCreated }) => {
         <div className="form-group">
           <label className="form-label">
             <User className="w-4 h-4" />
-            Author *
+            Author Name *
           </label>
           <input
             type="text"
-            name="author"
-            value={formData.author}
+            name="author.name"
+            value={formData.author.name}
             onChange={handleInputChange}
             className="form-input"
             placeholder="Author name"
@@ -210,15 +352,15 @@ const BlogForm = ({ onClose, onCreated }) => {
         <div className="form-group">
           <label className="form-label">
             <Clock className="w-4 h-4" />
-            Read Time (min)
+            Read Time
           </label>
           <input
-            type="number"
+            type="text"
             name="estimatedReadTime"
             value={formData.estimatedReadTime}
             onChange={handleInputChange}
             className="form-input"
-            placeholder="5"
+            placeholder="5 min read"
           />
         </div>
       </div>
@@ -229,8 +371,8 @@ const BlogForm = ({ onClose, onCreated }) => {
           Author Bio
         </label>
         <textarea
-          name="authorBio"
-          value={formData.authorBio}
+          name="author.bio"
+          value={formData.author.bio}
           onChange={handleInputChange}
           className="form-textarea"
           rows="2"
@@ -260,51 +402,129 @@ const BlogForm = ({ onClose, onCreated }) => {
       <div className="form-group">
         <label className="form-label">
           <FileText className="w-4 h-4" />
-          Main Content
+          Introduction *
         </label>
         <textarea
-          name="content"
-          value={formData.content}
+          name="content.intro"
+          value={formData.content.intro}
           onChange={handleInputChange}
           className="form-textarea"
-          rows="8"
-          placeholder="Write your blog content here..."
+          rows="4"
+          placeholder="Write your blog introduction here..."
         />
       </div>
 
-      <div className="form-array">
+      <div className="form-group">
         <label className="form-label">
-          <Plus className="w-4 h-4" />
-          Key Points
+          <FileText className="w-4 h-4" />
+          Main Content *
         </label>
-        <div className="space-y-3">
-          {formData.keyPoints.map((point, i) => (
-            <div key={i} className="array-input">
-              <input
-                type="text"
-                value={point}
-                onChange={(e) => handleArrayChange('keyPoints', i, e.target.value)}
-                className="form-input flex-1"
-                placeholder={`Key point ${i + 1}...`}
-              />
-              <button
-                type="button"
-                onClick={() => removeArrayItem('keyPoints', i)}
-                disabled={formData.keyPoints.length === 1}
-                className="btn-icon btn-danger"
-              >
-                <Minus className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
-          <button
-            type="button"
-            className="btn-secondary"
-            onClick={() => addArrayItem('keyPoints')}
-          >
+        <textarea
+          name="content.body"
+          value={formData.content.body}
+          onChange={handleInputChange}
+          className="form-textarea"
+          rows="8"
+          placeholder="Write your main blog content here..."
+        />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="form-group">
+          <label className="form-label">Quote Text</label>
+          <textarea
+            name="content.quote.text"
+            value={formData.content.quote.text}
+            onChange={handleInputChange}
+            className="form-textarea"
+            rows="3"
+            placeholder="Inspiring quote..."
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Quote Author</label>
+          <input
+            type="text"
+            name="content.quote.author"
+            value={formData.content.quote.author}
+            onChange={handleInputChange}
+            className="form-input"
+            placeholder="Quote author"
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="form-array">
+          <label className="form-label">
             <Plus className="w-4 h-4" />
-            Add Key Point
-          </button>
+            Key Features (Left Column)
+          </label>
+          <div className="space-y-3">
+            {formData.keyFeatures.leftColumn.map((feature, i) => (
+              <div key={i} className="array-input">
+                <input
+                  type="text"
+                  value={feature}
+                  onChange={(e) => handleArrayChange('keyFeatures', 'leftColumn', i, e.target.value)}
+                  className="form-input flex-1"
+                  placeholder={`Feature ${i + 1}...`}
+                />
+                <button
+                  type="button"
+                  onClick={() => removeArrayItem('keyFeatures', 'leftColumn', i)}
+                  disabled={formData.keyFeatures.leftColumn.length === 1}
+                  className="btn-icon btn-danger"
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => addArrayItem('keyFeatures', 'leftColumn')}
+            >
+              <Plus className="w-4 h-4" />
+              Add Feature
+            </button>
+          </div>
+        </div>
+
+        <div className="form-array">
+          <label className="form-label">
+            <Plus className="w-4 h-4" />
+            Key Features (Right Column)
+          </label>
+          <div className="space-y-3">
+            {formData.keyFeatures.rightColumn.map((feature, i) => (
+              <div key={i} className="array-input">
+                <input
+                  type="text"
+                  value={feature}
+                  onChange={(e) => handleArrayChange('keyFeatures', 'rightColumn', i, e.target.value)}
+                  className="form-input flex-1"
+                  placeholder={`Feature ${i + 1}...`}
+                />
+                <button
+                  type="button"
+                  onClick={() => removeArrayItem('keyFeatures', 'rightColumn', i)}
+                  disabled={formData.keyFeatures.rightColumn.length === 1}
+                  className="btn-icon btn-danger"
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => addArrayItem('keyFeatures', 'rightColumn')}
+            >
+              <Plus className="w-4 h-4" />
+              Add Feature
+            </button>
+          </div>
         </div>
       </div>
 
@@ -319,13 +539,13 @@ const BlogForm = ({ onClose, onCreated }) => {
               <input
                 type="text"
                 value={req}
-                onChange={(e) => handleArrayChange('requirements', i, e.target.value)}
+                onChange={(e) => handleArrayChange('requirements', null, i, e.target.value)}
                 className="form-input flex-1"
                 placeholder={`Requirement ${i + 1}...`}
               />
               <button
                 type="button"
-                onClick={() => removeArrayItem('requirements', i)}
+                onClick={() => removeArrayItem('requirements', null, i)}
                 disabled={formData.requirements.length === 1}
                 className="btn-icon btn-danger"
               >
@@ -349,44 +569,122 @@ const BlogForm = ({ onClose, onCreated }) => {
   const renderMediaTab = () => (
     <div className="space-y-6">
       <div className="form-group">
-        <label className="form-label">
-          <Image className="w-4 h-4" />
-          Hero Image URL
-        </label>
-        <input
-          type="url"
-          name="heroImage"
-          value={formData.heroImage}
-          onChange={handleInputChange}
-          className="form-input"
-          placeholder="https://example.com/hero-image.jpg"
-        />
-        {formData.heroImage && (
-          <div className="mt-3 p-4 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
-            <img
-              src={formData.heroImage}
-              alt="Hero preview"
-              className="w-full h-32 object-cover rounded-lg"
-              onError={(e) => {
-                e.target.style.display = 'none';
-              }}
+        <label className="form-label">Upload Method</label>
+        <div className="flex gap-4">
+          <label className="form-checkbox">
+            <input
+              type="radio"
+              name="uploadMethod"
+              value="url"
+              checked={uploadMethod === 'url'}
+              onChange={(e) => setUploadMethod(e.target.value)}
             />
-          </div>
-        )}
+            <span className="checkmark"></span>
+            Use URLs
+          </label>
+          <label className="form-checkbox">
+            <input
+              type="radio"
+              name="uploadMethod"
+              value="file"
+              checked={uploadMethod === 'file'}
+              onChange={(e) => setUploadMethod(e.target.value)}
+            />
+            <span className="checkmark"></span>
+            Upload Files
+          </label>
+        </div>
       </div>
 
+      {uploadMethod === 'url' ? (
+        <>
+          <div className="form-group">
+            <label className="form-label">
+              <Image className="w-4 h-4" />
+              Hero Image URL *
+            </label>
+            <input
+              type="url"
+              name="images.hero"
+              value={formData.images.hero}
+              onChange={handleInputChange}
+              className="form-input"
+              placeholder="https://example.com/hero-image.jpg"
+            />
+            {formData.images.hero && (
+              <div className="mt-3 p-4 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+                <img
+                  src={formData.images.hero}
+                  alt="Hero preview"
+                  className="w-full h-32 object-cover rounded-lg"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">
+              <Image className="w-4 h-4" />
+              Content Image URL
+            </label>
+            <input
+              type="url"
+              name="images.content"
+              value={formData.images.content}
+              onChange={handleInputChange}
+              className="form-input"
+              placeholder="https://example.com/content-image.jpg"
+            />
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="form-group">
+            <label className="form-label">
+              <Upload className="w-4 h-4" />
+              Hero Image File
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileChange(e, 'hero')}
+              className="form-input"
+            />
+            {heroImageFile && (
+              <p className="text-sm text-green-600 mt-1">Selected: {heroImageFile.name}</p>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">
+              <Upload className="w-4 h-4" />
+              Content Image File
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileChange(e, 'content')}
+              className="form-input"
+            />
+            {contentImageFile && (
+              <p className="text-sm text-green-600 mt-1">Selected: {contentImageFile.name}</p>
+            )}
+          </div>
+        </>
+      )}
+
       <div className="form-group">
-        <label className="form-label">
-          <Image className="w-4 h-4" />
-          Content Image URL
-        </label>
+        <label className="form-label">Image Alt Text</label>
         <input
-          type="url"
-          name="contentImage"
-          value={formData.contentImage}
+          type="text"
+          name="images.alt"
+          value={formData.images.alt}
           onChange={handleInputChange}
           className="form-input"
-          placeholder="https://example.com/content-image.jpg"
+          placeholder="Description of the image"
         />
       </div>
 
@@ -397,8 +695,8 @@ const BlogForm = ({ onClose, onCreated }) => {
         </label>
         <input
           type="url"
-          name="authorAvatar"
-          value={formData.authorAvatar}
+          name="author.avatar"
+          value={formData.author.avatar}
           onChange={handleInputChange}
           className="form-input"
           placeholder="https://example.com/avatar.jpg"
@@ -409,21 +707,6 @@ const BlogForm = ({ onClose, onCreated }) => {
 
   const renderSEOTab = () => (
     <div className="space-y-6">
-      <div className="form-group">
-        <label className="form-label">
-          <Hash className="w-4 h-4" />
-          URL Slug
-        </label>
-        <input
-          type="text"
-          name="slug"
-          value={formData.slug}
-          onChange={handleInputChange}
-          className="form-input"
-          placeholder="blog-post-url-slug"
-        />
-      </div>
-
       <div className="form-group">
         <label className="form-label">
           <FileText className="w-4 h-4" />
@@ -437,6 +720,56 @@ const BlogForm = ({ onClose, onCreated }) => {
           rows="3"
           placeholder="SEO meta description for search engines..."
         />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="form-group">
+          <label className="form-label">Previous Post Title</label>
+          <input
+            type="text"
+            name="navigation.previous.title"
+            value={formData.navigation.previous.title}
+            onChange={handleInputChange}
+            className="form-input"
+            placeholder="Previous post title"
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Previous Post Slug</label>
+          <input
+            type="text"
+            name="navigation.previous.slug"
+            value={formData.navigation.previous.slug}
+            onChange={handleInputChange}
+            className="form-input"
+            placeholder="previous-post-slug"
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="form-group">
+          <label className="form-label">Next Post Title</label>
+          <input
+            type="text"
+            name="navigation.next.title"
+            value={formData.navigation.next.title}
+            onChange={handleInputChange}
+            className="form-input"
+            placeholder="Next post title"
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Next Post Slug</label>
+          <input
+            type="text"
+            name="navigation.next.slug"
+            value={formData.navigation.next.slug}
+            onChange={handleInputChange}
+            className="form-input"
+            placeholder="next-post-slug"
+          />
+        </div>
       </div>
 
       <div className="form-checkbox-group">
@@ -475,7 +808,12 @@ const BlogForm = ({ onClose, onCreated }) => {
           </div>
           <button
             type="button"
-            onClick={() => { resetForm(); onClose(); }}
+            onClick={() => { 
+              resetForm(); 
+              if (typeof onClose === 'function') {
+                onClose();
+              }
+            }}
             className="btn-icon btn-ghost"
           >
             <X className="w-5 h-5" />
@@ -510,7 +848,12 @@ const BlogForm = ({ onClose, onCreated }) => {
           <div className="form-actions">
             <button
               type="button"
-              onClick={() => { resetForm(); onClose(); }}
+              onClick={() => { 
+                resetForm(); 
+                if (typeof onClose === 'function') {
+                  onClose();
+                }
+              }}
               className="btn-ghost"
             >
               Cancel
