@@ -46,7 +46,9 @@ const BlogArticleCard = ({
     <div className="blog-article-content">
       <div className="blog-article-meta">
         {/* <div className="blog-article-meta-dot"></div> */}
-        <span className="blog-article-author">{post.author}</span>
+        <span className="blog-article-author">
+          {typeof post.author === 'object' ? post.author.name : post.author}
+        </span>
         <span className="blog-article-date-separator">•</span>
         <span className="blog-article-date">{formatDate(post.createdAt)}</span>
       </div>
