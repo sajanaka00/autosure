@@ -10,6 +10,7 @@ export default function FilterBar() {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [showWhatsAppCard, setShowWhatsAppCard] = useState(false);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [activeCondition, setActiveCondition] = useState('all'); // New state for condition tabs
 
   // WhatsApp configuration for different services
   const whatsappConfig = {
@@ -79,6 +80,10 @@ export default function FilterBar() {
     setActiveDropdown(null);
   };
 
+  const handleConditionChange = (condition) => {
+    setActiveCondition(condition);
+  };
+
   // WhatsApp functionality
   const openWhatsApp = (serviceType) => {
     const config = whatsappConfig[serviceType];
@@ -133,110 +138,215 @@ export default function FilterBar() {
     setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
-  const DropdownSection = ({ dropdownKey, options, label }) => (
-    <div className="dropdown-section">
-      <button
-        onClick={() => toggleDropdown(dropdownKey)}
-        className="dropdown-button"
-      >
-        <span className="dropdown-text">{selectedValues[dropdownKey]}</span>
-        <ChevronDown 
-          className={`dropdown-icon ${activeDropdown === dropdownKey ? 'rotated' : ''}`} 
-        />
-      </button>
-
-      {activeDropdown === dropdownKey && (
-        <div className="dropdown-menu">
-          {options.map((option, index) => (
-            <button
-              key={index}
-              className="dropdown-option"
-              onClick={() => selectOption(dropdownKey, option)}
-            >
-              {option}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-
   return (
     <div className="filter-bar-wrapper">
-      {/* Background Image */}
-      <div className="image-background">
-        <img src={backgroundImage} alt="Background" />
-      </div>
-
-      {/* Dark Overlay */}
-      <div className="image-overlay"></div>
-
-      <div className="filter-bar-container">
-        <div className="filter-bar">
-          {/* Makes Dropdown */}
-          <DropdownSection 
-            dropdownKey="makes" 
-            options={dropdownOptions.makes}
-          />
+      {/* New Hero Section with Filter */}
+      <div className="hero-filter-section">
+        <div
+          className="hero-background"
+          style={{
+            background: `url(${backgroundImage}) center`,
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
+          <div className="hero-overlay"></div>
           
-          {/* Divider */}
-          <div className="filter-divider"></div>
-          
-          {/* Models Dropdown */}
-          <DropdownSection 
-            dropdownKey="models" 
-            options={dropdownOptions.models}
-          />
-          
-          {/* Divider */}
-          <div className="filter-divider"></div>
-          
-          {/* Price Section */}
-          <div className="price-section">
-            <span className="price-label">Price:</span>
-            <div className="price-dropdown">
-              <button
-                onClick={() => toggleDropdown('prices')}
-                className="price-button"
-              >
-                <span className="price-text">{selectedValues.prices}</span>
-                <ChevronDown 
-                  className={`price-icon ${activeDropdown === 'prices' ? 'rotated' : ''}`} 
-                />
-              </button>
-
-              {activeDropdown === 'prices' && (
-                <div className="price-menu">
-                  {dropdownOptions.prices.map((option, index) => (
-                    <button
-                      key={index}
-                      className="price-option"
-                      onClick={() => selectOption('prices', option)}
-                    >
-                      {option}
-                    </button>
-                  ))}
+          <div className="hero-content-wrapper">
+            <div className="hero-subtitle">
+              Find cars for sale and for rent near you
+            </div>
+            <div className="hero-description">
+              Lorem ipsum dolor sit amet consectetur. Tellus diam at commodo egestas eu.
+            </div>
+            <div className="hero-main-title">Find Your Perfect Car</div>
+            
+            <div className="filter-form">
+              <div className="condition-tabs">
+                <div className="condition-tab-wrapper">
+                  <div 
+                    className={`condition-tab ${activeCondition === 'all' ? 'active' : ''}`}
+                    onClick={() => handleConditionChange('all')}
+                  >
+                    <div className="tab-underline"></div>
+                    <div className="tab-text">All</div>
+                  </div>
+                  <div 
+                    className={`condition-tab ${activeCondition === 'new' ? 'active' : ''}`}
+                    onClick={() => handleConditionChange('new')}
+                  >
+                    <div className="tab-text">New</div>
+                  </div>
+                  <div 
+                    className={`condition-tab ${activeCondition === 'used' ? 'active' : ''}`}
+                    onClick={() => handleConditionChange('used')}
+                  >
+                    <div className="tab-text">Used</div>
+                  </div>
                 </div>
-              )}
+              </div>
+              
+              <div className="filter-container">
+                <div className="filter-section makes-section">
+                  <div className="filter-vertical-border"></div>
+                  <div className="filter-dropdown-container">
+                    <div 
+                      className="filter-dropdown-textbox"
+                      onClick={() => toggleDropdown('makes')}
+                    >
+                      <div className="filter-dropdown-text">{selectedValues.makes}</div>
+                    </div>
+                    <div 
+                      className={`filter-dropdown-icon ${activeDropdown === 'makes' ? 'rotated' : ''}`}
+                      onClick={() => toggleDropdown('makes')}
+                    >
+                      <ChevronDown size={16} />
+                    </div>
+                    
+                    {activeDropdown === 'makes' && (
+                      <div className="filter-dropdown-menu">
+                        {dropdownOptions.makes.map((option, index) => (
+                          <button
+                            key={index}
+                            className="filter-dropdown-option"
+                            onClick={() => selectOption('makes', option)}
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="filter-section models-section">
+                  <div className="filter-vertical-border"></div>
+                  <div className="filter-dropdown-container">
+                    <div 
+                      className="filter-dropdown-textbox"
+                      onClick={() => toggleDropdown('models')}
+                    >
+                      <div className="filter-dropdown-text">{selectedValues.models}</div>
+                    </div>
+                    <div 
+                      className={`filter-dropdown-icon ${activeDropdown === 'models' ? 'rotated' : ''}`}
+                      onClick={() => toggleDropdown('models')}
+                    >
+                      <ChevronDown size={16} />
+                    </div>
+                    
+                    {activeDropdown === 'models' && (
+                      <div className="filter-dropdown-menu">
+                        {dropdownOptions.models.map((option, index) => (
+                          <button
+                            key={index}
+                            className="filter-dropdown-option"
+                            onClick={() => selectOption('models', option)}
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="filter-section prices-section">
+                  <div className="prices-label">Prices:</div>
+                  <div 
+                    className="prices-dropdown"
+                    onClick={() => toggleDropdown('prices')}
+                  >
+                    <div className="prices-text">{selectedValues.prices}</div>
+                    <div className={`prices-dropdown-icon ${activeDropdown === 'prices' ? 'rotated' : ''}`}>
+                      <ChevronDown size={16} />
+                    </div>
+                    
+                    {activeDropdown === 'prices' && (
+                      <div className="filter-dropdown-menu prices-menu">
+                        {dropdownOptions.prices.map((option, index) => (
+                          <button
+                            key={index}
+                            className="filter-dropdown-option"
+                            onClick={() => selectOption('prices', option)}
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="search-button-section">
+                  <button className="search-cars-button">
+                    <Search className="search-button-icon" size={15} />
+                    <div className="search-button-text">Search Cars</div>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-          
-          {/* Search Button */}
-          <div className="search-section">
-            <button className="search-button">
-              <Search className="search-icon" />
-              Search
-            </button>
+        </div>
+        
+        <div className="navigation-button nav-button-left">
+          <ChevronLeft className="nav-button-icon" size={12} />
+        </div>
+        <div className="navigation-button nav-button-right">
+          <ChevronRight className="nav-button-icon" size={12} />
+        </div>
+      </div>
+
+      {/* Overlay to close dropdowns when clicking outside */}
+      {activeDropdown && (
+        <div 
+          className="dropdown-overlay" 
+          onClick={() => setActiveDropdown(null)}
+        />
+      )}
+
+      {/* Browse by Type Section */}
+      <div className="browse-by-type-section">
+        <div className="browse-by-type-container">
+          <div className="browse-by-type-header">
+            <div className="browse-by-type-title">Browse by Type</div>
+            <div className="browse-by-type-link"></div>
+          </div>
+          <div className="vehicle-types-container">
+            <div className="vehicle-types-grid">
+              <div className="vehicle-type-card">
+                <img className="vehicle-type-image" src="suv-jpg0.png" alt="SUV" />
+                <div className="vehicle-type-overlay"></div>
+                <div className="vehicle-type-count">3 Cars</div>
+                <div className="vehicle-type-name">SUV</div>
+              </div>
+              <div className="vehicle-type-card">
+                <img className="vehicle-type-image" src="h-72-jpg0.png" alt="Sedan" />
+                <div className="vehicle-type-overlay"></div>
+                <div className="vehicle-type-count">7 Cars</div>
+                <div className="vehicle-type-name">Sedan</div>
+              </div>
+              <div className="vehicle-type-card">
+                <img className="vehicle-type-image" src="h-73-jpg0.png" alt="Hatchback" />
+                <div className="vehicle-type-overlay"></div>
+                <div className="vehicle-type-count">1 Car</div>
+                <div className="vehicle-type-name">Hatchback</div>
+              </div>
+              <div className="vehicle-type-card">
+                <img className="vehicle-type-image" src="h-74-jpg0.png" alt="Hybrid" />
+                <div className="vehicle-type-overlay"></div>
+                <div className="vehicle-type-count">0 Cars</div>
+                <div className="vehicle-type-name">Hybrid</div>
+              </div>
+              <div className="vehicle-type-card">
+                <img className="vehicle-type-image" src="h-75-jpg0.png" alt="Convertible" />
+                <div className="vehicle-type-overlay"></div>
+                <div className="vehicle-type-count">3 Cars</div>
+                <div className="vehicle-type-name">Convertible</div>
+              </div>
+            </div>
           </div>
         </div>
-
-        {/* Overlay to close dropdowns when clicking outside */}
-        {activeDropdown && (
-          <div 
-            className="dropdown-overlay" 
-            onClick={() => setActiveDropdown(null)}
-          />
-        )}
       </div>
 
       {/* Fair Price Section */}
@@ -304,18 +414,6 @@ export default function FilterBar() {
               <div className="stat-number">238M</div>
               <div className="stat-label">VERIFIED DEALERS</div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Hero Section */}
-      <div className="hero-section">
-        <div className="hero-overlay">
-          <div className="hero-content">
-            <h1 className="hero-title">We Make Finding The Right Car Simple</h1>
-            <button className="hero-button">
-              Find Out More <ArrowRight className="hero-arrow-icon" />
-            </button>
           </div>
         </div>
       </div>
