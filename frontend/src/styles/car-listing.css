@@ -380,7 +380,7 @@
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: shimmer 3s ease-in-out infinite;
+  /* animation: shimmer 3s ease-in-out infinite; */
   background-size: 200% 200%;
 }
 
@@ -519,7 +519,7 @@
   font-size: 30px;
   line-height: 45px;
   font-weight: 700;
-  animation: pulse 3s infinite;
+  /* animation: pulse 3s infinite; */
   background: linear-gradient(135deg, #405ff2, #2d4dcc);
   background-clip: text;
   -webkit-background-clip: text;
