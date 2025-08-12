@@ -5,7 +5,7 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: "DmSans-Regular", sans-serif !important;
   line-height: 1.6;
   background-color: #ffffff;
 }
@@ -14,89 +14,94 @@ body {
   background-color: #ffffff;
 }
 
-.header {
-  background: white;
-  padding: 1rem 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.nav-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 2rem;
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
-  text-decoration: none;
-}
-
-.nav-menu {
-  display: flex;
-  list-style: none;
-  gap: 2rem;
-  align-items: center;
-}
-
-.nav-link {
-  color: #666;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s;
-}
-
-.nav-link:hover {
-  color: #4f46e5;
-}
-
-.submit-listing-btn {
-  background: #4f46e5;
-  color: white;
-  padding: 0.5rem 1.5rem;
-  border-radius: 25px;
-  text-decoration: none;
-  font-weight: 500;
-  transition: background 0.3s;
-}
-
-.submit-listing-btn:hover {
-  background: #4338ca;
-}
-
-.mobile-menu-btn {
-  display: none;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
+/* Breadcrumb Styles - DEBUG VERSION WITH VISIBILITY FIXES */
 .breadcrumb {
   max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 2rem;
-  color: #3a3a3a;
-  font-size: 1rem;
-  background-color: #ffffff;
+  margin: 2rem auto 1rem;
+  padding: 1rem 2rem;
+  
+  /* VISIBILITY FIXES */
+  color: #000000 !important;
+  background-color: #f8f9fa; /* Debug background to see if element exists */
+  border: 1px solid #e9ecef; /* Debug border */
+  font-size: 0.95rem;
+  font-weight: 500;
+  
+  /* Clear positioning issues */
+  position: relative;
+  z-index: 10;
+  
+  /* Start with left alignment */
+  text-align: left;
+  width: 100%;
+  clear: both;
+  
+  /* Simple flexbox for left alignment */
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  
+  /* Ensure visibility */
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  min-height: 40px;
+  
+  /* Remove any possible conflicts */
+  overflow: visible;
+  white-space: nowrap;
+}
+
+/* Make sure breadcrumb content is visible */
+.breadcrumb * {
+  color: inherit !important;
+  font-size: inherit !important;
 }
 
 .breadcrumb a {
-  color: #4f46e5;
+  color: #4f46e5 !important;
   text-decoration: none;
+  transition: color 0.3s ease;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  background-color: rgba(79, 70, 229, 0.1);
 }
 
+.breadcrumb a:hover {
+  color: #4338ca !important;
+  text-decoration: underline;
+  background-color: rgba(79, 70, 229, 0.2);
+}
+
+/* Breadcrumb separator styling - make it more visible */
+.breadcrumb-item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.breadcrumb-separator {
+  margin: 0 0.5rem;
+  color: #666 !important;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* If using text content instead of structured items */
+.breadcrumb > a,
+.breadcrumb > span {
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+/* Contact Hero Section */
 .contact-hero {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem 2rem;
+  padding: 1rem 2rem 2rem;
+  text-align: left; /* Start with left alignment */
 }
 
 .contact-title {
@@ -104,6 +109,8 @@ body {
   font-weight: bold;
   color: #333;
   margin-bottom: 2rem;
+  margin-top: 0.5rem;
+  text-align: left; /* Explicitly set left alignment */
 }
 
 .map-container {
@@ -128,6 +135,7 @@ body {
   text-align: center;
 }
 
+/* Contact Content Section */
 .contact-content {
   max-width: 1200px;
   margin: 0 auto;
@@ -211,6 +219,12 @@ body {
   background: #4338ca;
 }
 
+.send-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Contact Details Section */
 .contact-details {
   border: 2px solid #e4e4e4;
   padding: 1.5rem;
@@ -294,8 +308,10 @@ body {
 .social-link:hover {
   background: #4f46e5;
   color: white;
+  transform: translateY(-2px);
 }
 
+/* Offices Section */
 .offices-section {
   max-width: 1200px;
   margin: 0 auto;
@@ -322,6 +338,12 @@ body {
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.office-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 
 .office-card h3 {
@@ -357,6 +379,17 @@ body {
   color: #4338ca;
 }
 
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .contact-content {
+    gap: 3rem;
+  }
+  
+  .offices-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
 @media (max-width: 768px) {
   .nav-menu {
     display: none;
@@ -375,19 +408,148 @@ body {
     grid-template-columns: 1fr;
   }
 
+  /* Center breadcrumb and title on mobile */
+  .breadcrumb {
+    margin: 1rem auto 0.5rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    
+    /* Change to center alignment on mobile */
+    text-align: center;
+    justify-content: center;
+    
+    /* Better mobile handling */
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.4;
+    min-height: 2rem;
+    
+    /* Ensure visibility on mobile */
+    border-radius: 0.5rem;
+    z-index: 20;
+  }
+
   .contact-title {
     font-size: 2rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding: 0 0.5rem;
+    text-align: center; /* Center on mobile */
+  }
+
+  .contact-hero {
+    padding: 1rem 1rem 2rem;
+    text-align: center; /* Center hero content on mobile */
   }
 
   .nav-container {
     padding: 0 1rem;
   }
 
-  .breadcrumb,
-  .contact-hero,
+  .contact-details {
+    height: auto;
+  }
+
+  .map-container {
+    height: 300px;
+  }
+
+  .offices-section {
+    padding: 3rem 1rem;
+  }
+
+  .offices-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .breadcrumb {
+    margin: 1rem auto 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .contact-title {
+    font-size: 1.75rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .contact-hero {
+    padding: 0.25rem 1rem 2rem;
+    text-align: center;
+  }
+
   .contact-content,
   .offices-section {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+
+  .contact-form-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .offices-title {
+    font-size: 1.5rem;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .send-btn {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .office-card {
+    padding: 1.5rem;
+  }
+
+  .map-container {
+    height: 250px;
+  }
+
+  .social-links {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 360px) {
+  .breadcrumb {
+    margin: 0.75rem auto 0.5rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .contact-title {
+    font-size: 1.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .contact-hero {
+    padding: 0.25rem 1rem 1.5rem;
+    text-align: center;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: 0.5rem;
+  }
+
+  .office-card {
+    padding: 1rem;
   }
 }
