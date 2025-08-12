@@ -12,6 +12,7 @@
   height: 60px; /* Reduced from 80px */
   position: absolute;
   top: 70px;
+  z-index: -1;
 }
 
 .white-curved-overlay {
@@ -22,6 +23,7 @@
   right: 0px;
   left: 0px;
   top: 0px;
+  z-index: -1;
 }
 
 /* Main Navbar */

@@ -11,6 +11,9 @@ export default function Navbar({ user, onLogout }) {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Check if current page is home page
+  const isHomePage = location.pathname === '/';
+
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -158,10 +161,12 @@ export default function Navbar({ user, onLogout }) {
 
   return (
     <div className="navbar-group">
-      {/* Curved Background Section */}
-      <div className="curved-background">
-        <div className="white-curved-overlay"></div>
-      </div>
+      {/* Curved Background Section - Only show on non-home pages */}
+      {!isHomePage && (
+        <div className="curved-background">
+          <div className="white-curved-overlay"></div>
+        </div>
+      )}
       
       {/* Main Navbar */}
       <nav className="navbar-main">
