@@ -1,0 +1,314 @@
+/* Why Choose Us Section */
+.wcu-section,
+.wcu-section * {
+  box-sizing: border-box;
+  font-family: "DM Sans", sans-serif;
+}
+
+.wcu-section {
+  background: #ffffff;
+  max-width: 1200px;
+  margin: 80px auto;
+  padding: 60px 20px;
+  position: relative;
+  min-height: 400px;
+}
+
+.wcu-title {
+  color: #050b20;
+  text-align: left;
+  font-family: "DM Sans", sans-serif;
+  font-size: 40px;
+  line-height: 40px;
+  font-weight: 700;
+  position: absolute;
+  left: 20px;
+  top: 60px;
+  width: 325.71px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Features Grid Layout */
+.wcu-features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  margin-top: 140px;
+  position: relative;
+}
+
+.wcu-feature {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+/* Icon Styles */
+.wcu-icon-1,
+.wcu-icon-2,
+.wcu-icon-3,
+.wcu-icon-4 {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.wcu-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.wcu-icon-inner {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  overflow: hidden;
+}
+
+.wcu-icon-img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* Heading Styles */
+.wcu-heading-1,
+.wcu-heading-2,
+.wcu-heading-3,
+.wcu-heading-4 {
+  color: #050b20;
+  text-align: left;
+  font-family: "DM Sans", sans-serif;
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Description Styles */
+.wcu-desc-1,
+.wcu-desc-2,
+.wcu-desc-3,
+.wcu-desc-4 {
+  color: #050b20;
+  text-align: left;
+  font-family: "DM Sans", sans-serif;
+  font-size: 15px;
+  line-height: 27.75px;
+  font-weight: 400;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-width: 250px;
+}
+
+/* Hover Effects */
+.wcu-feature:hover .wcu-icon-1,
+.wcu-feature:hover .wcu-icon-2,
+.wcu-feature:hover .wcu-icon-3,
+.wcu-feature:hover .wcu-icon-4 {
+  transform: scale(1.1);
+}
+
+.wcu-feature:hover .wcu-icon-img {
+  filter: brightness(1.2);
+  transition: filter 0.3s ease;
+}
+
+/* ===== RESPONSIVE STYLES ===== */
+
+/* Large Tablets and Small Desktops (1024px and down) */
+@media (max-width: 1024px) {
+  .wcu-section {
+    width: 100%;
+    height: auto;
+    padding: 60px 20px;
+    position: relative;
+    left: 0;
+    transform: none;
+  }
+
+  .wcu-title {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin-bottom: 40px;
+    text-align: center;
+    font-size: 36px;
+  }
+
+  /* Rearrange features in 2x2 grid */
+  .wcu-icon-1, .wcu-icon-2 {
+    left: 20%;
+    top: 80px;
+  }
+
+  .wcu-icon-2 {
+    left: 60%;
+  }
+
+  .wcu-icon-3, .wcu-icon-4 {
+    left: 20%;
+    top: 250px;
+  }
+
+  .wcu-icon-4 {
+    left: 60%;
+  }
+
+  .wcu-heading-1,
+  .wcu-desc-1 {
+    left: 15%;
+    top: 150px;
+    width: 30%;
+  }
+
+  .wcu-heading-2,
+  .wcu-desc-2 {
+    left: 55%;
+    top: 150px;
+    width: 30%;
+  }
+
+  .wcu-heading-3,
+  .wcu-desc-3 {
+    left: 15%;
+    top: 320px;
+    width: 30%;
+  }
+
+  .wcu-heading-4,
+  .wcu-desc-4 {
+    left: 55%;
+    top: 320px;
+    width: 30%;
+  }
+
+  .wcu-section {
+    height: 450px;
+  }
+}
+
+/* Tablets (768px and down) */
+@media (max-width: 768px) {
+  .wcu-section {
+    padding: 40px 15px;
+    height: auto;
+  }
+
+  .wcu-title {
+    font-size: 32px;
+    margin-bottom: 30px;
+  }
+
+  /* Stack features vertically */
+  .wcu-icon-1, .wcu-icon-2, .wcu-icon-3, .wcu-icon-4 {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    margin: 20px 0 10px 0;
+  }
+
+  .wcu-heading-1,
+  .wcu-heading-2,
+  .wcu-heading-3,
+  .wcu-heading-4 {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+
+  .wcu-desc-1,
+  .wcu-desc-2,
+  .wcu-desc-3,
+  .wcu-desc-4 {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}
+
+/* Mobile Phones (480px and down) */
+@media (max-width: 480px) {
+  .wcu-section {
+    padding: 30px 10px;
+    margin: 40px 0;
+  }
+
+  .wcu-title {
+    font-size: 28px;
+    line-height: 32px;
+  }
+
+  .wcu-icon-1, .wcu-icon-2, .wcu-icon-3, .wcu-icon-4 {
+    width: 50px;
+    height: 50px;
+  }
+
+  .wcu-icon-wrapper {
+    width: 50px;
+    height: 50px;
+  }
+
+  .wcu-icon-inner {
+    width: 50px;
+    height: 50px;
+  }
+
+  .wcu-icon-img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .wcu-heading-1,
+  .wcu-heading-2,
+  .wcu-heading-3,
+  .wcu-heading-4 {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .wcu-desc-1,
+  .wcu-desc-2,
+  .wcu-desc-3,
+  .wcu-desc-4 {
+    font-size: 13px;
+    line-height: 1.5;
+    height: auto;
+  }
+}
+
+/* Font fallbacks for better compatibility */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+
+.wcu-section * {
+  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
