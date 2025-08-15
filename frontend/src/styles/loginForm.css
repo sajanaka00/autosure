@@ -1,4 +1,4 @@
-/* loginForm.css - Updated for React Component */
+/* loginForm.css - Updated for React Component with Image */
 
 * {
   box-sizing: border-box;
@@ -16,7 +16,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #1e40af 100%);
   position: relative;
   overflow: hidden;
 }
@@ -29,24 +29,67 @@ body {
   right: 0;
   bottom: 0;
   background:
-    radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(120, 119, 198, 0.2) 0%, transparent 50%);
+    radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(30, 58, 138, 0.3) 0%, transparent 50%);
   pointer-events: none;
 }
 
-.login-form {
-  background: rgba(255, 255, 255, 0.95);
+.login-card {
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(20px);
-  border-radius: 20px;
+  border-radius: 24px;
   box-shadow:
-    0 25px 50px rgba(0, 0, 0, 0.15),
-    0 0 0 1px rgba(255, 255, 255, 0.05);
-  padding: 3rem;
+    0 32px 64px rgba(30, 58, 138, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
   width: 100%;
-  max-width: 450px;
+  max-width: 1000px;
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  overflow: hidden;
+  min-height: 650px;
+}
+
+.login-image-section {
+  flex: 1.2;
+  position: relative;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.login-image-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(30, 58, 138, 0.8) 0%, rgba(59, 130, 246, 0.6) 100%);
+  z-index: 1;
+}
+
+.login-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  position: relative;
+  z-index: 0;
+}
+
+.login-form {
+  flex: 1;
+  padding: 4rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
 }
 
 .login-header {
@@ -55,9 +98,9 @@ body {
 }
 
 .login-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-size: 2.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -67,9 +110,9 @@ body {
 }
 
 .login-subtitle {
-  color: #6b7280;
+  color: #64748b;
   font-size: 1.1rem;
-  font-weight: 400;
+  font-weight: 500;
   margin: 0;
 }
 
@@ -149,17 +192,17 @@ body {
 }
 
 .form-input:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   background: rgba(255, 255, 255, 0.95);
 }
 
 .form-input:focus ~ .input-icon {
-  color: #667eea;
+  color: #3b82f6;
 }
 
 .input-wrapper:focus-within .input-icon {
-  color: #667eea;
+  color: #3b82f6;
 }
 
 .form-input.error {
@@ -200,7 +243,7 @@ body {
 }
 
 .password-toggle:focus {
-  outline: 2px solid #667eea;
+  outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }
 
@@ -219,19 +262,20 @@ body {
 
 .submit-button {
   width: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
   color: white;
-  padding: 1rem 1.5rem;
+  padding: 1.2rem 1.5rem;
   border: none;
-  border-radius: 12px;
+  border-radius: 16px;
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
   letter-spacing: 0.025em;
   margin-top: 0.5rem;
+  text-transform: uppercase;
 }
 
 .submit-button::before {
@@ -251,7 +295,7 @@ body {
 
 .submit-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 12px 32px rgba(59, 130, 246, 0.4);
 }
 
 .submit-button:active {
@@ -259,7 +303,7 @@ body {
 }
 
 .submit-button:focus {
-  outline: 2px solid #667eea;
+  outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }
 
@@ -286,7 +330,7 @@ body {
 }
 
 .footer-link {
-  color: #667eea;
+  color: #3b82f6;
   font-weight: 600;
   text-decoration: none;
   transition: color 0.2s ease;
@@ -299,12 +343,12 @@ body {
 }
 
 .footer-link:hover {
-  color: #5a67d8;
+  color: #1e40af;
   text-decoration: underline;
 }
 
 .footer-link:focus {
-  outline: 2px solid #667eea;
+  outline: 2px solid #3b82f6;
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -347,10 +391,39 @@ body {
 }
 
 /* Responsive Design */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
+  .login-card {
+    flex-direction: column;
+    max-width: 450px;
+  }
+  
+  .login-image-section {
+    min-height: 200px;
+    flex: none;
+  }
+  
   .login-form {
     padding: 2rem 1.5rem;
+  }
+  
+  .login-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-card {
     margin: 1rem;
+    min-height: auto;
+  }
+  
+  .login-image-section {
+    min-height: 150px;
+    padding: 1rem;
+  }
+  
+  .login-form {
+    padding: 2rem 1.5rem;
   }
 
   .login-title {
