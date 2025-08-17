@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from 'lucide-react';
 import { api } from '../../services/api';
 import { tokenManager } from '../../utils/tokenManager';
-import loginImage from '../../assets/images/login-bg.jpg'; // Dental office image
+import loginImage from '../../assets/images/login-bg1.jpg'; // Dental office image
 import '../../styles/loginForm.css';
 
 export default function LoginForm({ onLogin, onSwitchToSignup }) {
@@ -79,52 +79,56 @@ export default function LoginForm({ onLogin, onSwitchToSignup }) {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-image-section">
+    <div className="auth-login-container">
+      <div className="auth-login-image-section">
         <img 
           src={loginImage} 
           alt="Login illustration" 
-          className="login-image"
+          className="auth-login-image"
         />
       </div>
       
-      <div className="login-form">
-        <div className="login-header">
-          <h2 className="login-title">Sign in to your Account</h2>
+      <div className="auth-login-form">
+        <div className="auth-login-header">
+          <h2 className="auth-login-title">Sign in to your Account</h2>
         </div>
 
         {apiError && (
-          <div className="error-alert">
-            <p className="error-text">{apiError}</p>
+          <div className="auth-error-alert">
+            <AlertCircle className="auth-error-icon" />
+            <p className="auth-error-text">{apiError}</p>
           </div>
         )}
 
-        <div className="form-fields">
-          <div className="field-group">
-            <label className="field-label" htmlFor="email">
+        <div className="auth-form-fields">
+          <div className="auth-field-group">
+            <label className="auth-field-label" htmlFor="email">
               Username
             </label>
-            <div className="input-wrapper">
+            <div className="auth-input-wrapper">
               <input
                 type="email"
                 id="email"
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`form-input ${errors.email ? 'error' : ''}`}
+                className={`auth-form-input ${errors.email ? 'auth-input-error' : ''}`}
                 placeholder="Enter your email"
               />
             </div>
             {errors.email && (
-              <p className="field-error">{errors.email}</p>
+              <div className="auth-field-error">
+                <AlertCircle className="auth-error-icon-small" />
+                <p className="auth-field-error-text">{errors.email}</p>
+              </div>
             )}
           </div>
 
-          <div className="field-group">
-            <label className="field-label" htmlFor="password">
+          <div className="auth-field-group">
+            <label className="auth-field-label" htmlFor="password">
               Password
             </label>
-            <div className="input-wrapper">
+            <div className="auth-input-wrapper auth-password-wrapper">
               <input
                 type={showPassword ? 'text' : 'password'}
                 id="password"
@@ -136,19 +140,22 @@ export default function LoginForm({ onLogin, onSwitchToSignup }) {
                     handleSubmit(e);
                   }
                 }}
-                className={`form-input password-input ${errors.password ? 'error' : ''}`}
+                className={`auth-form-input auth-password-input ${errors.password ? 'auth-input-error' : ''}`}
                 placeholder="Enter your password"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="password-toggle"
+                className="auth-password-toggle"
               >
                 {showPassword ? <EyeOff /> : <Eye />}
               </button>
             </div>
             {errors.password && (
-              <p className="field-error">{errors.password}</p>
+              <div className="auth-field-error">
+                <AlertCircle className="auth-error-icon-small" />
+                <p className="auth-field-error-text">{errors.password}</p>
+              </div>
             )}
           </div>
 
@@ -156,19 +163,19 @@ export default function LoginForm({ onLogin, onSwitchToSignup }) {
             type="button"
             onClick={handleSubmit}
             disabled={isLoading}
-            className="submit-button"
+            className="auth-submit-button"
           >
             {isLoading ? 'Logging in...' : 'LOGIN'}
           </button>
         </div>
 
-        <div className="form-footer">
-          <p className="footer-text">
+        <div className="auth-form-footer">
+          <p className="auth-footer-text">
             Do you have an Account?
             <button
               type="button"
               onClick={onSwitchToSignup}
-              className="footer-link"
+              className="auth-footer-link"
             >
               Sign up
             </button>
