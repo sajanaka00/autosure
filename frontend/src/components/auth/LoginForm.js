@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from 'lucide-react';
 import { api } from '../../services/api';
 import { tokenManager } from '../../utils/tokenManager';
-import loginImage from '../../assets/images/login-bg.jpg'; // Adjust extension as needed
+import loginImage from '../../assets/images/login-bg.jpg'; // Dental office image
 import '../../styles/loginForm.css';
 
 export default function LoginForm({ onLogin, onSwitchToSignup }) {
@@ -80,105 +80,99 @@ export default function LoginForm({ onLogin, onSwitchToSignup }) {
 
   return (
     <div className="login-container">
-      <div className="login-card">
-        <div className="login-image-section">
-          <img 
-            src={loginImage} 
-            alt="Login illustration" 
-            className="login-image"
-          />
+      <div className="login-image-section">
+        <img 
+          src={loginImage} 
+          alt="Login illustration" 
+          className="login-image"
+        />
+      </div>
+      
+      <div className="login-form">
+        <div className="login-header">
+          <h2 className="login-title">Sign in to your Account</h2>
         </div>
-        
-        <div className="login-form">
-          <div className="login-header">
-            <h2 className="login-title">Welcome Back</h2>
-            <p className="login-subtitle">Sign in to your account</p>
+
+        {apiError && (
+          <div className="error-alert">
+            <p className="error-text">{apiError}</p>
+          </div>
+        )}
+
+        <div className="form-fields">
+          <div className="field-group">
+            <label className="field-label" htmlFor="email">
+              Username
+            </label>
+            <div className="input-wrapper">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className={`form-input ${errors.email ? 'error' : ''}`}
+                placeholder="Enter your email"
+              />
+            </div>
+            {errors.email && (
+              <p className="field-error">{errors.email}</p>
+            )}
           </div>
 
-          {apiError && (
-            <div className="error-alert">
-              <AlertCircle className="error-icon" />
-              <p className="error-text">{apiError}</p>
-            </div>
-          )}
-
-          <div className="form-fields">
-            <div className="field-group">
-              <label className="field-label" htmlFor="email">
-                Email Address
-              </label>
-              <div className="input-wrapper">
-                <Mail className="input-icon" />
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className={`form-input ${errors.email ? 'error' : ''}`}
-                  placeholder="Enter your email"
-                />
-              </div>
-              {errors.email && (
-                <p className="field-error">{errors.email}</p>
-              )}
-            </div>
-
-            <div className="field-group">
-              <label className="field-label" htmlFor="password">
-                Password
-              </label>
-              <div className="input-wrapper">
-                <Lock className="input-icon" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      handleSubmit(e);
-                    }
-                  }}
-                  className={`form-input password-input ${errors.password ? 'error' : ''}`}
-                  placeholder="Enter your password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="password-toggle"
-                >
-                  {showPassword ? <EyeOff /> : <Eye />}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="field-error">{errors.password}</p>
-              )}
-            </div>
-
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={isLoading}
-              className="submit-button"
-            >
-              {isLoading ? 'Logging in...' : 'Sign In'}
-            </button>
-          </div>
-
-          <div className="form-footer">
-            <p className="footer-text">
-              Don't have an account?{' '}
+          <div className="field-group">
+            <label className="field-label" htmlFor="password">
+              Password
+            </label>
+            <div className="input-wrapper">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSubmit(e);
+                  }
+                }}
+                className={`form-input password-input ${errors.password ? 'error' : ''}`}
+                placeholder="Enter your password"
+              />
               <button
                 type="button"
-                onClick={onSwitchToSignup}
-                className="footer-link"
+                onClick={() => setShowPassword(!showPassword)}
+                className="password-toggle"
               >
-                Sign up
+                {showPassword ? <EyeOff /> : <Eye />}
               </button>
-            </p>
+            </div>
+            {errors.password && (
+              <p className="field-error">{errors.password}</p>
+            )}
           </div>
+
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={isLoading}
+            className="submit-button"
+          >
+            {isLoading ? 'Logging in...' : 'LOGIN'}
+          </button>
+        </div>
+
+        <div className="form-footer">
+          <p className="footer-text">
+            Do you have an Account?
+            <button
+              type="button"
+              onClick={onSwitchToSignup}
+              className="footer-link"
+            >
+              Sign up
+            </button>
+          </p>
         </div>
       </div>
     </div>
