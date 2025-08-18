@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Eye, EyeOff, User, Mail, Lock, Phone, AlertCircle } from 'lucide-react';
 import { api } from '../../services/api';
 import { tokenManager } from '../../utils/tokenManager';
+import signupImage from '../../assets/images/cars/bmwx1.jpg'; // Signup image
 import '../../styles/signupForm.css';
 
 export default function SignupForm({ onSignup, onSwitchToLogin }) {
@@ -50,24 +51,32 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    if (e) e.preventDefault();
+    
     if (!validateForm()) return;
     
     setIsLoading(true);
     setApiError('');
+    
+    console.log('Attempting signup with:', { email: formData.email });
     
     try {
       // Remove confirmPassword before sending to backend
       const { confirmPassword, ...userData } = formData;
       const response = await api.register(userData);
       
+      console.log('Signup response:', response);
+      
       tokenManager.setToken(response.token);
       tokenManager.setUser(response.user);
       
-      // Call the onSignup callback with the user data
-      onSignup?.(response.user);
+      if (onSignup) {
+        onSignup(response.user);
+      }
     } catch (error) {
-      setApiError(error.message);
+      console.error('Signup error:', error);
+      setApiError(error.message || 'Signup failed');
     } finally {
       setIsLoading(false);
     }
@@ -93,169 +102,223 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
   };
 
   return (
-    <div className="signup-container">
-      <div className="signup-form">
-        <div className="signup-header">
-          <h2 className="signup-title">Create Account</h2>
-          <p className="signup-subtitle">Sign up to get started</p>
-        </div>
-
-        {apiError && (
-          <div className="error-alert">
-            <AlertCircle className="error-icon" />
-            <p className="error-text">{apiError}</p>
+    <div className="signup-page-wrapper">
+      <div className="signup-auth-container">
+        <div className="signup-auth-form">
+          <div className="signup-auth-header">
+            <h2 className="signup-auth-title">Create Your Account</h2>
+            <p className="signup-subtitle">Sign up to get started</p>
           </div>
-        )}
 
-        <div className="form-fields">
-          <div className="field-row">
-            <div className="field-group">
-              <label className="field-label">First Name</label>
-              <div className="input-wrapper">
-                <User className="input-icon" />
-                <input
-                  type="text"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleInputChange}
-                  className={`form-input ${errors.firstName ? 'error' : ''}`}
-                  placeholder="First name"
-                />
+          {apiError && (
+            <div className="signup-auth-error-alert">
+              <AlertCircle className="signup-auth-error-icon" />
+              <p className="signup-auth-error-text">{apiError}</p>
+            </div>
+          )}
+
+          <div className="signup-auth-form-fields">
+            <div className="signup-auth-field-row">
+              <div className="signup-auth-field-group">
+                <label className="signup-auth-field-label" htmlFor="firstName">
+                  First Name
+                </label>
+                <div className="signup-auth-input-wrapper">
+                  <User className="signup-auth-input-icon" />
+                  <input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                    className={`signup-auth-form-input ${errors.firstName ? 'signup-auth-input-error' : ''}`}
+                    placeholder="First name"
+                  />
+                </div>
+                {errors.firstName && (
+                  <p className="signup-auth-field-error-text">{errors.firstName}</p>
+                )}
               </div>
-              {errors.firstName && (
-                <p className="field-error">{errors.firstName}</p>
-              )}
-            </div>
 
-            <div className="field-group">
-              <label className="field-label">Last Name</label>
-              <div className="input-wrapper">
-                <User className="input-icon" />
-                <input
-                  type="text"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleInputChange}
-                  className={`form-input ${errors.lastName ? 'error' : ''}`}
-                  placeholder="Last name"
-                />
+              <div className="signup-auth-field-group">
+                <label className="signup-auth-field-label" htmlFor="lastName">
+                  Last Name
+                </label>
+                <div className="signup-auth-input-wrapper">
+                  <User className="signup-auth-input-icon" />
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                    className={`signup-auth-form-input ${errors.lastName ? 'signup-auth-input-error' : ''}`}
+                    placeholder="Last name"
+                  />
+                </div>
+                {errors.lastName && (
+                  <p className="signup-auth-field-error-text">{errors.lastName}</p>
+                )}
               </div>
-              {errors.lastName && (
-                <p className="field-error">{errors.lastName}</p>
-              )}
             </div>
+
+            <div className="signup-auth-field-row">
+              <div className="signup-auth-field-group">
+                <label className="signup-auth-field-label" htmlFor="email">
+                  Email Address
+                </label>
+                <div className="signup-auth-input-wrapper">
+                  <Mail className="signup-auth-input-icon" />
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className={`signup-auth-form-input ${errors.email ? 'signup-auth-input-error' : ''}`}
+                    placeholder="Enter your email"
+                  />
+                </div>
+                {errors.email && (
+                  <p className="signup-auth-field-error-text">{errors.email}</p>
+                )}
+              </div>
+
+              <div className="signup-auth-field-group">
+                <label className="signup-auth-field-label" htmlFor="phone">
+                  Phone Number (Optional)
+                </label>
+                <div className="signup-auth-input-wrapper">
+                  <Phone className="signup-auth-input-icon" />
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="signup-auth-form-input"
+                    placeholder="Enter your phone number"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="signup-auth-field-row">
+              <div className="signup-auth-field-group">
+                <label className="signup-auth-field-label" htmlFor="password">
+                  Password
+                </label>
+                <div className="signup-auth-input-wrapper signup-auth-password-wrapper">
+                  <Lock className="signup-auth-input-icon" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    className={`signup-auth-form-input signup-auth-password-input ${errors.password ? 'signup-auth-input-error' : ''}`}
+                    placeholder="Enter your password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="signup-auth-password-toggle"
+                  >
+                    {showPassword ? <EyeOff /> : <Eye />}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className="signup-auth-field-error-text">{errors.password}</p>
+                )}
+              </div>
+
+              <div className="signup-auth-field-group">
+                <label className="signup-auth-field-label" htmlFor="confirmPassword">
+                  Confirm Password
+                </label>
+                <div className="signup-auth-input-wrapper">
+                  <Lock className="signup-auth-input-icon" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleInputChange}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handleSubmit(e);
+                      }
+                    }}
+                    className={`signup-auth-form-input ${errors.confirmPassword ? 'signup-auth-input-error' : ''}`}
+                    placeholder="Confirm your password"
+                  />
+                </div>
+                {errors.confirmPassword && (
+                  <p className="signup-auth-field-error-text">{errors.confirmPassword}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="signup-auth-field-group">
+              <label className="signup-auth-field-label">Role</label>
+              <div className="signup-auth-radio-group">
+                <label className="signup-auth-radio-option">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="customer"
+                    checked={formData.role === 'customer'}
+                    onChange={handleInputChange}
+                    className="signup-auth-radio-input"
+                  />
+                  <span className="signup-auth-radio-custom"></span>
+                  <span className="signup-auth-radio-label">Customer</span>
+                </label>
+                <label className="signup-auth-radio-option">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="dealer"
+                    checked={formData.role === 'dealer'}
+                    onChange={handleInputChange}
+                    className="signup-auth-radio-input"
+                  />
+                  <span className="signup-auth-radio-custom"></span>
+                  <span className="signup-auth-radio-label">Dealer</span>
+                </label>
+              </div>
+            </div>
+            
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={isLoading}
+              className="signup-auth-submit-button"
+            >
+              {isLoading ? 'Creating Account...' : 'SIGN UP'}
+            </button>
           </div>
 
-          <div className="field-group">
-            <label className="field-label">Email Address</label>
-            <div className="input-wrapper">
-              <Mail className="input-icon" />
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className={`form-input ${errors.email ? 'error' : ''}`}
-                placeholder="Enter your email"
-              />
-            </div>
-            {errors.email && (
-              <p className="field-error">{errors.email}</p>
-            )}
-          </div>
-
-          <div className="field-group">
-            <label className="field-label">Phone Number (Optional)</label>
-            <div className="input-wrapper">
-              <Phone className="input-icon" />
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                className="form-input"
-                placeholder="Enter your phone number"
-              />
-            </div>
-          </div>
-
-          <div className="field-group">
-            <label className="field-label">Role</label>
-            <div className="role-select-wrapper">
-              <select
-                name="role"
-                value={formData.role}
-                onChange={handleInputChange}
-                className="form-select"
-              >
-                <option value="customer">Customer</option>
-                <option value="dealer">Dealer</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="field-group">
-            <label className="field-label">Password</label>
-            <div className="input-wrapper">
-              <Lock className="input-icon" />
-              <input
-                type={showPassword ? 'text' : 'password'}
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                className={`form-input password-input ${errors.password ? 'error' : ''}`}
-                placeholder="Enter your password"
-              />
+          <div className="signup-auth-form-footer">
+            <p className="signup-auth-footer-text">
+              Already have an account?{' '}
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="password-toggle"
+                onClick={onSwitchToLogin}
+                className="signup-auth-footer-link"
               >
-                {showPassword ? <EyeOff /> : <Eye />}
+                Sign in
               </button>
-            </div>
-            {errors.password && (
-              <p className="field-error">{errors.password}</p>
-            )}
+            </p>
           </div>
-
-          <div className="field-group">
-            <label className="field-label">Confirm Password</label>
-            <div className="input-wrapper">
-              <Lock className="input-icon" />
-              <input
-                type={showPassword ? 'text' : 'password'}
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleInputChange}
-                className={`form-input ${errors.confirmPassword ? 'error' : ''}`}
-                placeholder="Confirm your password"
-              />
-            </div>
-            {errors.confirmPassword && (
-              <p className="field-error">{errors.confirmPassword}</p>
-            )}
-          </div>
-
-          <button
-            onClick={handleSubmit}
-            disabled={isLoading}
-            className="submit-button"
-          >
-            {isLoading ? 'Creating Account...' : 'Sign Up'}
-          </button>
         </div>
 
-        <div className="form-footer">
-          <p className="footer-text">
-            Already have an account?{' '}
-            <button
-              onClick={onSwitchToLogin}
-              className="footer-link"
-            >
-              Sign in
-            </button>
-          </p>
+        <div className="signup-auth-image-section">
+          <img 
+            src={signupImage} 
+            alt="Signup illustration" 
+            className="signup-auth-image"
+          />
         </div>
       </div>
     </div>

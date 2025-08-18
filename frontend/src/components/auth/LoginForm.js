@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from 'lucide-react';
 import { api } from '../../services/api';
 import { tokenManager } from '../../utils/tokenManager';
+import loginImage from '../../assets/images/login-bg1.jpg'; // Dental office image
 import '../../styles/loginForm.css';
 
 export default function LoginForm({ onLogin, onSwitchToSignup }) {
@@ -78,96 +79,106 @@ export default function LoginForm({ onLogin, onSwitchToSignup }) {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-form">
-        <div className="login-header">
-          <h2 className="login-title">Welcome Back</h2>
-          <p className="login-subtitle">Sign in to your account</p>
+    <div className="login-page-wrapper">
+      <div className="login-auth-container">
+        <div className="login-auth-image-section">
+          <img 
+            src={loginImage} 
+            alt="Login illustration" 
+            className="login-auth-image"
+          />
         </div>
-
-        {apiError && (
-          <div className="error-alert">
-            <AlertCircle className="error-icon" />
-            <p className="error-text">{apiError}</p>
+        
+        <div className="login-auth-form">
+          <div className="login-auth-header">
+            <h2 className="login-auth-title">Welcome Back</h2>
+            <p className="login-subtitle">Sign in to your account</p>
           </div>
-        )}
 
-        <div className="form-fields">
-          <div className="field-group">
-            <label className="field-label" htmlFor="email">
-              Email Address
-            </label>
-            <div className="input-wrapper">
-              <Mail className="input-icon" />
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className={`form-input ${errors.email ? 'error' : ''}`}
-                placeholder="Enter your email"
-              />
+          {apiError && (
+            <div className="login-auth-error-alert">
+              <AlertCircle className="login-auth-error-icon" />
+              <p className="login-auth-error-text">{apiError}</p>
             </div>
-            {errors.email && (
-              <p className="field-error">{errors.email}</p>
-            )}
-          </div>
+          )}
 
-          <div className="field-group">
-            <label className="field-label" htmlFor="password">
-              Password
-            </label>
-            <div className="input-wrapper">
-              <Lock className="input-icon" />
-              <input
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleSubmit(e);
-                  }
-                }}
-                className={`form-input password-input ${errors.password ? 'error' : ''}`}
-                placeholder="Enter your password"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="password-toggle"
-              >
-                {showPassword ? <EyeOff /> : <Eye />}
-              </button>
+          <div className="login-auth-form-fields">
+            <div className="login-auth-field-group">
+              <label className="login-auth-field-label" htmlFor="email">
+                Email Address
+              </label>
+              <div className="login-auth-input-wrapper">
+                <Mail className="login-input-icon" />
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className={`login-auth-form-input ${errors.email ? 'login-auth-input-error' : ''}`}
+                  placeholder="Enter your email"
+                />
+              </div>
+              {errors.email && (
+                <p className="login-auth-field-error-text">{errors.email}</p>
+              )}
             </div>
-            {errors.password && (
-              <p className="field-error">{errors.password}</p>
-            )}
-          </div>
 
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={isLoading}
-            className="submit-button"
-          >
-            {isLoading ? 'Logging in...' : 'Sign In'}
-          </button>
-        </div>
+            <div className="login-auth-field-group">
+              <label className="login-auth-field-label" htmlFor="password">
+                Password
+              </label>
+              <div className="login-auth-input-wrapper login-auth-password-wrapper">
+                <Lock className="login-input-icon" />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSubmit(e);
+                    }
+                  }}
+                  className={`login-auth-form-input login-auth-password-input ${errors.password ? 'login-auth-input-error' : ''}`}
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="login-auth-password-toggle"
+                >
+                  {showPassword ? <EyeOff /> : <Eye />}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="login-auth-field-error-text">{errors.password}</p>
+              )}
+            </div>
 
-        <div className="form-footer">
-          <p className="footer-text">
-            Don't have an account?{' '}
             <button
               type="button"
-              onClick={onSwitchToSignup}
-              className="footer-link"
+              onClick={handleSubmit}
+              disabled={isLoading}
+              className="login-auth-submit-button"
             >
-              Sign up
+              {isLoading ? 'Logging in...' : 'Sign In'}
             </button>
-          </p>
+          </div>
+
+          <div className="login-auth-form-footer">
+            <p className="login-auth-footer-text">
+              Don't have an account?{' '}
+              <button
+                type="button"
+                onClick={onSwitchToSignup}
+                className="login-auth-footer-link"
+              >
+                Sign up
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </div>
