@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Eye, EyeOff, User, Mail, Lock, Phone, AlertCircle } from 'lucide-react';
 import { api } from '../../services/api';
 import { tokenManager } from '../../utils/tokenManager';
-import signupImage from '../../assets/images/cars/bmwx1.jpg'; // Signup image
 import '../../styles/signupForm.css';
 
 export default function SignupForm({ onSignup, onSwitchToLogin }) {
@@ -51,32 +50,24 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
+  const handleSubmit = async () => {
     if (!validateForm()) return;
     
     setIsLoading(true);
     setApiError('');
-    
-    console.log('Attempting signup with:', { email: formData.email });
     
     try {
       // Remove confirmPassword before sending to backend
       const { confirmPassword, ...userData } = formData;
       const response = await api.register(userData);
       
-      console.log('Signup response:', response);
-      
       tokenManager.setToken(response.token);
       tokenManager.setUser(response.user);
       
-      if (onSignup) {
-        onSignup(response.user);
-      }
+      // Call the onSignup callback with the user data
+      onSignup?.(response.user);
     } catch (error) {
-      console.error('Signup error:', error);
-      setApiError(error.message || 'Signup failed');
+      setApiError(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -89,246 +80,183 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
       [name]: value
     }));
     
+    // Clear specific field error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
         [name]: ''
       }));
     }
+    
+    // Clear API error when user makes changes
     if (apiError) setApiError('');
   };
 
   return (
-    <div className="auth-signup-container">
-      <div className="auth-signup-form">
-        <div className="auth-signup-header">
-          <h2 className="auth-signup-title">Create Your Account</h2>
+    <div className="signup-container">
+      <div className="signup-form">
+        <div className="signup-header">
+          <h2 className="signup-title">Create Account</h2>
+          <p className="signup-subtitle">Sign up to get started</p>
         </div>
 
         {apiError && (
-          <div className="auth-signup-error-alert">
-            <AlertCircle className="auth-signup-error-icon" />
-            <p className="auth-signup-error-text">{apiError}</p>
+          <div className="error-alert">
+            <AlertCircle className="error-icon" />
+            <p className="error-text">{apiError}</p>
           </div>
         )}
 
-        <div className="auth-signup-form-fields">
-          <div className="auth-signup-field-row">
-            <div className="auth-signup-field-group">
-              <label className="auth-signup-field-label" htmlFor="firstName">
-                First Name
-              </label>
-              <div className="auth-signup-input-wrapper">
-                <User className="auth-signup-input-icon" />
+        <div className="form-fields">
+          <div className="field-row">
+            <div className="field-group">
+              <label className="field-label">First Name</label>
+              <div className="input-wrapper">
+                <User className="input-icon" />
                 <input
                   type="text"
-                  id="firstName"
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleInputChange}
-                  className={`auth-signup-form-input ${errors.firstName ? 'auth-signup-input-error' : ''}`}
+                  className={`form-input ${errors.firstName ? 'error' : ''}`}
                   placeholder="First name"
                 />
               </div>
               {errors.firstName && (
-                <div className="auth-signup-field-error">
-                  <AlertCircle className="auth-signup-error-icon-small" />
-                  <p className="auth-signup-field-error-text">{errors.firstName}</p>
-                </div>
+                <p className="field-error">{errors.firstName}</p>
               )}
             </div>
 
-            <div className="auth-signup-field-group">
-              <label className="auth-signup-field-label" htmlFor="lastName">
-                Last Name
-              </label>
-              <div className="auth-signup-input-wrapper">
-                <User className="auth-signup-input-icon" />
+            <div className="field-group">
+              <label className="field-label">Last Name</label>
+              <div className="input-wrapper">
+                <User className="input-icon" />
                 <input
                   type="text"
-                  id="lastName"
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleInputChange}
-                  className={`auth-signup-form-input ${errors.lastName ? 'auth-signup-input-error' : ''}`}
+                  className={`form-input ${errors.lastName ? 'error' : ''}`}
                   placeholder="Last name"
                 />
               </div>
               {errors.lastName && (
-                <div className="auth-signup-field-error">
-                  <AlertCircle className="auth-signup-error-icon-small" />
-                  <p className="auth-signup-field-error-text">{errors.lastName}</p>
-                </div>
+                <p className="field-error">{errors.lastName}</p>
               )}
             </div>
           </div>
 
-          <div className="auth-signup-field-row">
-            <div className="auth-signup-field-group">
-              <label className="auth-signup-field-label" htmlFor="email">
-                Email Address
-              </label>
-              <div className="auth-signup-input-wrapper">
-                <Mail className="auth-signup-input-icon" />
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className={`auth-signup-form-input ${errors.email ? 'auth-signup-input-error' : ''}`}
-                  placeholder="Enter your email"
-                />
-              </div>
-              {errors.email && (
-                <div className="auth-signup-field-error">
-                  <AlertCircle className="auth-signup-error-icon-small" />
-                  <p className="auth-signup-field-error-text">{errors.email}</p>
-                </div>
-              )}
+          <div className="field-group">
+            <label className="field-label">Email Address</label>
+            <div className="input-wrapper">
+              <Mail className="input-icon" />
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className={`form-input ${errors.email ? 'error' : ''}`}
+                placeholder="Enter your email"
+              />
             </div>
+            {errors.email && (
+              <p className="field-error">{errors.email}</p>
+            )}
+          </div>
 
-            <div className="auth-signup-field-group">
-              <label className="auth-signup-field-label" htmlFor="phone">
-                Phone Number (Optional)
-              </label>
-              <div className="auth-signup-input-wrapper">
-                <Phone className="auth-signup-input-icon" />
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className="auth-signup-form-input"
-                  placeholder="Enter your phone number"
-                />
-              </div>
+          <div className="field-group">
+            <label className="field-label">Phone Number (Optional)</label>
+            <div className="input-wrapper">
+              <Phone className="input-icon" />
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                className="form-input"
+                placeholder="Enter your phone number"
+              />
             </div>
           </div>
 
-          <div className="auth-signup-field-row">
-            <div className="auth-signup-field-group">
-              <label className="auth-signup-field-label" htmlFor="password">
-                Password
-              </label>
-              <div className="auth-signup-input-wrapper auth-signup-password-wrapper">
-                <Lock className="auth-signup-input-icon" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  className={`auth-signup-form-input auth-signup-password-input ${errors.password ? 'auth-signup-input-error' : ''}`}
-                  placeholder="Enter your password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="auth-signup-password-toggle"
-                >
-                  {showPassword ? <EyeOff /> : <Eye />}
-                </button>
-              </div>
-              {errors.password && (
-                <div className="auth-signup-field-error">
-                  <AlertCircle className="auth-signup-error-icon-small" />
-                  <p className="auth-signup-field-error-text">{errors.password}</p>
-                </div>
-              )}
-            </div>
-
-            <div className="auth-signup-field-group">
-              <label className="auth-signup-field-label" htmlFor="confirmPassword">
-                Confirm Password
-              </label>
-              <div className="auth-signup-input-wrapper">
-                <Lock className="auth-signup-input-icon" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      handleSubmit(e);
-                    }
-                  }}
-                  className={`auth-signup-form-input ${errors.confirmPassword ? 'auth-signup-input-error' : ''}`}
-                  placeholder="Confirm your password"
-                />
-              </div>
-              {errors.confirmPassword && (
-                <div className="auth-signup-field-error">
-                  <AlertCircle className="auth-signup-error-icon-small" />
-                  <p className="auth-signup-field-error-text">{errors.confirmPassword}</p>
-                </div>
-              )}
+          <div className="field-group">
+            <label className="field-label">Role</label>
+            <div className="role-select-wrapper">
+              <select
+                name="role"
+                value={formData.role}
+                onChange={handleInputChange}
+                className="form-select"
+              >
+                <option value="customer">Customer</option>
+                <option value="dealer">Dealer</option>
+              </select>
             </div>
           </div>
 
-          <div className="auth-signup-field-group">
-            <label className="auth-signup-field-label">Role</label>
-            <div className="auth-signup-radio-group">
-              <label className="auth-signup-radio-option">
-                <input
-                  type="radio"
-                  name="role"
-                  value="customer"
-                  checked={formData.role === 'customer'}
-                  onChange={handleInputChange}
-                  className="auth-signup-radio-input"
-                />
-                <span className="auth-signup-radio-custom"></span>
-                <span className="auth-signup-radio-label">Customer</span>
-              </label>
-              <label className="auth-signup-radio-option">
-                <input
-                  type="radio"
-                  name="role"
-                  value="dealer"
-                  checked={formData.role === 'dealer'}
-                  onChange={handleInputChange}
-                  className="auth-signup-radio-input"
-                />
-                <span className="auth-signup-radio-custom"></span>
-                <span className="auth-signup-radio-label">Dealer</span>
-              </label>
+          <div className="field-group">
+            <label className="field-label">Password</label>
+            <div className="input-wrapper">
+              <Lock className="input-icon" />
+              <input
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                className={`form-input password-input ${errors.password ? 'error' : ''}`}
+                placeholder="Enter your password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="password-toggle"
+              >
+                {showPassword ? <EyeOff /> : <Eye />}
+              </button>
             </div>
+            {errors.password && (
+              <p className="field-error">{errors.password}</p>
+            )}
           </div>
-          
+
+          <div className="field-group">
+            <label className="field-label">Confirm Password</label>
+            <div className="input-wrapper">
+              <Lock className="input-icon" />
+              <input
+                type={showPassword ? 'text' : 'password'}
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
+                className={`form-input ${errors.confirmPassword ? 'error' : ''}`}
+                placeholder="Confirm your password"
+              />
+            </div>
+            {errors.confirmPassword && (
+              <p className="field-error">{errors.confirmPassword}</p>
+            )}
+          </div>
+
           <button
-            type="button"
             onClick={handleSubmit}
             disabled={isLoading}
-            className="auth-signup-submit-button"
+            className="submit-button"
           >
-            {isLoading ? 'Creating Account...' : 'SIGN UP'}
+            {isLoading ? 'Creating Account...' : 'Sign Up'}
           </button>
         </div>
 
-        <div className="auth-signup-form-footer">
-          <p className="auth-signup-footer-text">
-            Already have an account?
+        <div className="form-footer">
+          <p className="footer-text">
+            Already have an account?{' '}
             <button
-              type="button"
               onClick={onSwitchToLogin}
-              className="auth-signup-footer-link"
+              className="footer-link"
             >
               Sign in
             </button>
           </p>
         </div>
-      </div>
-
-      <div className="auth-signup-image-section">
-        <img 
-          src={signupImage} 
-          alt="Signup illustration" 
-          className="auth-signup-image"
-        />
       </div>
     </div>
   );
