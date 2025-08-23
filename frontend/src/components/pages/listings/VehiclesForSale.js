@@ -5,8 +5,8 @@ import '../../../styles/vehicles-for-sale.css'
 import Navbar from '../../common/Navbar';
 import Footer from '../../common/Footer';
 
-// Reusable Price Range Slider Component
-const PriceRangeSlider = ({ min, max, value, onChange }) => {
+// Reusable Range Slider Component
+const RangeSlider = ({ label, min, max, value, onChange, unit = '' }) => {
   const [minValue, maxValue] = value;
   
   const handleMinChange = (e) => {
@@ -20,10 +20,10 @@ const PriceRangeSlider = ({ min, max, value, onChange }) => {
   };
   
   return (
-    <div className="vehicles-sale-price-range">
-      <div className="vehicles-sale-price-values">
-        <span className="vehicles-sale-price-min">${minValue}k</span>
-        <span className="vehicles-sale-price-max">${maxValue}k</span>
+    <div className="vehicles-sale-range-slider">
+      <div className="vehicles-sale-range-values">
+        <span className="vehicles-sale-range-min">{minValue}{unit}</span>
+        <span className="vehicles-sale-range-max">{maxValue}{unit}</span>
       </div>
       <div className="vehicles-sale-slider-container">
         <div className="vehicles-sale-slider-track">
@@ -254,20 +254,22 @@ const VehiclesForSale = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState('latest');
   const [priceRange, setPriceRange] = useState([15, 85]);
+  const [yearRange, setYearRange] = useState([2020, 2024]);
+  const [mileageRange, setMileageRange] = useState([0, 100]);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' (3 per row), 'compact' (4 per row), 'list' (1 per row)
   const [filters, setFilters] = useState({
-    categories: [],
     makes: [],
     models: [],
-    types: [],
-    years: [],
+    bodyTypes: [],
     transmissions: [],
-    fuelTypes: []
+    fuelTypes: [],
+    engineSizes: [],
+    conditions: []
   });
   
   const itemsPerPage = viewMode === 'list' ? 5 : (viewMode === 'compact' ? 12 : 9);
   
-  // Sample vehicle data
+  // Enhanced vehicle data with multiple models per make
   const allVehicles = [
     {
       id: 1,
@@ -283,14 +285,36 @@ const VehiclesForSale = () => {
       fuelType: 'Electric',
       transmission: 'Automatic',
       year: '2022',
-      category: 'Luxury',
       make: 'Tesla',
       model: 'Model S',
-      type: 'Sedan',
+      bodyType: 'Sedan',
+      engineSize: 'Electric Motor',
+      condition: 'Used',
       image: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=400&h=300&fit=crop&crop=center'
     },
     {
       id: 2,
+      title: '2023 Tesla Model 3 Performance',
+      description: 'High-performance compact electric sedan with advanced autopilot features',
+      price: '$54,900',
+      originalPrice: null,
+      badge: 'New Arrival',
+      badgeColor: 'blue',
+      rating: 4.7,
+      reviewCount: 18,
+      mileage: '2,100 mi',
+      fuelType: 'Electric',
+      transmission: 'Automatic',
+      year: '2023',
+      make: 'Tesla',
+      model: 'Model 3',
+      bodyType: 'Sedan',
+      engineSize: 'Electric Motor',
+      condition: 'New',
+      image: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=400&h=300&fit=crop&crop=center'
+    },
+    {
+      id: 3,
       title: '2021 BMW X5 xDrive40i',
       description: 'Premium SUV with all-wheel drive, panoramic sunroof, and advanced safety features',
       price: '$52,900',
@@ -303,14 +327,36 @@ const VehiclesForSale = () => {
       fuelType: 'Gasoline',
       transmission: 'Automatic',
       year: '2021',
-      category: 'SUV',
       make: 'BMW',
       model: 'X5',
-      type: 'SUV',
+      bodyType: 'SUV',
+      engineSize: '3.0L Turbo I6',
+      condition: 'CPO',
       image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&h=300&fit=crop&crop=center'
     },
     {
-      id: 3,
+      id: 4,
+      title: '2022 BMW 3 Series 330i',
+      description: 'Luxury compact sedan with sporty handling and premium amenities',
+      price: '$43,500',
+      originalPrice: null,
+      badge: 'Premium',
+      badgeColor: 'blue',
+      rating: 4.6,
+      reviewCount: 12,
+      mileage: '15,800 mi',
+      fuelType: 'Gasoline',
+      transmission: 'Automatic',
+      year: '2022',
+      make: 'BMW',
+      model: '3 Series',
+      bodyType: 'Sedan',
+      engineSize: '2.0L Turbo I4',
+      condition: 'Used',
+      image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&h=300&fit=crop&crop=center'
+    },
+    {
+      id: 5,
       title: '2023 Ford F-150 Lightning',
       description: 'All-electric pickup truck with impressive towing capacity and innovative features',
       price: '$67,500',
@@ -323,14 +369,36 @@ const VehiclesForSale = () => {
       fuelType: 'Electric',
       transmission: 'Automatic',
       year: '2023',
-      category: 'Truck',
       make: 'Ford',
-      model: 'F-150',
-      type: 'Pickup',
+      model: 'F-150 Lightning',
+      bodyType: 'Pickup Truck',
+      engineSize: 'Electric Motor',
+      condition: 'New',
       image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop&crop=center'
     },
     {
-      id: 4,
+      id: 6,
+      title: '2022 Ford Mustang GT',
+      description: 'Classic American muscle car with powerful V8 engine and iconic styling',
+      price: '$38,900',
+      originalPrice: null,
+      badge: 'Sport Package',
+      badgeColor: 'blue',
+      rating: 4.4,
+      reviewCount: 9,
+      mileage: '12,500 mi',
+      fuelType: 'Gasoline',
+      transmission: 'Manual',
+      year: '2022',
+      make: 'Ford',
+      model: 'Mustang',
+      bodyType: 'Coupe',
+      engineSize: '5.0L V8',
+      condition: 'Used',
+      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop&crop=center'
+    },
+    {
+      id: 7,
       title: '2022 Toyota Camry Hybrid',
       description: 'Fuel-efficient hybrid sedan with reliable performance and modern technology',
       price: '$28,900',
@@ -343,14 +411,36 @@ const VehiclesForSale = () => {
       fuelType: 'Hybrid',
       transmission: 'CVT',
       year: '2022',
-      category: 'Economy',
       make: 'Toyota',
       model: 'Camry',
-      type: 'Sedan',
+      bodyType: 'Sedan',
+      engineSize: '2.5L Hybrid I4',
+      condition: 'Used',
       image: 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=400&h=300&fit=crop&crop=center'
     },
     {
-      id: 5,
+      id: 8,
+      title: '2023 Toyota RAV4 Hybrid',
+      description: 'Compact hybrid SUV with excellent fuel economy and all-wheel drive capability',
+      price: '$32,400',
+      originalPrice: null,
+      badge: 'Eco-Friendly',
+      badgeColor: 'green',
+      rating: 4.5,
+      reviewCount: 16,
+      mileage: '8,900 mi',
+      fuelType: 'Hybrid',
+      transmission: 'CVT',
+      year: '2023',
+      make: 'Toyota',
+      model: 'RAV4',
+      bodyType: 'SUV',
+      engineSize: '2.5L Hybrid I4',
+      condition: 'New',
+      image: 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=400&h=300&fit=crop&crop=center'
+    },
+    {
+      id: 9,
       title: '2021 Mercedes-Benz C-Class',
       description: 'Luxury compact sedan with premium materials and advanced driver assistance',
       price: '$41,800',
@@ -363,14 +453,36 @@ const VehiclesForSale = () => {
       fuelType: 'Gasoline',
       transmission: 'Automatic',
       year: '2021',
-      category: 'Luxury',
-      make: 'Mercedes',
+      make: 'Mercedes-Benz',
       model: 'C-Class',
-      type: 'Sedan',
+      bodyType: 'Sedan',
+      engineSize: '2.0L Turbo I4',
+      condition: 'CPO',
       image: 'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?w=400&h=300&fit=crop&crop=center'
     },
     {
-      id: 6,
+      id: 10,
+      title: '2022 Mercedes-Benz GLE 350',
+      description: 'Luxury mid-size SUV with advanced technology and premium comfort features',
+      price: '$58,700',
+      originalPrice: null,
+      badge: 'Luxury',
+      badgeColor: 'blue',
+      rating: 4.6,
+      reviewCount: 11,
+      mileage: '19,600 mi',
+      fuelType: 'Gasoline',
+      transmission: 'Automatic',
+      year: '2022',
+      make: 'Mercedes-Benz',
+      model: 'GLE',
+      bodyType: 'SUV',
+      engineSize: '2.0L Turbo I4',
+      condition: 'CPO',
+      image: 'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?w=400&h=300&fit=crop&crop=center'
+    },
+    {
+      id: 11,
       title: '2023 Jeep Wrangler Unlimited',
       description: 'Rugged off-road SUV with removable doors and roof for outdoor adventures',
       price: '$45,300',
@@ -383,14 +495,15 @@ const VehiclesForSale = () => {
       fuelType: 'Gasoline',
       transmission: 'Manual',
       year: '2023',
-      category: 'SUV',
       make: 'Jeep',
       model: 'Wrangler',
-      type: 'SUV',
+      bodyType: 'SUV',
+      engineSize: '3.6L V6',
+      condition: 'New',
       image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400&h=300&fit=crop&crop=center'
     },
     {
-      id: 7,
+      id: 12,
       title: '2022 Honda Civic Si',
       description: 'Sporty compact sedan with manual transmission and performance-tuned suspension',
       price: '$26,500',
@@ -403,160 +516,107 @@ const VehiclesForSale = () => {
       fuelType: 'Gasoline',
       transmission: 'Manual',
       year: '2022',
-      category: 'Sport',
       make: 'Honda',
       model: 'Civic',
-      type: 'Sedan',
+      bodyType: 'Sedan',
+      engineSize: '1.5L Turbo I4',
+      condition: 'Used',
       image: 'https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=400&h=300&fit=crop&crop=center'
     },
     {
-      id: 8,
-      title: '2021 Chevrolet Tahoe LT',
-      description: 'Full-size SUV with three rows of seating and excellent towing capacity',
-      price: '$48,700',
-      originalPrice: '$52,000',
-      badge: 'Family Ready',
-      badgeColor: 'green',
-      rating: 4.2,
-      reviewCount: 11,
-      mileage: '28,900 mi',
-      fuelType: 'Gasoline',
-      transmission: 'Automatic',
-      year: '2021',
-      category: 'SUV',
-      make: 'Chevrolet',
-      model: 'Tahoe',
-      type: 'SUV',
-      image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=300&fit=crop&crop=center'
-    },
-    {
-      id: 9,
-      title: '2023 Porsche 911 Carrera',
-      description: 'Iconic sports car with rear-engine layout and exceptional driving dynamics',
-      price: '$115,800',
+      id: 13,
+      title: '2023 Honda CR-V Hybrid',
+      description: 'Reliable compact SUV with hybrid powertrain and spacious interior',
+      price: '$34,200',
       originalPrice: null,
-      badge: 'Performance',
-      badgeColor: 'blue',
-      rating: 4.9,
-      reviewCount: 6,
-      mileage: '3,200 mi',
-      fuelType: 'Gasoline',
-      transmission: 'Manual',
-      year: '2023',
-      category: 'Sport',
-      make: 'Porsche',
-      model: '911',
-      type: 'Coupe',
-      image: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&h=300&fit=crop&crop=center'
-    },
-    {
-      id: 10,
-      title: '2022 Audi Q7 Premium Plus',
-      description: 'Luxury three-row SUV with sophisticated technology and all-wheel drive',
-      price: '$61,900',
-      originalPrice: null,
-      badge: 'Premium',
-      badgeColor: 'blue',
-      rating: 4.6,
-      reviewCount: 13,
-      mileage: '19,500 mi',
-      fuelType: 'Gasoline',
-      transmission: 'Automatic',
-      year: '2022',
-      category: 'Luxury',
-      make: 'Audi',
-      model: 'Q7',
-      type: 'SUV',
-      image: 'https://images.unsplash.com/photo-1549399090-7e1ad5019a5c?w=400&h=300&fit=crop&crop=center'
-    },
-    {
-      id: 11,
-      title: '2021 Subaru Outback Limited',
-      description: 'Adventure-ready wagon with standard all-wheel drive and excellent ground clearance',
-      price: '$33,200',
-      originalPrice: null,
-      badge: 'Adventure Ready',
+      badge: 'Best Seller',
       badgeColor: 'green',
       rating: 4.4,
-      reviewCount: 19,
-      mileage: '25,100 mi',
-      fuelType: 'Gasoline',
+      reviewCount: 20,
+      mileage: '6,800 mi',
+      fuelType: 'Hybrid',
       transmission: 'CVT',
-      year: '2021',
-      category: 'Wagon',
-      make: 'Subaru',
-      model: 'Outback',
-      type: 'Wagon',
-      image: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=400&h=300&fit=crop&crop=center'
-    },
-    {
-      id: 12,
-      title: '2023 Ram 1500 Laramie',
-      description: 'Full-size pickup with luxurious interior and impressive hauling capabilities',
-      price: '$56,400',
-      originalPrice: null,
-      badge: 'Luxury Truck',
-      badgeColor: 'blue',
-      rating: 4.5,
-      reviewCount: 7,
-      mileage: '8,900 mi',
-      fuelType: 'Gasoline',
-      transmission: 'Automatic',
       year: '2023',
-      category: 'Truck',
-      make: 'Ram',
-      model: '1500',
-      type: 'Pickup',
-      image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&h=300&fit=crop&crop=center'
+      make: 'Honda',
+      model: 'CR-V',
+      bodyType: 'SUV',
+      engineSize: '2.0L Hybrid I4',
+      condition: 'New',
+      image: 'https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=400&h=300&fit=crop&crop=center'
     }
   ];
 
-  // Filter options data
+  // Updated filter options with multiple models per make
   const filterOptions = {
-    categories: [
-      { value: 'Luxury', count: 3 },
-      { value: 'SUV', count: 4 },
-      { value: 'Sport', count: 2 },
-      { value: 'Economy', count: 1 },
-      { value: 'Truck', count: 2 },
-      { value: 'Wagon', count: 1 }
-    ],
     makes: [
-      { value: 'Tesla', count: 1 },
-      { value: 'BMW', count: 1 },
-      { value: 'Ford', count: 1 },
-      { value: 'Toyota', count: 1 },
-      { value: 'Mercedes', count: 1 },
+      { value: 'Tesla', count: 2 },
+      { value: 'BMW', count: 2 },
+      { value: 'Ford', count: 2 },
+      { value: 'Toyota', count: 2 },
+      { value: 'Mercedes-Benz', count: 2 },
       { value: 'Jeep', count: 1 },
-      { value: 'Honda', count: 1 },
-      { value: 'Chevrolet', count: 1 },
-      { value: 'Porsche', count: 1 },
-      { value: 'Audi', count: 1 },
-      { value: 'Subaru', count: 1 },
-      { value: 'Ram', count: 1 }
+      { value: 'Honda', count: 2 }
     ],
-    types: [
-      { value: 'Sedan', count: 4 },
+    // Models will be filtered based on selected makes
+    allModels: [
+      { value: 'Model S', make: 'Tesla', count: 1 },
+      { value: 'Model 3', make: 'Tesla', count: 1 },
+      { value: 'X5', make: 'BMW', count: 1 },
+      { value: '3 Series', make: 'BMW', count: 1 },
+      { value: 'F-150 Lightning', make: 'Ford', count: 1 },
+      { value: 'Mustang', make: 'Ford', count: 1 },
+      { value: 'Camry', make: 'Toyota', count: 1 },
+      { value: 'RAV4', make: 'Toyota', count: 1 },
+      { value: 'C-Class', make: 'Mercedes-Benz', count: 1 },
+      { value: 'GLE', make: 'Mercedes-Benz', count: 1 },
+      { value: 'Wrangler', make: 'Jeep', count: 1 },
+      { value: 'Civic', make: 'Honda', count: 1 },
+      { value: 'CR-V', make: 'Honda', count: 1 }
+    ],
+    bodyTypes: [
+      { value: 'Sedan', count: 6 },
       { value: 'SUV', count: 5 },
-      { value: 'Pickup', count: 2 },
-      { value: 'Coupe', count: 1 },
-      { value: 'Wagon', count: 1 }
-    ],
-    years: [
-      { value: '2023', count: 4 },
-      { value: '2022', count: 4 },
-      { value: '2021', count: 4 }
+      { value: 'Pickup Truck', count: 1 },
+      { value: 'Coupe', count: 1 }
     ],
     transmissions: [
-      { value: 'Automatic', count: 7 },
-      { value: 'Manual', count: 3 },
-      { value: 'CVT', count: 2 }
+      { value: 'Automatic', count: 9 },
+      { value: 'Manual', count: 2 },
+      { value: 'CVT', count: 4 }
     ],
     fuelTypes: [
-      { value: 'Gasoline', count: 8 },
-      { value: 'Electric', count: 2 },
-      { value: 'Hybrid', count: 1 }
+      { value: 'Gasoline', count: 6 },
+      { value: 'Electric', count: 3 },
+      { value: 'Hybrid', count: 4 }
+    ],
+    engineSizes: [
+      { value: '1.5L Turbo I4', count: 1 },
+      { value: '2.0L Turbo I4', count: 3 },
+      { value: '2.0L Hybrid I4', count: 1 },
+      { value: '2.5L Hybrid I4', count: 2 },
+      { value: '3.0L Turbo I6', count: 1 },
+      { value: '3.6L V6', count: 1 },
+      { value: '5.0L V8', count: 1 },
+      { value: 'Electric Motor', count: 3 }
+    ],
+    conditions: [
+      { value: 'New', count: 6 },
+      { value: 'Used', count: 5 },
+      { value: 'CPO', count: 2 }
     ]
+  };
+
+  // Get available models based on selected makes
+  const getAvailableModels = () => {
+    if (filters.makes.length === 0) {
+      // If no makes selected, show all models
+      return filterOptions.allModels;
+    }
+    
+    // Filter models based on selected makes
+    return filterOptions.allModels.filter(model => 
+      filters.makes.includes(model.make)
+    );
   };
 
   // Filter and sort vehicles
@@ -566,13 +626,21 @@ const VehiclesForSale = () => {
       const price = parseInt(vehicle.price.replace(/[$,]/g, ''));
       if (price < priceRange[0] * 1000 || price > priceRange[1] * 1000) return false;
       
+      // Year filter
+      if (vehicle.year < yearRange[0] || vehicle.year > yearRange[1]) return false;
+      
+      // Mileage filter (convert to thousands)
+      const mileage = parseInt(vehicle.mileage.replace(/[^0-9]/g, '')) / 1000;
+      if (mileage < mileageRange[0] || mileage > mileageRange[1]) return false;
+      
       // Category filters
-      if (filters.categories.length > 0 && !filters.categories.includes(vehicle.category)) return false;
       if (filters.makes.length > 0 && !filters.makes.includes(vehicle.make)) return false;
-      if (filters.types.length > 0 && !filters.types.includes(vehicle.type)) return false;
-      if (filters.years.length > 0 && !filters.years.includes(vehicle.year)) return false;
+      if (filters.models.length > 0 && !filters.models.includes(vehicle.model)) return false;
+      if (filters.bodyTypes.length > 0 && !filters.bodyTypes.includes(vehicle.bodyType)) return false;
       if (filters.transmissions.length > 0 && !filters.transmissions.includes(vehicle.transmission)) return false;
       if (filters.fuelTypes.length > 0 && !filters.fuelTypes.includes(vehicle.fuelType)) return false;
+      if (filters.engineSizes.length > 0 && !filters.engineSizes.includes(vehicle.engineSize)) return false;
+      if (filters.conditions.length > 0 && !filters.conditions.includes(vehicle.condition)) return false;
       
       return true;
     });
@@ -591,6 +659,9 @@ const VehiclesForSale = () => {
       case 'mileage':
         filtered.sort((a, b) => parseInt(a.mileage.replace(/[^0-9]/g, '')) - parseInt(b.mileage.replace(/[^0-9]/g, '')));
         break;
+      case 'year':
+        filtered.sort((a, b) => b.year - a.year);
+        break;
       case 'latest':
       default:
         // Keep original order for latest
@@ -598,7 +669,7 @@ const VehiclesForSale = () => {
     }
 
     return filtered;
-  }, [allVehicles, filters, priceRange, sortBy]);
+  }, [allVehicles, filters, priceRange, yearRange, mileageRange, sortBy]);
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredAndSortedVehicles.length / itemsPerPage);
@@ -607,12 +678,29 @@ const VehiclesForSale = () => {
 
   // Filter handlers
   const handleFilterChange = (category, value, checked) => {
-    setFilters(prev => ({
-      ...prev,
-      [category]: checked 
-        ? [...prev[category], value]
-        : prev[category].filter(item => item !== value)
-    }));
+    setFilters(prev => {
+      const newFilters = {
+        ...prev,
+        [category]: checked 
+          ? [...prev[category], value]
+          : prev[category].filter(item => item !== value)
+      };
+
+      // If make is deselected, remove associated models
+      if (category === 'makes' && !checked) {
+        // Get models that belong to the deselected make
+        const modelsToRemove = filterOptions.allModels
+          .filter(model => model.make === value)
+          .map(model => model.value);
+        
+        // Remove those models from selected models
+        newFilters.models = newFilters.models.filter(model => 
+          !modelsToRemove.includes(model)
+        );
+      }
+
+      return newFilters;
+    });
     setCurrentPage(1); // Reset to first page when filtering
   };
 
@@ -623,6 +711,12 @@ const VehiclesForSale = () => {
   const removeFilter = (category, value) => {
     if (category === 'priceRange') {
       setPriceRange([15, 85]);
+      setCurrentPage(1);
+    } else if (category === 'yearRange') {
+      setYearRange([2020, 2024]);
+      setCurrentPage(1);
+    } else if (category === 'mileageRange') {
+      setMileageRange([0, 100]);
       setCurrentPage(1);
     } else {
       setFilters(prev => ({
@@ -635,15 +729,17 @@ const VehiclesForSale = () => {
 
   const clearAllFilters = () => {
     setFilters({
-      categories: [],
       makes: [],
       models: [],
-      types: [],
-      years: [],
+      bodyTypes: [],
       transmissions: [],
-      fuelTypes: []
+      fuelTypes: [],
+      engineSizes: [],
+      conditions: []
     });
     setPriceRange([15, 85]);
+    setYearRange([2020, 2024]);
+    setMileageRange([0, 100]);
     setCurrentPage(1);
   };
 
@@ -664,18 +760,37 @@ const VehiclesForSale = () => {
       });
     }
 
+    // Add year range if not default
+    if (yearRange[0] !== 2020 || yearRange[1] !== 2024) {
+      activeFilters.push({ 
+        category: 'yearRange', 
+        value: `${yearRange[0]} - ${yearRange[1]}` 
+      });
+    }
+
+    // Add mileage range if not default
+    if (mileageRange[0] !== 0 || mileageRange[1] !== 100) {
+      activeFilters.push({ 
+        category: 'mileageRange', 
+        value: `${mileageRange[0]}k - ${mileageRange[1]}k mi` 
+      });
+    }
+
     return activeFilters;
   };
 
   const getFilterColor = (category) => {
     const colors = {
-      categories: { bg: '#e0f2fe', text: '#0369a1' }, // Light blue bg, dark blue text
       makes: { bg: '#dcfce7', text: '#166534' }, // Light green bg, dark green text
-      types: { bg: '#fef3c7', text: '#d97706' }, // Light amber bg, dark amber text
-      years: { bg: '#ede9fe', text: '#7c3aed' }, // Light purple bg, dark purple text
+      models: { bg: '#fef3c7', text: '#d97706' }, // Light amber bg, dark amber text
+      bodyTypes: { bg: '#e0f2fe', text: '#0369a1' }, // Light blue bg, dark blue text
       transmissions: { bg: '#fee2e2', text: '#dc2626' }, // Light red bg, dark red text
       fuelTypes: { bg: '#fce7f3', text: '#c2185b' }, // Light pink bg, dark pink text
-      priceRange: { bg: '#e0e7ff', text: '#4338ca' } // Light indigo bg, dark indigo text
+      engineSizes: { bg: '#ede9fe', text: '#7c3aed' }, // Light purple bg, dark purple text
+      conditions: { bg: '#f0fdf4', text: '#15803d' }, // Light emerald bg, dark emerald text
+      priceRange: { bg: '#e0e7ff', text: '#4338ca' }, // Light indigo bg, dark indigo text
+      yearRange: { bg: '#fef7ff', text: '#a21caf' }, // Light fuchsia bg, dark fuchsia text
+      mileageRange: { bg: '#ecfccb', text: '#65a30d' } // Light lime bg, dark lime text
     };
     return colors[category] || { bg: '#f3f4f6', text: '#374151' };
   };
@@ -686,31 +801,8 @@ const VehiclesForSale = () => {
       <div className="vehicles-sale-page">
         {/* Sidebar Filters */}
         <aside className="vehicles-sale-sidebar">
-          {/* Categories */}
-          <FilterCategory title="Categories">
-            {filterOptions.categories.map(option => (
-              <FilterOption
-                key={option.value}
-                label={option.value}
-                count={option.count}
-                checked={filters.categories.includes(option.value)}
-                onChange={(e) => handleFilterChange('categories', option.value, e.target.checked)}
-              />
-            ))}
-          </FilterCategory>
-
-          {/* Price Range */}
-          <FilterCategory title="Price Range">
-            <PriceRangeSlider
-              min={15}
-              max={120}
-              value={priceRange}
-              onChange={setPriceRange}
-            />
-          </FilterCategory>
-
-          {/* Makes */}
-          <FilterCategory title="Makes">
+          {/* Make */}
+          <FilterCategory title="Make">
             {filterOptions.makes.map(option => (
               <FilterOption
                 key={option.value}
@@ -722,34 +814,79 @@ const VehiclesForSale = () => {
             ))}
           </FilterCategory>
 
-          {/* Types */}
-          <FilterCategory title="Vehicle Types">
-            {filterOptions.types.map(option => (
+          {/* Model */}
+          <FilterCategory title="Model">
+            {getAvailableModels().length > 0 ? (
+              getAvailableModels().map(option => (
+                <FilterOption
+                  key={option.value}
+                  label={option.value}
+                  count={option.count}
+                  checked={filters.models.includes(option.value)}
+                  onChange={(e) => handleFilterChange('models', option.value, e.target.checked)}
+                />
+              ))
+            ) : (
+              <div className="vehicles-sale-no-options">
+                {filters.makes.length > 0 
+                  ? "No models available for selected makes"
+                  : "Select a make to see available models"
+                }
+              </div>
+            )}
+          </FilterCategory>
+
+          {/* Year Range */}
+          <FilterCategory title="Year Range">
+            <RangeSlider
+              label="Year Range"
+              min={2020}
+              max={2024}
+              value={yearRange}
+              onChange={setYearRange}
+              unit=""
+            />
+          </FilterCategory>
+
+          {/* Price Range */}
+          <FilterCategory title="Price Range">
+            <RangeSlider
+              label="Price Range"
+              min={15}
+              max={120}
+              value={priceRange}
+              onChange={setPriceRange}
+              unit="k"
+            />
+          </FilterCategory>
+
+          {/* Mileage Range */}
+          <FilterCategory title="Mileage Range">
+            <RangeSlider
+              label="Mileage Range"
+              min={0}
+              max={100}
+              value={mileageRange}
+              onChange={setMileageRange}
+              unit="k mi"
+            />
+          </FilterCategory>
+
+          {/* Body Type */}
+          <FilterCategory title="Body Type">
+            {filterOptions.bodyTypes.map(option => (
               <FilterOption
                 key={option.value}
                 label={option.value}
                 count={option.count}
-                checked={filters.types.includes(option.value)}
-                onChange={(e) => handleFilterChange('types', option.value, e.target.checked)}
+                checked={filters.bodyTypes.includes(option.value)}
+                onChange={(e) => handleFilterChange('bodyTypes', option.value, e.target.checked)}
               />
             ))}
           </FilterCategory>
 
-          {/* Years */}
-          <FilterCategory title="Years" isOpen={false}>
-            {filterOptions.years.map(option => (
-              <FilterOption
-                key={option.value}
-                label={option.value}
-                count={option.count}
-                checked={filters.years.includes(option.value)}
-                onChange={(e) => handleFilterChange('years', option.value, e.target.checked)}
-              />
-            ))}
-          </FilterCategory>
-
-          {/* Transmissions */}
-          <FilterCategory title="Transmissions" isOpen={false}>
+          {/* Transmission */}
+          <FilterCategory title="Transmission">
             {filterOptions.transmissions.map(option => (
               <FilterOption
                 key={option.value}
@@ -761,8 +898,8 @@ const VehiclesForSale = () => {
             ))}
           </FilterCategory>
 
-          {/* Fuel Types */}
-          <FilterCategory title="Fuel Types" isOpen={false}>
+          {/* Fuel Type */}
+          <FilterCategory title="Fuel Type">
             {filterOptions.fuelTypes.map(option => (
               <FilterOption
                 key={option.value}
@@ -770,6 +907,32 @@ const VehiclesForSale = () => {
                 count={option.count}
                 checked={filters.fuelTypes.includes(option.value)}
                 onChange={(e) => handleFilterChange('fuelTypes', option.value, e.target.checked)}
+              />
+            ))}
+          </FilterCategory>
+
+          {/* Engine Size / Cylinders */}
+          <FilterCategory title="Engine Size" isOpen={false}>
+            {filterOptions.engineSizes.map(option => (
+              <FilterOption
+                key={option.value}
+                label={option.value}
+                count={option.count}
+                checked={filters.engineSizes.includes(option.value)}
+                onChange={(e) => handleFilterChange('engineSizes', option.value, e.target.checked)}
+              />
+            ))}
+          </FilterCategory>
+
+          {/* Condition */}
+          <FilterCategory title="Condition" isOpen={false}>
+            {filterOptions.conditions.map(option => (
+              <FilterOption
+                key={option.value}
+                label={option.value}
+                count={option.count}
+                checked={filters.conditions.includes(option.value)}
+                onChange={(e) => handleFilterChange('conditions', option.value, e.target.checked)}
               />
             ))}
           </FilterCategory>
@@ -825,6 +988,7 @@ const VehiclesForSale = () => {
                   <option value="price-high">Price: High to Low</option>
                   <option value="rating">Highest Rated</option>
                   <option value="mileage">Lowest Mileage</option>
+                  <option value="year">Newest First</option>
                 </select>
               </div>
             </div>
