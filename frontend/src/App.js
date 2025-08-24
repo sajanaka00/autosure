@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AuthApp from './components/auth/AuthApp';
-import ExploreAllVehicles from './components/pages/listings/ExploreAllVehicles';
+import VehiclesForSale from './components/pages/listings/VehiclesForSale';
 import CarListing from './components/pages/listings/CarListing';
 import BlogPage from './components/pages/blog/BlogPage';
 import BlogDetailPage from './components/pages/blog/BlogDetailPage';
@@ -21,7 +21,7 @@ function App() {
           
           {/* Vehicle routes */}
           <Route path="/car-listing/:carId" element={<CarListing />} />
-          <Route path="/vehicles" element={<ExploreAllVehicles />} />
+          <Route path="/vehicles" element={<VehiclesForSale />} />
           
           {/* About route */}
           <Route path="/about" element={<BoxCarsAbout />} />

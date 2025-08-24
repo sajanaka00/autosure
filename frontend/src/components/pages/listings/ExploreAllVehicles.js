@@ -27,6 +27,21 @@ export default function ExploreAllVehicles() {
     }, 100);
   };
 
+  const navigateToVehiclesPage = () => {
+    console.log('Navigating to all vehicles page');
+    
+    // Scroll to top before navigation
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    
+    // Small delay to ensure smooth scroll completes before navigation
+    setTimeout(() => {
+      navigate('/vehicles');
+    }, 100);
+  };
+
   // Alternative approach: Immediate navigation with instant scroll
   const navigateToCarDetailInstant = (carId) => {
     console.log('Navigating to car:', carId);
@@ -274,7 +289,7 @@ export default function ExploreAllVehicles() {
     <div className="eav-section">
       {/* Header */}
       <div className="eav-header-title">Explore All Vehicles</div>
-      <div className="eav-view-all">
+      <div className="eav-view-all" onClick={navigateToVehiclesPage}>
         <div className="eav-view-all-text">View All</div>
         <ArrowRight className="eav-view-all-arrow" />
       </div>
