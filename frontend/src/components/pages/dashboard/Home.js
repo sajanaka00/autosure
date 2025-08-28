@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ChevronDown, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import backgroundImage from '../../../assets/images/cars/bmw6.jpg'; 
 import whatsappIcon from '../../../assets/images/vectors/whatsapp.png';
@@ -11,6 +12,7 @@ import WhyChooseUs from '../../common/WhyChooseUs';
 import '../../../styles/home.css';
 
 export default function FilterBar() {
+  const navigate = useNavigate();
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [showWhatsAppCard, setShowWhatsAppCard] = useState(false);
   const [activeCondition, setActiveCondition] = useState('all');
@@ -36,7 +38,7 @@ export default function FilterBar() {
   };
 
   const dropdownOptions = {
-    makes: ['Any Makes', 'Toyota', 'Honda', 'Ford', 'BMW', 'Mercedes', 'Audi', 'Volkswagen', 'Nissan', 'Hyundai', 'Lexus', 'Infiniti', 'Acura', 'Mazda', 'Subaru', 'Mitsubishi', 'Kia', 'Genesis', 'Volvo', 'Jaguar'],
+    makes: ['Any Makes', 'Toyota', 'Honda', 'Ford', 'BMW', 'Mercedes-Benz', 'Audi', 'Volkswagen', 'Nissan', 'Hyundai', 'Lexus', 'Infiniti', 'Acura', 'Mazda', 'Subaru', 'Mitsubishi', 'Kia', 'Genesis', 'Volvo', 'Jaguar', 'Tesla', 'Jeep'],
     models: ['Any Models', 'Sedan', 'SUV', 'Hatchback', 'Coupe', 'Convertible', 'Truck', 'Crossover', 'Wagon', 'Compact', 'Midsize', 'Full-size', 'Luxury', 'Sports Car', 'Electric', 'Hybrid'],
     prices: ['All Prices', 'Under $10,000', '$10,000 - $20,000', '$20,000 - $30,000', '$30,000 - $50,000', '$50,000 - $75,000', '$75,000 - $100,000', '$100,000+']
   };
@@ -83,7 +85,7 @@ export default function FilterBar() {
     prices: 'All Prices'
   });
 
-  // NEW APPROACH: Handle clicks outside to close dropdown
+  // Handle clicks outside to close dropdown
   useEffect(() => {
     const handleDocumentClick = (event) => {
       if (activeDropdown) {
@@ -106,7 +108,7 @@ export default function FilterBar() {
     return () => document.removeEventListener('click', handleDocumentClick);
   }, [activeDropdown]);
 
-  // NEW APPROACH: Handle option selection with useCallback
+  // Handle option selection with useCallback
   const handleOptionSelect = useCallback((dropdownKey, option) => {
     setDropdownValues(prev => ({
       ...prev,
@@ -154,11 +156,78 @@ export default function FilterBar() {
     setShowWhatsAppCard(!showWhatsAppCard);
   };
 
+  // Modified handleSearch function to navigate to VehiclesForSale page with filters
   const handleSearch = () => {
-    alert(`Searching for:\nMake: ${dropdownValues.makes}\nModel: ${dropdownValues.models}\nPrice: ${dropdownValues.prices}\nCondition: ${activeCondition}`);
+    // Build search parameters
+    const searchParams = new URLSearchParams();
+    
+    // Add make filter if not default
+    if (dropdownValues.makes !== 'Any Makes') {
+      searchParams.append('make', dropdownValues.makes);
+    }
+    
+    // Add model filter if not default (and if it's a specific model, not a category)
+    if (dropdownValues.models !== 'Any Models') {
+      // Check if it's a specific model name rather than a body type
+      const specificModels = [
+        'Model S', 'Model 3', 'X5', '3 Series', 'F-150 Lightning', 'Mustang',
+        'Camry', 'RAV4', 'C-Class', 'GLE', 'Wrangler', 'Civic', 'CR-V'
+      ];
+      
+      if (specificModels.includes(dropdownValues.models)) {
+        searchParams.append('model', dropdownValues.models);
+      } else {
+        // If it's a body type, add it as bodyType filter
+        searchParams.append('bodyType', dropdownValues.models);
+      }
+    }
+    
+    // Add price range filter if not default
+    if (dropdownValues.prices !== 'All Prices') {
+      let priceRange = '';
+      switch (dropdownValues.prices) {
+        case 'Under $10,000':
+          priceRange = '0-10';
+          break;
+        case '$10,000 - $20,000':
+          priceRange = '10-20';
+          break;
+        case '$20,000 - $30,000':
+          priceRange = '20-30';
+          break;
+        case '$30,000 - $50,000':
+          priceRange = '30-50';
+          break;
+        case '$50,000 - $75,000':
+          priceRange = '50-75';
+          break;
+        case '$75,000 - $100,000':
+          priceRange = '75-100';
+          break;
+        case '$100,000+':
+          priceRange = '100-120';
+          break;
+      }
+      if (priceRange) {
+        searchParams.append('priceRange', priceRange);
+      }
+    }
+    
+    // Add condition filter if not 'all'
+    if (activeCondition !== 'all') {
+      const conditionMap = {
+        'new': 'New',
+        'used': 'Used'
+      };
+      searchParams.append('condition', conditionMap[activeCondition]);
+    }
+    
+    // Navigate to vehicles page with search parameters
+    const queryString = searchParams.toString();
+    navigate(`/vehicles${queryString ? `?${queryString}` : ''}`);
   };
 
-  // NEW APPROACH: Render dropdown with better event handling
+  // Render dropdown with better event handling
   const renderDropdown = (key, label = null) => {
     const isActive = activeDropdown === key;
     const currentValue = dropdownValues[key];
@@ -270,7 +339,7 @@ export default function FilterBar() {
             </div>
             <div className="h-browse-grid">
               {vehicleTypes.map((vehicle, index) => (
-                <div key={index} className="h-vehicle-card">
+                <div key={index} className="h-vehicle-card" onClick={() => navigate(`/vehicles?bodyType=${vehicle.name}`)}>
                   <img className="h-vehicle-img" src={vehicle.image} alt={vehicle.name} />
                   <div className="h-vehicle-overlay"></div>
                   <div className="h-vehicle-count">{vehicle.count} Car{vehicle.count !== 1 ? 's' : ''}</div>

@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowRight, Bookmark, ChevronRight, Grid3X3, LayoutList } from 'lucide-react';
 import '../../../styles/vehicles-for-sale.css'
 import Navbar from '../../common/Navbar';
@@ -251,6 +251,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 // Main VehiclesForSale Component
 const VehiclesForSale = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState('latest');
   const [priceRange, setPriceRange] = useState([15, 85]);
@@ -269,6 +270,57 @@ const VehiclesForSale = () => {
   
   const itemsPerPage = viewMode === 'list' ? 5 : (viewMode === 'compact' ? 12 : 9);
   
+  // Parse URL parameters and apply filters on component mount
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    
+    // Apply filters from URL parameters
+    const newFilters = {
+      makes: [],
+      models: [],
+      bodyTypes: [],
+      transmissions: [],
+      fuelTypes: [],
+      engineSizes: [],
+      conditions: []
+    };
+    
+    // Parse make filter
+    const make = searchParams.get('make');
+    if (make) {
+      newFilters.makes = [make];
+    }
+    
+    // Parse model filter
+    const model = searchParams.get('model');
+    if (model) {
+      newFilters.models = [model];
+    }
+    
+    // Parse bodyType filter
+    const bodyType = searchParams.get('bodyType');
+    if (bodyType) {
+      newFilters.bodyTypes = [bodyType];
+    }
+    
+    // Parse condition filter
+    const condition = searchParams.get('condition');
+    if (condition) {
+      newFilters.conditions = [condition];
+    }
+    
+    // Parse price range filter
+    const priceRangeParam = searchParams.get('priceRange');
+    if (priceRangeParam) {
+      const [min, max] = priceRangeParam.split('-').map(Number);
+      setPriceRange([min, max]);
+    }
+    
+    // Set the filters
+    setFilters(newFilters);
+    
+  }, [location.search]);
+  
   // Enhanced vehicle data with multiple models per make
   const allVehicles = [
     {
@@ -284,7 +336,7 @@ const VehiclesForSale = () => {
       mileage: '8,500 mi',
       fuelType: 'Electric',
       transmission: 'Automatic',
-      year: '2022',
+      year: 2022,
       make: 'Tesla',
       model: 'Model S',
       bodyType: 'Sedan',
@@ -305,7 +357,7 @@ const VehiclesForSale = () => {
       mileage: '2,100 mi',
       fuelType: 'Electric',
       transmission: 'Automatic',
-      year: '2023',
+      year: 2023,
       make: 'Tesla',
       model: 'Model 3',
       bodyType: 'Sedan',
@@ -326,7 +378,7 @@ const VehiclesForSale = () => {
       mileage: '23,400 mi',
       fuelType: 'Gasoline',
       transmission: 'Automatic',
-      year: '2021',
+      year: 2021,
       make: 'BMW',
       model: 'X5',
       bodyType: 'SUV',
@@ -347,7 +399,7 @@ const VehiclesForSale = () => {
       mileage: '15,800 mi',
       fuelType: 'Gasoline',
       transmission: 'Automatic',
-      year: '2022',
+      year: 2022,
       make: 'BMW',
       model: '3 Series',
       bodyType: 'Sedan',
@@ -368,7 +420,7 @@ const VehiclesForSale = () => {
       mileage: '5,200 mi',
       fuelType: 'Electric',
       transmission: 'Automatic',
-      year: '2023',
+      year: 2023,
       make: 'Ford',
       model: 'F-150 Lightning',
       bodyType: 'Pickup Truck',
@@ -389,7 +441,7 @@ const VehiclesForSale = () => {
       mileage: '12,500 mi',
       fuelType: 'Gasoline',
       transmission: 'Manual',
-      year: '2022',
+      year: 2022,
       make: 'Ford',
       model: 'Mustang',
       bodyType: 'Coupe',
@@ -410,7 +462,7 @@ const VehiclesForSale = () => {
       mileage: '18,500 mi',
       fuelType: 'Hybrid',
       transmission: 'CVT',
-      year: '2022',
+      year: 2022,
       make: 'Toyota',
       model: 'Camry',
       bodyType: 'Sedan',
@@ -431,7 +483,7 @@ const VehiclesForSale = () => {
       mileage: '8,900 mi',
       fuelType: 'Hybrid',
       transmission: 'CVT',
-      year: '2023',
+      year: 2023,
       make: 'Toyota',
       model: 'RAV4',
       bodyType: 'SUV',
@@ -452,7 +504,7 @@ const VehiclesForSale = () => {
       mileage: '31,200 mi',
       fuelType: 'Gasoline',
       transmission: 'Automatic',
-      year: '2021',
+      year: 2021,
       make: 'Mercedes-Benz',
       model: 'C-Class',
       bodyType: 'Sedan',
@@ -473,7 +525,7 @@ const VehiclesForSale = () => {
       mileage: '19,600 mi',
       fuelType: 'Gasoline',
       transmission: 'Automatic',
-      year: '2022',
+      year: 2022,
       make: 'Mercedes-Benz',
       model: 'GLE',
       bodyType: 'SUV',
@@ -494,7 +546,7 @@ const VehiclesForSale = () => {
       mileage: '12,800 mi',
       fuelType: 'Gasoline',
       transmission: 'Manual',
-      year: '2023',
+      year: 2023,
       make: 'Jeep',
       model: 'Wrangler',
       bodyType: 'SUV',
@@ -515,7 +567,7 @@ const VehiclesForSale = () => {
       mileage: '15,600 mi',
       fuelType: 'Gasoline',
       transmission: 'Manual',
-      year: '2022',
+      year: 2022,
       make: 'Honda',
       model: 'Civic',
       bodyType: 'Sedan',
@@ -536,7 +588,7 @@ const VehiclesForSale = () => {
       mileage: '6,800 mi',
       fuelType: 'Hybrid',
       transmission: 'CVT',
-      year: '2023',
+      year: 2023,
       make: 'Honda',
       model: 'CR-V',
       bodyType: 'SUV',
