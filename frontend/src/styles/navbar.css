@@ -1,15 +1,17 @@
 /* Main Container */
 .navbar-group {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  z-index: 1000; /* Ensure navbar group is above other content */
+  z-index: 1000;
 }
 
 /* Curved Background Section */
 .curved-background {
   background: #050b20;
   width: 100%;
-  height: 60px; /* Reduced from 80px */
+  height: 60px;
   position: absolute;
   top: 70px;
   z-index: -1;
@@ -17,8 +19,8 @@
 
 .white-curved-overlay {
   background: #ffffff;
-  border-radius: 60px 60px 0px 0px; /* Adjusted to match new height */
-  height: 60px; /* Reduced from 80px */
+  border-radius: 60px 60px 0px 0px;
+  height: 60px;
   position: absolute;
   right: 0px;
   left: 0px;
@@ -30,12 +32,13 @@
 .navbar-main {
   background: #050b20;
   width: 100%;
-  height: 70px; /* Reduced from 103.75px */
+  height: 70px;
   position: relative;
   top: 0px;
   z-index: 1001;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   font-family: "DmSans-Regular", sans-serif;
+  overflow: visible !important;
 }
 
 .navbar-container {
@@ -45,13 +48,14 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: 22px; /* Reduced from 39.22px to center in smaller navbar */
+  top: 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  overflow: visible !important;
 }
 
-/* Logo Section - Added cursor pointer */
+/* Logo Section */
 .navbar-logo-link {
   width: 108px;
   height: 26px;
@@ -87,19 +91,22 @@
   display: flex;
   align-items: center;
   gap: 30px;
-  height: 35px; /* Reduced from 45.75px */
+  height: 35px;
+  position: static !important;
+  overflow: visible !important;
 }
 
 .nav-item {
-  position: relative;
+  position: relative !important;
   display: flex;
   align-items: center;
-  z-index: 10; /* Ensure nav items are stackable */
+  z-index: 1000 !important;
+  overflow: visible !important;
 }
 
 .nav-link-wrapper {
   width: 100%;
-  height: 35px; /* Reduced from 45.75px */
+  height: 35px;
   position: relative;
 }
 
@@ -107,9 +114,9 @@
   color: #ffffff;
   font-family: "DmSans-Medium", sans-serif;
   font-size: 15px;
-  line-height: 24px; /* Reduced from 27.75px */
+  line-height: 24px;
   font-weight: 500;
-  height: 35px; /* Reduced from 45.75px */
+  height: 35px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -138,7 +145,7 @@
   width: 8px;
   height: 4px;
   position: absolute;
-  top: 15px; /* Adjusted from 19.19px */
+  top: 15px;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -154,58 +161,69 @@
   transform: rotate(180deg);
 }
 
-/* Dropdown Menu - FIXED */
+/* Dropdown Menu - FIXED VERSION */
 .dropdown-menu {
-  position: absolute;
-  top: calc(100% + 12px); /* Changed from top: 100% */
-  left: 50%;
-  transform: translateX(-50%); /* Center the dropdown */
-  min-width: 200px;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  padding: 8px 0;
-  z-index: 9999; /* Very high z-index */
-  overflow: visible; /* Changed from hidden */
-  pointer-events: all; /* Ensure clicks work */
-  opacity: 1;
-  visibility: visible;
-  animation: dropdownAppear 0.2s ease-out;
+  position: absolute !important;
+  top: 100% !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  margin-top: 12px !important;
+  min-width: 220px !important;
+  max-width: 300px !important;
+  background: #ffffff !important;
+  border-radius: 12px !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  padding: 8px 0 !important;
+  z-index: 99999 !important;
+  overflow: visible !important;
+  pointer-events: all !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  animation: dropdownSlideIn 0.2s ease-out forwards;
 }
 
-/* Dropdown is controlled by React state, not hover */
-
-/* Add dropdown animation */
-@keyframes dropdownAppear {
-  from {
+/* Dropdown Animation */
+@keyframes dropdownSlideIn {
+  0% {
     opacity: 0;
-    transform: translateX(-50%) translateY(-10px);
+    transform: translateX(-50%) translateY(-10px) scale(0.95);
+    visibility: hidden;
   }
-  to {
+  100% {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(-50%) translateY(0) scale(1);
+    visibility: visible;
   }
 }
 
 .dropdown-item {
-  width: 100%;
-  text-align: left;
-  padding: 12px 20px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #374151;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: block;
-  white-space: nowrap; /* Prevent text wrapping */
+  width: 100% !important;
+  text-align: left !important;
+  padding: 12px 20px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #374151 !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: block !important;
+  white-space: nowrap !important;
+  font-family: "DmSans-Medium", sans-serif !important;
 }
 
 .dropdown-item:hover {
-  background: #f8fafc;
-  color: #111827;
-  padding-left: 24px;
+  background: #f8fafc !important;
+  color: #111827 !important;
+  padding-left: 24px !important;
+  transform: translateX(2px) !important;
+}
+
+.dropdown-item:active {
+  background: #e2e8f0 !important;
+  transform: translateX(0) !important;
 }
 
 /* Right Side Actions */
@@ -213,7 +231,7 @@
   display: flex;
   align-items: center;
   gap: 24px;
-  height: 24px; /* Reduced from 27.75px */
+  height: 24px;
 }
 
 /* User Info */
@@ -233,7 +251,7 @@
   color: #ffffff;
   font-family: "DmSans-Medium", sans-serif;
   font-size: 15px;
-  line-height: 24px; /* Reduced from 27.75px */
+  line-height: 24px;
   font-weight: 500;
 }
 
@@ -298,17 +316,17 @@
   color: #ffffff;
   font-family: "DmSans-Medium", sans-serif;
   font-size: 15px;
-  line-height: 24px; /* Reduced from 27.75px */
+  line-height: 24px;
   font-weight: 500;
 }
 
 /* Submit Listing Button */
 .submit-listing-button {
   background: #ffffff;
-  border-radius: 40px; /* Reduced from 46px */
+  border-radius: 40px;
   border: 1px solid #ffffff;
-  width: 140px; /* Reduced from 152.86px */
-  height: 40px; /* Reduced from 47.75px */
+  width: 140px;
+  height: 40px;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
@@ -325,12 +343,12 @@
 .submit-listing-text {
   color: #050b20;
   font-family: "DmSans-Medium", sans-serif;
-  font-size: 14px; /* Reduced from 15px */
-  line-height: 24px; /* Reduced from 27.75px */
+  font-size: 14px;
+  line-height: 24px;
   font-weight: 500;
 }
 
-/* Mobile Menu Toggle - Hidden by default */
+/* Mobile Menu Toggle */
 .mobile-menu-toggle {
   display: none;
   align-items: center;
@@ -349,7 +367,7 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* Mobile Menu - Hidden by default */
+/* Mobile Menu */
 .mobile-menu {
   position: absolute;
   top: 100%;
@@ -513,6 +531,16 @@
   padding: 8px 0;
 }
 
+/* Body Padding for Fixed Navbar */
+body {
+  overflow-x: hidden;
+  padding-top: 130px;
+}
+
+body.home-page {
+  padding-top: 0;
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
   .navbar-container {
@@ -536,7 +564,7 @@
 
 @media (max-width: 768px) {
   .navbar-main {
-    height: 60px; /* Even smaller on mobile */
+    height: 60px;
   }
   
   .curved-background {
@@ -550,7 +578,7 @@
   }
   
   .navbar-container {
-    top: 15px; /* Centered in smaller mobile navbar */
+    top: 15px;
     height: 30px;
     width: calc(100% - 40px);
     left: 20px;
@@ -679,15 +707,4 @@ button:focus-visible {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
-
-/* Ensure dropdown doesn't get clipped by parent containers */
-body {
-  overflow-x: hidden;
-}
-
-.navbar-main,
-.navbar-container,
-.navbar-navigation {
-  overflow: visible !important;
 }

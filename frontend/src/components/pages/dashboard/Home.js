@@ -332,7 +332,7 @@ export default function FilterBar() {
         </div>
 
         {/* Browse by Type Section */}
-        <div className="h-browse">
+        <div className="h-browse" id="browse-by-type">
           <div className="h-browse-container">
             <div className="h-browse-header">
               <div className="h-browse-title">Browse by Type</div>
@@ -350,11 +350,21 @@ export default function FilterBar() {
           </div>
         </div>
 
-        {/* Components */}
-        <GetFairPrice />
-        <WhyChooseUs />
-        <ExploreAllVehicles />
-        <TestimonialsSection />
+        <div id="get-fair-price">
+          <GetFairPrice />
+        </div>
+
+        <div id="why-choose-us">
+          <WhyChooseUs />
+        </div>
+
+        <div id="explore-vehicles">
+          <ExploreAllVehicles />
+        </div>
+
+        <div id="testimonials">
+          <TestimonialsSection />
+        </div>
       </div>
 
       {/* Floating WhatsApp Button */}

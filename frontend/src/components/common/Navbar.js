@@ -14,17 +14,30 @@ export default function Navbar({ user, onLogout }) {
   // Check if current page is home page
   const isHomePage = location.pathname === '/';
 
+  // Add/remove home-page class to body for navbar styling
+  useEffect(() => {
+    if (isHomePage) {
+      document.body.classList.add('home-page');
+    } else {
+      document.body.classList.remove('home-page');
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.classList.remove('home-page');
+    };
+  }, [isHomePage]);
+
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Check if the click is outside the navbar
-      if (!event.target.closest('.navbar-navigation')) {
+      if (!event.target.closest('.nav-item')) {
         setDropdownOpen({});
       }
     };
 
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   // Close dropdowns when route changes
@@ -41,23 +54,53 @@ export default function Navbar({ user, onLogout }) {
 
   const toggleDropdown = (dropdown) => {
     setDropdownOpen(prev => {
-      // If the same dropdown is already open, close it
       if (prev[dropdown]) {
         return {};
       }
-      // Otherwise, close all dropdowns and open the clicked one
       return { [dropdown]: true };
     });
   };
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
-    // Close any open dropdowns when opening mobile menu
     setDropdownOpen({});
+  };
+
+  const scrollToSection = (sectionId) => {
+    if (isHomePage) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    } else {
+      navigate(`/#${sectionId}`);
+    }
+    
+    setDropdownOpen({});
+    setMobileMenuOpen(false);
   };
 
   const handleNavClick = (itemId, dropdownItem = null) => {
     let route = '/';
+    
+    if (itemId === 'home' && dropdownItem) {
+      const sectionMap = {
+        'Browse by Type': 'browse-by-type',
+        'Get Fair Price': 'get-fair-price', 
+        'Why Choose Us': 'why-choose-us',
+        'Explore All Vehicles': 'explore-vehicles',
+        'Testimonials': 'testimonials'
+      };
+      
+      const sectionId = sectionMap[dropdownItem];
+      if (sectionId) {
+        scrollToSection(sectionId);
+        return;
+      }
+    }
     
     switch (itemId) {
       case 'home':
@@ -91,13 +134,12 @@ export default function Navbar({ user, onLogout }) {
         route = '/';
     }
     
-    if (dropdownItem) {
+    if (dropdownItem && itemId !== 'home') {
       const queryParam = dropdownItem.toLowerCase().replace(/\s+/g, '-');
       route += `?category=${queryParam}`;
     }
     
     navigate(route);
-    // Close all dropdowns and mobile menu after navigation
     setDropdownOpen({});
     setMobileMenuOpen(false);
   };
@@ -126,8 +168,8 @@ export default function Navbar({ user, onLogout }) {
       { 
         id: 'home', 
         label: 'Home',
-        hasDropdown: true,
-        dropdownItems: ['Featured Cars', 'New Arrivals', 'Best Deals']
+        hasDropdown: isHomePage, // Only show dropdown on homepage
+        dropdownItems: isHomePage ? ['Browse by Type', 'Get Fair Price', 'Why Choose Us', 'Explore All Vehicles', 'Testimonials'] : []
       },
       { 
         id: 'listings', 
@@ -161,17 +203,14 @@ export default function Navbar({ user, onLogout }) {
 
   return (
     <div className="navbar-group">
-      {/* Curved Background Section - Only show on non-home pages */}
       {!isHomePage && (
         <div className="curved-background">
           <div className="white-curved-overlay"></div>
         </div>
       )}
       
-      {/* Main Navbar */}
       <nav className="navbar-main">
         <div className="navbar-container">
-          {/* Logo Section */}
           <div className="navbar-logo-link" onClick={() => handleNavClick('home')}>
             <div className="navbar-logo">
               <div className="logo-container">
@@ -180,14 +219,14 @@ export default function Navbar({ user, onLogout }) {
             </div>
           </div>
 
-          {/* Desktop Navigation */}
           <div className="navbar-navigation">
             {navItems.map((item) => (
               <div key={item.id} className="nav-item">
                 <div className="nav-link-wrapper">
                   <button
                     onClick={(e) => {
-                      e.stopPropagation(); // Prevent event bubbling
+                      e.preventDefault();
+                      e.stopPropagation();
                       if (item.hasDropdown) {
                         toggleDropdown(item.id);
                       } else {
@@ -207,12 +246,16 @@ export default function Navbar({ user, onLogout }) {
                 </div>
                 
                 {item.hasDropdown && dropdownOpen[item.id] && (
-                  <div className="dropdown-menu" onClick={(e) => e.stopPropagation()}>
+                  <div className="dropdown-menu">
                     {item.dropdownItems && item.dropdownItems.map((dropdownItem, index) => (
                       <button
                         key={index}
                         className="dropdown-item"
-                        onClick={() => handleNavClick(item.id, dropdownItem)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleNavClick(item.id, dropdownItem);
+                        }}
                       >
                         {dropdownItem}
                       </button>
@@ -223,9 +266,7 @@ export default function Navbar({ user, onLogout }) {
             ))}
           </div>
 
-          {/* Right Side Actions */}
           <div className="navbar-actions">
-            {/* Sign In / User Info */}
             {user ? (
               <div className="user-info-container">
                 <User className="user-icon" />
@@ -244,7 +285,6 @@ export default function Navbar({ user, onLogout }) {
               </div>
             )}
             
-            {/* Submit Listing Button */}
             {!isCustomer && (
               <button 
                 className="submit-listing-button"
@@ -255,7 +295,6 @@ export default function Navbar({ user, onLogout }) {
             )}
           </div>
 
-          {/* Mobile Menu Toggle */}
           <button 
             className="mobile-menu-toggle"
             onClick={toggleMobileMenu}
@@ -265,7 +304,6 @@ export default function Navbar({ user, onLogout }) {
           </button>
         </div>
 
-        {/* Mobile Menu */}
         <div className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`}>
           <div className="mobile-menu-content">
             {navItems.map((item) => (
@@ -286,7 +324,6 @@ export default function Navbar({ user, onLogout }) {
                   )}
                 </button>
                 
-                {/* Mobile Dropdown Items */}
                 {item.hasDropdown && dropdownOpen[item.id] && (
                   <div style={{ paddingLeft: '20px', backgroundColor: '#f8fafc' }}>
                     {item.dropdownItems && item.dropdownItems.map((dropdownItem, index) => (
