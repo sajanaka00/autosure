@@ -1,25 +1,59 @@
 import React, { useState, useEffect } from 'react';
-import { api } from '../../../services/api'; // Adjust path if needed
+import { ArrowLeft, Upload, X, Star, Image as ImageIcon, Plus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { api } from '../../../services/api';
 import '../../../styles/add-car.css';
+import Navbar from '../../common/Navbar';
+import Footer from '../../common/Footer';
 
 export default function AddCar({ user }) {
+  const navigate = useNavigate();
+  
   const [formData, setFormData] = useState({
+    // Basic Information
     make: '',
     model: '',
-    transmission: '',
-    mileageRange: '',
-    engineCapacity: '',
-    seatingCapacity: '',
     year: '',
-    yearOfRegistration: '',
+    condition: '',
+    bodyType: '',
+    
+    // Technical Specifications
+    engineSize: '',
+    engineType: '',
+    transmission: '',
+    driveType: '',
     fuelType: '',
+    cylinders: '',
+    doors: '',
+    seatingCapacity: '',
+    
+    // Performance & Condition
+    mileage: '',
     avgFuelConsumption: '',
     numberOfOwners: '',
     vehicleNumber: '',
-    totalValue: '',
+    vin: '',
+    color: '',
+    
+    // Pricing
+    price: '',
+    originalPrice: '',
     downPayment: '',
-    features: '',
-    category: ''
+    
+    // Location & Contact
+    dealerName: '',
+    dealerAddress: '',
+    dealerPhone: '',
+    
+    // Description & Features
+    title: '',
+    description: '',
+    features: [],
+    
+    // Additional
+    category: '',
+    badge: '',
+    badgeColor: 'blue'
   });
 
   const [categories, setCategories] = useState([]);
@@ -28,7 +62,35 @@ export default function AddCar({ user }) {
   const [success, setSuccess] = useState('');
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
-  const [primaryImageIndex, setPrimaryImageIndex] = useState(0);
+  const [featuredImageIndex, setFeaturedImageIndex] = useState(0);
+  const [activeStep, setActiveStep] = useState(1);
+
+  // Predefined options
+  const makeOptions = ['BMW', 'Mercedes-Benz', 'Toyota', 'Honda', 'Ford', 'Tesla', 'Audi', 'Jeep', 'Nissan', 'Hyundai'];
+  const conditionOptions = ['New', 'Used', 'CPO'];
+  const bodyTypeOptions = ['Sedan', 'SUV', 'Hatchback', 'Coupe', 'Convertible', 'Pickup Truck', 'Wagon', 'Van'];
+  const transmissionOptions = ['Manual', 'Automatic', 'CVT'];
+  const fuelTypeOptions = ['Gasoline', 'Diesel', 'Electric', 'Hybrid', 'Plug-in Hybrid'];
+  const driveTypeOptions = ['Front-Wheel Drive', 'Rear-Wheel Drive', 'All-Wheel Drive', 'Four-Wheel Drive'];
+  const badgeOptions = [
+    { value: 'New Arrival', color: 'blue' },
+    { value: 'Best Value', color: 'green' },
+    { value: 'Great Deal', color: 'green' },
+    { value: 'Low Mileage', color: 'blue' },
+    { value: 'Premium', color: 'blue' },
+    { value: 'Sport Package', color: 'blue' },
+    { value: 'Certified', color: 'blue' },
+    { value: 'Eco-Friendly', color: 'green' }
+  ];
+
+  const commonFeatures = [
+    'Air Conditioning', 'Power Steering', 'ABS', 'Airbags', 'Power Windows',
+    'Central Locking', 'Leather Seats', 'Sunroof', 'Navigation System',
+    'Bluetooth', 'Backup Camera', 'Heated Seats', 'Cruise Control',
+    'Keyless Entry', 'Remote Start', 'Parking Sensors', 'Lane Departure Warning',
+    'Blind Spot Monitoring', 'Automatic Emergency Braking', 'Apple CarPlay',
+    'Android Auto', 'Wireless Charging', 'Premium Sound System'
+  ];
 
   useEffect(() => {
     fetchCategories();
@@ -44,7 +106,6 @@ export default function AddCar({ user }) {
       } else if (data.categories) {
         setCategories(data.categories);
       } else {
-        console.error('Unexpected response format:', data);
         setError('Failed to load categories - unexpected response format');
       }
     } catch (error) {
@@ -61,10 +122,43 @@ export default function AddCar({ user }) {
     }));
   };
 
+  const handleFeatureToggle = (feature) => {
+    setFormData(prev => ({
+      ...prev,
+      features: prev.features.includes(feature)
+        ? prev.features.filter(f => f !== feature)
+        : [...prev.features, feature]
+    }));
+  };
+
+  const addCustomFeature = () => {
+    const customFeatureInput = document.getElementById('customFeature');
+    const customFeature = customFeatureInput?.value.trim();
+    if (customFeature && !formData.features.includes(customFeature)) {
+      setFormData(prev => ({
+        ...prev,
+        features: [...prev.features, customFeature]
+      }));
+      customFeatureInput.value = '';
+    }
+  };
+
+  const removeFeature = (feature) => {
+    setFormData(prev => ({
+      ...prev,
+      features: prev.features.filter(f => f !== feature)
+    }));
+  };
+
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-    const maxImages = 10;
-    const maxFileSize = 5 * 1024 * 1024;
+    const maxImages = 5;
+    const maxFileSize = 5 * 1024 * 1024; // 5MB
+
+    if (imageFiles.length >= maxImages) {
+      setError(`Maximum ${maxImages} images allowed`);
+      return;
+    }
 
     const validFiles = files.filter(file => {
       if (!file.type.startsWith('image/')) {
@@ -78,14 +172,16 @@ export default function AddCar({ user }) {
       return true;
     });
 
-    if (imageFiles.length + validFiles.length > maxImages) {
-      setError(`Maximum ${maxImages} images allowed`);
-      return;
+    const remainingSlots = maxImages - imageFiles.length;
+    const filesToAdd = validFiles.slice(0, remainingSlots);
+
+    if (validFiles.length > remainingSlots) {
+      setError(`Only ${remainingSlots} more images can be added`);
     }
 
-    setImageFiles(prev => [...prev, ...validFiles]);
+    setImageFiles(prev => [...prev, ...filesToAdd]);
 
-    const newPreviews = validFiles.map(file => ({
+    const newPreviews = filesToAdd.map(file => ({
       file,
       url: URL.createObjectURL(file),
       caption: ''
@@ -101,19 +197,48 @@ export default function AddCar({ user }) {
     setImageFiles(prev => prev.filter((_, i) => i !== index));
     setImagePreviews(prev => prev.filter((_, i) => i !== index));
 
-    if (primaryImageIndex >= index && primaryImageIndex > 0) {
-      setPrimaryImageIndex(prev => prev - 1);
+    if (featuredImageIndex >= index && featuredImageIndex > 0) {
+      setFeaturedImageIndex(prev => prev - 1);
     }
   };
 
-  const setPrimaryImage = (index) => {
-    setPrimaryImageIndex(index);
+  const setFeaturedImage = (index) => {
+    setFeaturedImageIndex(index);
   };
 
   const updateImageCaption = (index, caption) => {
     setImagePreviews(prev => prev.map((img, i) =>
       i === index ? { ...img, caption } : img
     ));
+  };
+
+  const validateStep = (step) => {
+    switch (step) {
+      case 1:
+        return formData.make && formData.model && formData.year && formData.condition && formData.bodyType;
+      case 2:
+        return formData.engineSize && formData.transmission && formData.fuelType && formData.mileage;
+      case 3:
+        return formData.price && formData.title && formData.description;
+      case 4:
+        return imageFiles.length > 0;
+      default:
+        return true;
+    }
+  };
+
+  const nextStep = () => {
+    if (validateStep(activeStep)) {
+      setActiveStep(prev => Math.min(prev + 1, 5));
+      setError('');
+    } else {
+      setError('Please fill in all required fields before proceeding');
+    }
+  };
+
+  const prevStep = () => {
+    setActiveStep(prev => Math.max(prev - 1, 1));
+    setError('');
   };
 
   const handleSubmit = async (e) => {
@@ -125,9 +250,18 @@ export default function AddCar({ user }) {
     try {
       const submitFormData = new FormData();
 
-      Object.keys(formData).forEach(key => {
-        if (formData[key] !== '') {
-          submitFormData.append(key, formData[key]);
+      // Map form data to match expected fields
+      const vehicleData = {
+        ...formData,
+        mileageRange: formData.mileage,
+        totalValue: formData.price,
+        features: formData.features.join(', '),
+        yearOfRegistration: formData.year
+      };
+
+      Object.keys(vehicleData).forEach(key => {
+        if (vehicleData[key] !== '' && vehicleData[key] !== null && vehicleData[key] !== undefined) {
+          submitFormData.append(key, vehicleData[key]);
         }
       });
 
@@ -137,52 +271,40 @@ export default function AddCar({ user }) {
 
       if (imageFiles.length > 0) {
         const imageMetadata = imagePreviews.map((preview, index) => ({
-          isPrimary: index === primaryImageIndex,
+          isFeatured: index === featuredImageIndex,
           caption: preview.caption || ''
         }));
         submitFormData.append('imageMetadata', JSON.stringify(imageMetadata));
       }
 
-      // Use api.createVehicle instead of raw fetch to match your ApiService
       const data = await api.createVehicle(submitFormData, user?.token);
 
       if (data.success) {
         setSuccess('Vehicle added successfully!');
-
+        
+        // Reset form
         setFormData({
-          make: '',
-          model: '',
-          transmission: '',
-          mileageRange: '',
-          engineCapacity: '',
-          seatingCapacity: '',
-          year: '',
-          yearOfRegistration: '',
-          fuelType: '',
-          avgFuelConsumption: '',
-          numberOfOwners: '',
-          vehicleNumber: '',
-          totalValue: '',
-          downPayment: '',
-          features: '',
-          category: ''
+          make: '', model: '', year: '', condition: '', bodyType: '',
+          engineSize: '', engineType: '', transmission: '', driveType: '', fuelType: '',
+          cylinders: '', doors: '', seatingCapacity: '', mileage: '',
+          avgFuelConsumption: '', numberOfOwners: '', vehicleNumber: '', vin: '',
+          color: '', price: '', originalPrice: '', downPayment: '',
+          dealerName: '', dealerAddress: '', dealerPhone: '',
+          title: '', description: '', features: [], category: '', badge: '', badgeColor: 'blue'
         });
 
         setImageFiles([]);
         imagePreviews.forEach(preview => URL.revokeObjectURL(preview.url));
         setImagePreviews([]);
-        setPrimaryImageIndex(0);
+        setFeaturedImageIndex(0);
+        setActiveStep(1);
 
-        const fileInput = document.querySelector('input[type="file"]');
-        if (fileInput) fileInput.value = '';
+        // Redirect after success
+        setTimeout(() => {
+          navigate('/vehicles-for-sale');
+        }, 2000);
       } else {
-        if (data.missingFields) {
-          setError(`Missing required fields: ${data.missingFields.join(', ')}`);
-        } else if (data.details && Array.isArray(data.details)) {
-          setError(`Validation errors: ${data.details.join(', ')}`);
-        } else {
-          setError(data.error || 'Failed to add vehicle');
-        }
+        setError(data.error || 'Failed to add vehicle');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -194,55 +316,139 @@ export default function AddCar({ user }) {
 
   const currentYear = new Date().getFullYear();
 
-  return (
-    <div className="add-car-container fade-in">
-      <h2 className="page-title">Add New Vehicle</h2>
-      
-      {error && <div className="error-message">{error}</div>}
-      {success && <div className="success-message">{success}</div>}
-      
-      <div className="form-container">
-        <form className="car-form" onSubmit={handleSubmit}>
-          
-          {/* Basic Information */}
-          <div className="form-section">
-            <h3>Basic Information</h3>
+  const renderStepIndicator = () => {
+    const stepNames = ['Basic Info', 'Specifications', 'Details', 'Images', 'Review'];
+    const progress = (activeStep / 5) * 100;
+    
+    return (
+      <div className="add-car-step-indicator">
+        <div className="add-car-progress-header">
+          <div className="add-car-current-step">
+            {stepNames[activeStep - 1]}
+          </div>
+          <div className="add-car-step-counter">
+            Step {activeStep} of 5
+          </div>
+        </div>
+        
+        <div className="add-car-progress-container">
+          <div 
+            className="add-car-progress-bar" 
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+        
+        <ul className="add-car-steps-list">
+          {stepNames.map((name, index) => (
+            <li 
+              key={index} 
+              className={`add-car-step-item ${
+                index + 1 < activeStep ? 'completed' : 
+                index + 1 === activeStep ? 'active' : ''
+              }`}
+            >
+              {name}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+
+  const renderStep = () => {
+    switch (activeStep) {
+      case 1:
+        return (
+          <div className="add-car-form-step">
+            <h3 className="add-car-step-title">Basic Information</h3>
             
-            <div className="form-grid">
-              <div className="form-group">
-                <label className="form-label">Make *</label>
-                <input 
-                  type="text" 
+            <div className="add-car-form-grid">
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Make *</label>
+                <select
                   name="make"
-                  className="form-input" 
+                  className="add-car-form-input"
                   value={formData.make}
                   onChange={handleInputChange}
-                  required 
-                />
+                  required
+                >
+                  <option value="">Select Make</option>
+                  {makeOptions.map(make => (
+                    <option key={make} value={make}>{make}</option>
+                  ))}
+                </select>
               </div>
-              
-              <div className="form-group">
-                <label className="form-label">Model *</label>
-                <input 
-                  type="text" 
+
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Model *</label>
+                <input
+                  type="text"
                   name="model"
-                  className="form-input" 
+                  className="add-car-form-input"
                   value={formData.model}
                   onChange={handleInputChange}
-                  required 
+                  placeholder="e.g., M235i xDrive Gran Coupé"
+                  required
                 />
               </div>
             </div>
 
-            <div className="form-grid">
-              <div className="form-group">
-                <label className="form-label">Category *</label>
-                <select 
-                  name="category"
-                  className="form-input" 
-                  value={formData.category}
+            <div className="add-car-form-grid">
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Year *</label>
+                <input
+                  type="number"
+                  name="year"
+                  className="add-car-form-input"
+                  min="1900"
+                  max={currentYear + 1}
+                  value={formData.year}
                   onChange={handleInputChange}
                   required
+                />
+              </div>
+
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Condition *</label>
+                <select
+                  name="condition"
+                  className="add-car-form-input"
+                  value={formData.condition}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">Select Condition</option>
+                  {conditionOptions.map(condition => (
+                    <option key={condition} value={condition}>{condition}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="add-car-form-grid">
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Body Type *</label>
+                <select
+                  name="bodyType"
+                  className="add-car-form-input"
+                  value={formData.bodyType}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">Select Body Type</option>
+                  {bodyTypeOptions.map(type => (
+                    <option key={type} value={type}>{type}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Category</label>
+                <select
+                  name="category"
+                  className="add-car-form-input"
+                  value={formData.category}
+                  onChange={handleInputChange}
                 >
                   <option value="">Select Category</option>
                   {categories.map(category => (
@@ -252,253 +458,385 @@ export default function AddCar({ user }) {
                   ))}
                 </select>
               </div>
-              
-              <div className="form-group">
-                <label className="form-label">Vehicle Number *</label>
-                <input 
-                  type="text" 
-                  name="vehicleNumber"
-                  className="form-input" 
-                  value={formData.vehicleNumber}
-                  onChange={handleInputChange}
-                  placeholder="e.g., KJ-4088"
-                  required 
-                />
-              </div>
             </div>
           </div>
+        );
 
-          {/* Technical Specifications */}
-          <div className="form-section">
-            <h3>Technical Specifications</h3>
+      case 2:
+        return (
+          <div className="add-car-form-step">
+            <h3 className="add-car-step-title">Technical Specifications</h3>
             
-            <div className="form-grid">
-              <div className="form-group">
-                <label className="form-label">Year *</label>
-                <input 
-                  type="number" 
-                  name="year"
-                  className="form-input" 
-                  min="1900" 
-                  max={currentYear + 1}
-                  value={formData.year}
+            <div className="add-car-form-grid">
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Engine Size *</label>
+                <input
+                  type="text"
+                  name="engineSize"
+                  className="add-car-form-input"
+                  value={formData.engineSize}
                   onChange={handleInputChange}
-                  required 
+                  placeholder="e.g., 2.0L Turbo I4"
+                  required
                 />
               </div>
-              
-              <div className="form-group">
-                <label className="form-label">Year of Registration *</label>
-                <input 
-                  type="number" 
-                  name="yearOfRegistration"
-                  className="form-input" 
-                  min="1900" 
-                  max={currentYear}
-                  value={formData.yearOfRegistration}
-                  onChange={handleInputChange}
-                  required 
-                />
-              </div>
-            </div>
 
-            <div className="form-grid">
-              <div className="form-group">
-                <label className="form-label">Transmission *</label>
-                <select 
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Transmission *</label>
+                <select
                   name="transmission"
-                  className="form-input" 
+                  className="add-car-form-input"
                   value={formData.transmission}
                   onChange={handleInputChange}
                   required
                 >
                   <option value="">Select Transmission</option>
-                  <option value="manual">Manual</option>
-                  <option value="automatic">Automatic</option>
+                  {transmissionOptions.map(trans => (
+                    <option key={trans} value={trans}>{trans}</option>
+                  ))}
                 </select>
               </div>
-              
-              <div className="form-group">
-                <label className="form-label">Fuel Type *</label>
-                <select 
+            </div>
+
+            <div className="add-car-form-grid">
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Fuel Type *</label>
+                <select
                   name="fuelType"
-                  className="form-input" 
+                  className="add-car-form-input"
                   value={formData.fuelType}
                   onChange={handleInputChange}
                   required
                 >
                   <option value="">Select Fuel Type</option>
-                  <option value="petrol">Petrol</option>
-                  <option value="diesel">Diesel</option>
-                  <option value="electric">Electric</option>
-                  <option value="hybrid">Hybrid</option>
+                  {fuelTypeOptions.map(fuel => (
+                    <option key={fuel} value={fuel}>{fuel}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Drive Type</label>
+                <select
+                  name="driveType"
+                  className="add-car-form-input"
+                  value={formData.driveType}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Select Drive Type</option>
+                  {driveTypeOptions.map(drive => (
+                    <option key={drive} value={drive}>{drive}</option>
+                  ))}
                 </select>
               </div>
             </div>
 
-            <div className="form-grid">
-              <div className="form-group">
-                <label className="form-label">Engine Capacity *</label>
-                <input 
-                  type="text" 
-                  name="engineCapacity"
-                  className="form-input" 
-                  value={formData.engineCapacity}
+            <div className="add-car-form-grid">
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Mileage *</label>
+                <input
+                  type="text"
+                  name="mileage"
+                  className="add-car-form-input"
+                  value={formData.mileage}
                   onChange={handleInputChange}
-                  placeholder="e.g., 1300CC"
-                  required 
+                  placeholder="e.g., 8,500 mi"
+                  required
                 />
               </div>
-              
-              <div className="form-group">
-                <label className="form-label">Seating Capacity *</label>
-                <input 
-                  type="number" 
+
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Doors</label>
+                <select
+                  name="doors"
+                  className="add-car-form-input"
+                  value={formData.doors}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Select Doors</option>
+                  <option value="2">2 Doors</option>
+                  <option value="3">3 Doors</option>
+                  <option value="4">4 Doors</option>
+                  <option value="5">5 Doors</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="add-car-form-grid">
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Seating Capacity</label>
+                <input
+                  type="number"
                   name="seatingCapacity"
-                  className="form-input" 
-                  min="1" 
+                  className="add-car-form-input"
+                  min="1"
                   max="15"
                   value={formData.seatingCapacity}
                   onChange={handleInputChange}
-                  required 
+                  placeholder="e.g., 5"
+                />
+              </div>
+
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Color</label>
+                <input
+                  type="text"
+                  name="color"
+                  className="add-car-form-input"
+                  value={formData.color}
+                  onChange={handleInputChange}
+                  placeholder="e.g., Storm Bay Metallic"
                 />
               </div>
             </div>
 
-            <div className="form-grid">
-              <div className="form-group">
-                <label className="form-label">Mileage Range *</label>
-                <input 
-                  type="text" 
-                  name="mileageRange"
-                  className="form-input" 
-                  value={formData.mileageRange}
+            <div className="add-car-form-grid">
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">VIN</label>
+                <input
+                  type="text"
+                  name="vin"
+                  className="add-car-form-input"
+                  value={formData.vin}
                   onChange={handleInputChange}
-                  placeholder="e.g., 145000Km"
-                  required 
+                  placeholder="e.g., WBA53AK07PCG12345"
                 />
               </div>
-              
-              <div className="form-group">
-                <label className="form-label">Average Fuel Consumption</label>
-                <input 
-                  type="text" 
-                  name="avgFuelConsumption"
-                  className="form-input" 
-                  value={formData.avgFuelConsumption}
+
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Vehicle Number</label>
+                <input
+                  type="text"
+                  name="vehicleNumber"
+                  className="add-car-form-input"
+                  value={formData.vehicleNumber}
                   onChange={handleInputChange}
-                  placeholder="e.g., 15Km/l"
+                  placeholder="e.g., KJ-4088"
                 />
               </div>
             </div>
           </div>
+        );
 
-          {/* Ownership & Pricing */}
-          <div className="form-section">
-            <h3>Ownership & Pricing</h3>
+      case 3:
+        return (
+          <div className="add-car-form-step">
+            <h3 className="add-car-step-title">Details & Pricing</h3>
             
-            <div className="form-grid">
-              <div className="form-group">
-                <label className="form-label">Number of Owners *</label>
-                <input 
-                  type="number" 
+            <div className="add-car-form-group">
+              <label className="add-car-form-label">Vehicle Title *</label>
+              <input
+                type="text"
+                name="title"
+                className="add-car-form-input"
+                value={formData.title}
+                onChange={handleInputChange}
+                placeholder="e.g., 2024 BMW M235i xDrive Gran Coupé"
+                required
+              />
+            </div>
+
+            <div className="add-car-form-group">
+              <label className="add-car-form-label">Description *</label>
+              <textarea
+                name="description"
+                className="add-car-form-textarea"
+                rows="4"
+                value={formData.description}
+                onChange={handleInputChange}
+                placeholder="Detailed description of the vehicle, its condition, and special features..."
+                required
+              />
+            </div>
+
+            <div className="add-car-form-grid">
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Price *</label>
+                <input
+                  type="number"
+                  name="price"
+                  className="add-car-form-input"
+                  min="0"
+                  step="0.01"
+                  value={formData.price}
+                  onChange={handleInputChange}
+                  placeholder="e.g., 45900"
+                  required
+                />
+              </div>
+
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Original Price</label>
+                <input
+                  type="number"
+                  name="originalPrice"
+                  className="add-car-form-input"
+                  min="0"
+                  step="0.01"
+                  value={formData.originalPrice}
+                  onChange={handleInputChange}
+                  placeholder="e.g., 49900"
+                />
+              </div>
+            </div>
+
+            <div className="add-car-form-grid">
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Badge</label>
+                <select
+                  name="badge"
+                  className="add-car-form-input"
+                  value={formData.badge}
+                  onChange={(e) => {
+                    const selectedBadge = badgeOptions.find(b => b.value === e.target.value);
+                    setFormData(prev => ({
+                      ...prev,
+                      badge: e.target.value,
+                      badgeColor: selectedBadge ? selectedBadge.color : 'blue'
+                    }));
+                  }}
+                >
+                  <option value="">No Badge</option>
+                  {badgeOptions.map(badge => (
+                    <option key={badge.value} value={badge.value}>{badge.value}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Number of Owners</label>
+                <input
+                  type="number"
                   name="numberOfOwners"
-                  className="form-input" 
+                  className="add-car-form-input"
                   min="1"
                   value={formData.numberOfOwners}
                   onChange={handleInputChange}
-                  required 
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">Total Value *</label>
-                <input 
-                  type="number" 
-                  name="totalValue"
-                  className="form-input" 
-                  min="0" 
-                  step="0.01"
-                  value={formData.totalValue}
-                  onChange={handleInputChange}
-                  required 
+                  placeholder="e.g., 1"
                 />
               </div>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Down Payment *</label>
-              <input 
-                type="number" 
-                name="downPayment"
-                className="form-input" 
-                min="0" 
-                step="0.01"
-                value={formData.downPayment}
-                onChange={handleInputChange}
-                required 
-              />
+            <div className="add-car-form-section">
+              <h4 className="add-car-section-subtitle">Dealer Information</h4>
+              
+              <div className="add-car-form-group">
+                <label className="add-car-form-label">Dealer Name</label>
+                <input
+                  type="text"
+                  name="dealerName"
+                  className="add-car-form-input"
+                  value={formData.dealerName}
+                  onChange={handleInputChange}
+                  placeholder="e.g., BMW of Manhattan"
+                />
+              </div>
+
+              <div className="add-car-form-grid">
+                <div className="add-car-form-group">
+                  <label className="add-car-form-label">Dealer Address</label>
+                  <input
+                    type="text"
+                    name="dealerAddress"
+                    className="add-car-form-input"
+                    value={formData.dealerAddress}
+                    onChange={handleInputChange}
+                    placeholder="e.g., 555 West 57th Street, New York"
+                  />
+                </div>
+
+                <div className="add-car-form-group">
+                  <label className="add-car-form-label">Dealer Phone</label>
+                  <input
+                    type="tel"
+                    name="dealerPhone"
+                    className="add-car-form-input"
+                    value={formData.dealerPhone}
+                    onChange={handleInputChange}
+                    placeholder="e.g., +1-212-586-8787"
+                  />
+                </div>
+              </div>
             </div>
           </div>
+        );
 
-          {/* Image Upload Section */}
-          <div className="form-section">
-            <h3>Vehicle Images</h3>
+      case 4:
+        return (
+          <div className="add-car-form-step">
+            <h3 className="add-car-step-title">Vehicle Images</h3>
             
-            <div className="form-group">
-              <label className="form-label">Upload Images</label>
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="form-input"
-              />
-              <small className="form-help">
-                Maximum 10 images, 5MB each. Supported formats: JPG, PNG, GIF, WEBP
-              </small>
+            <div className="add-car-upload-section">
+              <div className="add-car-upload-area">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="add-car-upload-input"
+                  id="image-upload"
+                />
+                <label htmlFor="image-upload" className="add-car-upload-label">
+                  <Upload className="add-car-upload-icon" />
+                  <span className="add-car-upload-text">
+                    Click to upload images
+                  </span>
+                  <span className="add-car-upload-subtext">
+                    Maximum 5 images, 5MB each
+                  </span>
+                </label>
+              </div>
             </div>
 
-            {/* Image Previews */}
             {imagePreviews.length > 0 && (
-              <div className="image-previews">
-                <h4>Image Previews</h4>
-                <div className="preview-grid">
+              <div className="add-car-image-previews">
+                <h4 className="add-car-preview-title">
+                  Image Previews ({imagePreviews.length}/5)
+                </h4>
+                
+                <div className="add-car-preview-grid">
                   {imagePreviews.map((preview, index) => (
-                    <div key={index} className="preview-item">
-                      <div className="preview-image-container">
-                        <img 
-                          src={preview.url} 
+                    <div key={index} className="add-car-preview-item">
+                      <div className="add-car-preview-container">
+                        <img
+                          src={preview.url}
                           alt={`Preview ${index + 1}`}
-                          className="preview-image"
+                          className="add-car-preview-image"
                         />
+                        
+                        {featuredImageIndex === index && (
+                          <div className="add-car-featured-badge">
+                            <Star className="add-car-featured-icon" />
+                            <span>Featured</span>
+                          </div>
+                        )}
+                        
                         <button
                           type="button"
                           onClick={() => removeImage(index)}
-                          className="remove-image-btn"
+                          className="add-car-remove-btn"
                           title="Remove image"
                         >
-                          ×
+                          <X className="add-car-remove-icon" />
                         </button>
-                        {primaryImageIndex === index && (
-                          <div className="primary-badge">Primary</div>
-                        )}
                       </div>
                       
-                      <div className="preview-controls">
+                      <div className="add-car-preview-controls">
                         <input
                           type="text"
                           placeholder="Image caption (optional)"
                           value={preview.caption}
                           onChange={(e) => updateImageCaption(index, e.target.value)}
-                          className="caption-input"
+                          className="add-car-caption-input"
                         />
+                        
                         <button
                           type="button"
-                          onClick={() => setPrimaryImage(index)}
-                          className={`primary-btn ${primaryImageIndex === index ? 'active' : ''}`}
+                          onClick={() => setFeaturedImage(index)}
+                          className={`add-car-featured-btn ${featuredImageIndex === index ? 'add-car-featured-btn-active' : ''}`}
                         >
-                          Set as Primary
+                          <Star className="add-car-star-icon" />
+                          Set as Featured
                         </button>
                       </div>
                     </div>
@@ -506,35 +844,254 @@ export default function AddCar({ user }) {
                 </div>
               </div>
             )}
-          </div>
 
-          {/* Additional Features */}
-          <div className="form-section">
-            <h3>Additional Information</h3>
-            
-            <div className="form-group">
-              <label className="form-label">Features</label>
-              <textarea 
-                name="features"
-                className="form-textarea" 
-                rows="3"
-                value={formData.features}
-                onChange={handleInputChange}
-                placeholder="Enter features separated by commas (e.g., Air Conditioning, Power Steering, ABS)"
-              />
-              <small className="form-help">Separate multiple features with commas</small>
+            {/* Features Section */}
+            <div className="add-car-features-section">
+              <h4 className="add-car-section-subtitle">Vehicle Features</h4>
+              
+              <div className="add-car-features-grid">
+                {commonFeatures.map(feature => (
+                  <div key={feature} className="add-car-feature-item">
+                    <label className="add-car-feature-label">
+                      <input
+                        type="checkbox"
+                        checked={formData.features.includes(feature)}
+                        onChange={() => handleFeatureToggle(feature)}
+                        className="add-car-feature-checkbox"
+                      />
+                      <span className="add-car-feature-text">{feature}</span>
+                    </label>
+                  </div>
+                ))}
+              </div>
+
+              <div className="add-car-custom-feature">
+                <div className="add-car-custom-input-group">
+                  <input
+                    type="text"
+                    id="customFeature"
+                    placeholder="Add custom feature"
+                    className="add-car-form-input"
+                    onKeyPress={(e) => e.key === 'Enter' && addCustomFeature()}
+                  />
+                  <button
+                    type="button"
+                    onClick={addCustomFeature}
+                    className="add-car-add-feature-btn"
+                  >
+                    <Plus className="add-car-plus-icon" />
+                    Add
+                  </button>
+                </div>
+
+                {formData.features.length > 0 && (
+                  <div className="add-car-selected-features">
+                    <h5>Selected Features ({formData.features.length}):</h5>
+                    <div className="add-car-feature-tags">
+                      {formData.features.map(feature => (
+                        <div key={feature} className="add-car-feature-tag">
+                          <span>{feature}</span>
+                          <button
+                            type="button"
+                            onClick={() => removeFeature(feature)}
+                            className="add-car-feature-remove"
+                          >
+                            <X className="add-car-x-icon" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
+        );
+
+      case 5:
+        return (
+          <div className="add-car-form-step">
+            <h3 className="add-car-step-title">Review & Submit</h3>
+            
+            <div className="add-car-review-section">
+              <div className="add-car-review-card">
+                <h4 className="add-car-review-title">Vehicle Summary</h4>
+                
+                <div className="add-car-review-content">
+                  <div className="add-car-review-row">
+                    <span className="add-car-review-label">Title:</span>
+                    <span className="add-car-review-value">{formData.title || 'Not specified'}</span>
+                  </div>
+                  
+                  <div className="add-car-review-row">
+                    <span className="add-car-review-label">Vehicle:</span>
+                    <span className="add-car-review-value">{formData.year} {formData.make} {formData.model}</span>
+                  </div>
+                  
+                  <div className="add-car-review-row">
+                    <span className="add-car-review-label">Condition:</span>
+                    <span className="add-car-review-value">{formData.condition}</span>
+                  </div>
+                  
+                  <div className="add-car-review-row">
+                    <span className="add-car-review-label">Body Type:</span>
+                    <span className="add-car-review-value">{formData.bodyType}</span>
+                  </div>
+                  
+                  <div className="add-car-review-row">
+                    <span className="add-car-review-label">Engine:</span>
+                    <span className="add-car-review-value">{formData.engineSize || 'Not specified'}</span>
+                  </div>
+                  
+                  <div className="add-car-review-row">
+                    <span className="add-car-review-label">Transmission:</span>
+                    <span className="add-car-review-value">{formData.transmission}</span>
+                  </div>
+                  
+                  <div className="add-car-review-row">
+                    <span className="add-car-review-label">Fuel Type:</span>
+                    <span className="add-car-review-value">{formData.fuelType}</span>
+                  </div>
+                  
+                  <div className="add-car-review-row">
+                    <span className="add-car-review-label">Mileage:</span>
+                    <span className="add-car-review-value">{formData.mileage || 'Not specified'}</span>
+                  </div>
+                  
+                  <div className="add-car-review-row">
+                    <span className="add-car-review-label">Price:</span>
+                    <span className="add-car-review-value">${parseFloat(formData.price || 0).toLocaleString()}</span>
+                  </div>
+                  
+                  {formData.badge && (
+                    <div className="add-car-review-row">
+                      <span className="add-car-review-label">Badge:</span>
+                      <span className={`add-car-review-badge add-car-review-badge--${formData.badgeColor}`}>
+                        {formData.badge}
+                      </span>
+                    </div>
+                  )}
+                  
+                  <div className="add-car-review-row">
+                    <span className="add-car-review-label">Images:</span>
+                    <span className="add-car-review-value">{imageFiles.length} uploaded</span>
+                  </div>
+                  
+                  {formData.features.length > 0 && (
+                    <div className="add-car-review-row">
+                      <span className="add-car-review-label">Features:</span>
+                      <span className="add-car-review-value">{formData.features.length} selected</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {imagePreviews.length > 0 && (
+                <div className="add-car-review-images">
+                  <h4 className="add-car-review-subtitle">Images Preview</h4>
+                  <div className="add-car-review-image-grid">
+                    {imagePreviews.map((preview, index) => (
+                      <div key={index} className="add-car-review-image-item">
+                        <img src={preview.url} alt={`Preview ${index + 1}`} />
+                        {featuredImageIndex === index && (
+                          <div className="add-car-review-featured-badge">Featured</div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div>
+      <Navbar />
+      
+      <div className="add-car-page">
+        <div className="add-car-container">
+          {/* Header */}
+          <div className="add-car-header">
+            <button
+              onClick={() => navigate('/vehicles-for-sale')}
+              className="add-car-back-btn"
+            >
+              <ArrowLeft className="add-car-back-icon" />
+              Back to Listings
+            </button>
+            
+            <h1 className="add-car-title">Add New Vehicle</h1>
+            <p className="add-car-subtitle">Fill in the details to list your vehicle</p>
+          </div>
+
+          {/* Step Indicator */}
+          {renderStepIndicator()}
+
+          {/* Error/Success Messages */}
+          {error && (
+            <div className="add-car-message add-car-message--error">
+              {error}
+            </div>
+          )}
           
-          <button 
-            type="submit" 
-            className="btn-primary submit-btn"
-            disabled={loading}
-          >
-            {loading ? 'Adding Vehicle...' : 'Add Vehicle'}
-          </button>
-        </form>
+          {success && (
+            <div className="add-car-message add-car-message--success">
+              {success}
+            </div>
+          )}
+
+          {/* Form */}
+          <div className="add-car-form-container">
+            <form onSubmit={handleSubmit} className="add-car-form">
+              {renderStep()}
+
+              {/* Navigation Buttons */}
+              <div className="add-car-form-navigation">
+                {activeStep > 1 && (
+                  <button
+                    type="button"
+                    onClick={prevStep}
+                    className="add-car-nav-btn add-car-nav-btn--secondary"
+                  >
+                    <ArrowLeft className="add-car-nav-icon" />
+                    Previous
+                  </button>
+                )}
+
+                <div className="add-car-nav-spacer" />
+
+                {activeStep < 5 ? (
+                  <button
+                    type="button"
+                    onClick={nextStep}
+                    className="add-car-nav-btn add-car-nav-btn--primary"
+                    disabled={!validateStep(activeStep)}
+                  >
+                    Next
+                    <ArrowLeft className="add-car-nav-icon add-car-nav-icon--right" />
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="add-car-submit-btn"
+                    disabled={loading || !imageFiles.length}
+                  >
+                    {loading ? 'Adding Vehicle...' : 'Add Vehicle'}
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

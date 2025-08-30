@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowRight, Bookmark, ChevronRight, Grid3X3, LayoutList } from 'lucide-react';
+import { ArrowRight, Bookmark, ChevronRight, Grid3X3, LayoutList, Plus } from 'lucide-react';
 import '../../../styles/vehicles-for-sale.css'
 import Navbar from '../../common/Navbar';
 import Footer from '../../common/Footer';
@@ -760,6 +760,11 @@ const VehiclesForSale = () => {
     navigate(`/car-listing/${vehicleId}`);
   };
 
+  const handleAddVehicle = () => {
+    // Navigate to add vehicle page or open modal
+    navigate('/vehicles/add');
+  };
+
   const removeFilter = (category, value) => {
     if (category === 'priceRange') {
       setPriceRange([15, 85]);
@@ -1043,6 +1048,15 @@ const VehiclesForSale = () => {
                   <option value="year">Newest First</option>
                 </select>
               </div>
+
+              <button 
+                className="vehicles-sale-add-btn"
+                onClick={handleAddVehicle}
+                title="Add Vehicle"
+              >
+                <Plus className="vehicles-sale-add-icon" />
+                <span className="vehicles-sale-add-text">Add Vehicle</span>
+              </button>
             </div>
           </div>
 
