@@ -14,94 +14,11 @@ body {
   background-color: #ffffff;
 }
 
-/* Breadcrumb Styles - DEBUG VERSION WITH VISIBILITY FIXES */
-.breadcrumb {
-  max-width: 1200px;
-  margin: 2rem auto 1rem;
-  padding: 1rem 2rem;
-  
-  /* VISIBILITY FIXES */
-  color: #000000 !important;
-  background-color: #f8f9fa; /* Debug background to see if element exists */
-  border: 1px solid #e9ecef; /* Debug border */
-  font-size: 0.95rem;
-  font-weight: 500;
-  
-  /* Clear positioning issues */
-  position: relative;
-  z-index: 10;
-  
-  /* Start with left alignment */
-  text-align: left;
-  width: 100%;
-  clear: both;
-  
-  /* Simple flexbox for left alignment */
-  display: flex !important;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  
-  /* Ensure visibility */
-  visibility: visible !important;
-  opacity: 1 !important;
-  height: auto !important;
-  min-height: 40px;
-  
-  /* Remove any possible conflicts */
-  overflow: visible;
-  white-space: nowrap;
-}
-
-/* Make sure breadcrumb content is visible */
-.breadcrumb * {
-  color: inherit !important;
-  font-size: inherit !important;
-}
-
-.breadcrumb a {
-  color: #4f46e5 !important;
-  text-decoration: none;
-  transition: color 0.3s ease;
-  font-weight: 600;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  background-color: rgba(79, 70, 229, 0.1);
-}
-
-.breadcrumb a:hover {
-  color: #4338ca !important;
-  text-decoration: underline;
-  background-color: rgba(79, 70, 229, 0.2);
-}
-
-/* Breadcrumb separator styling - make it more visible */
-.breadcrumb-item {
-  display: inline-flex;
-  align-items: center;
-}
-
-.breadcrumb-separator {
-  margin: 0 0.5rem;
-  color: #666 !important;
-  font-weight: bold;
-  font-size: 1rem;
-}
-
-/* If using text content instead of structured items */
-.breadcrumb > a,
-.breadcrumb > span {
-  display: inline-block;
-  margin-right: 0.5rem;
-}
-
 /* Contact Hero Section */
 .contact-hero {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem 2rem 2rem;
-  text-align: left; /* Start with left alignment */
+  text-align: left;
 }
 
 .contact-title {
@@ -109,8 +26,7 @@ body {
   font-weight: bold;
   color: #333;
   margin-bottom: 2rem;
-  margin-top: 0.5rem;
-  text-align: left; /* Explicitly set left alignment */
+  text-align: left;
 }
 
 .map-container {
@@ -123,27 +39,13 @@ body {
   background: #f0f0f0;
 }
 
-.map-placeholder {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 1.2rem;
-  text-align: center;
-}
-
 /* Contact Content Section */
 .contact-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
-  margin-bottom: 4rem;
 }
 
 .contact-form-section h2 {
@@ -156,13 +58,14 @@ body {
 .form-description {
   color: #666;
   margin-bottom: 2rem;
-  line-height: 1.6;
+  line-height: 1.8;
+  text-align: justify;
 }
 
 .contact-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0.5rem;
 }
 
 .form-row {
@@ -229,7 +132,7 @@ body {
   border: 2px solid #e4e4e4;
   padding: 1.5rem;
   border-radius: 10px;
-  height: 542px;
+  height: fit-content;
 }
 
 .contact-details h3 {
@@ -242,7 +145,7 @@ body {
 .contact-details-description {
   color: #666;
   margin-bottom: 2rem;
-  line-height: 1.6;
+  line-height: 1.8;
 }
 
 .contact-info {
@@ -279,7 +182,7 @@ body {
 }
 
 .social-section {
-  margin-top: 2rem;
+  margin: 2rem 0 1rem 0;
 }
 
 .social-section h4 {
@@ -315,14 +218,13 @@ body {
 .offices-section {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 4rem 2rem;
-  margin-top: -35px;
+  padding: 4rem 0 0 0;
 }
 
 .offices-title {
   font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   color: #333;
   text-align: left;
 }
@@ -347,8 +249,8 @@ body {
 }
 
 .office-card h3 {
-  font-size: 1.25rem;
-  font-weight: bold;
+  font-size: 1.3rem;
+  font-weight: 600;
   margin-bottom: 1rem;
   color: #333;
 }
@@ -356,27 +258,37 @@ body {
 .office-address {
   color: #666;
   margin-bottom: 1rem;
-  line-height: 1.6;
+  line-height: 1.8;
 }
 
 .office-actions {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
 .office-link {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
   color: #4f46e5;
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.3s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  text-align: left;
 }
 
 .office-link:hover {
   color: #4338ca;
+}
+
+.office-link:focus {
+  outline: none;
 }
 
 /* Responsive Design */
@@ -408,23 +320,16 @@ body {
     grid-template-columns: 1fr;
   }
 
-  /* Center breadcrumb and title on mobile */
   .breadcrumb {
     margin: 1rem auto 0.5rem;
     padding: 0.75rem 1rem;
     font-size: 0.85rem;
-    
-    /* Change to center alignment on mobile */
     text-align: center;
     justify-content: center;
-    
-    /* Better mobile handling */
     white-space: normal;
     word-break: break-word;
     line-height: 1.4;
     min-height: 2rem;
-    
-    /* Ensure visibility on mobile */
     border-radius: 0.5rem;
     z-index: 20;
   }
@@ -434,12 +339,12 @@ body {
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
     padding: 0 0.5rem;
-    text-align: center; /* Center on mobile */
+    text-align: center;
   }
 
   .contact-hero {
     padding: 1rem 1rem 2rem;
-    text-align: center; /* Center hero content on mobile */
+    text-align: center;
   }
 
   .nav-container {
