@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Navbar from '../../common/Navbar';
 import Footer from '../../common/Footer';
 import AboutGrid1 from '../../../assets/images/cars/car-about1.jpeg'
@@ -21,6 +21,7 @@ import Customer2 from '../../../assets/images/avatars/avatar2.jpg'
 import Customer3 from '../../../assets/images/avatars/avatar3.jpg'
 import Customer4 from '../../../assets/images/avatars/avatar4.jpg'
 import Customer5 from '../../../assets/images/avatars/avatar5.jpg'
+import BrandsSection from './BrandsSection'
 import '../../../styles/about-us.css';
 
 const BoxCarsAbout = () => {
@@ -64,20 +65,25 @@ const BoxCarsAbout = () => {
           
           <div className="about-us-content-wrapper">
             <div className="about-us-text-content">
-              <h2>We Value Our Clients And Want Them To Have A Nice Experience</h2>
+              <h2>We value our clients and want them to have a nice experience</h2>
               <p>
-                Lorem ipsum dolor sit amet consectetur. Convallis integer enim eget sit urna. Eu duis lectus amet 
-                vestibulum varius. Nibh tellus sit sit at lorem facilisis. Nunc vulputate ac interdum aliquet 
-                vestibulum in tellus.
+                At our dealership, we understand that buying a car is one of life's most important decisions. 
+                That's why we're committed to making your vehicle shopping experience as smooth and enjoyable as 
+                possible. Our knowledgeable team takes the time to listen to your needs, whether you're looking 
+                for a reliable family sedan, an efficient commuter car, or a powerful truck for work. We believe 
+                every customer deserves honest advice and transparent pricing from the moment you step onto our lot.
               </p>
               <p>
-                Sit convallis rhoncus dolor purus amet orci urna. Lobortis vulputate vestibulum consectetur donec 
-                ipsum egestas velit laoreet justo. Eu dignissim egestas egestas ipsum. Sit est nunc pellentesque at 
-                a aliquam ultrices consequat. Velit duis velit nec amet eget eu morbi. Libero non diam sit viverra 
-                dignissim. Aliquam tincidunt in cursus euismod enim.
+                With over two decades of experience in the automotive industry, we've built our reputation on 
+                trust and quality service. Every vehicle in our inventory undergoes a comprehensive inspection 
+                to ensure it meets our high standards before we offer it to our customers. We work with trusted 
+                financing partners to help you secure competitive rates, and our service department is staffed 
+                with certified technicians who use genuine parts. From your first visit through years of ownership, 
+                we're here to support you with maintenance, repairs, and any questions you might have.
               </p>
               <p>
-                Magna odio sed ornare ultrices. Id lectus mi amet sit at sit arcu mi nisl. Mauris egestas arcu mauris.
+                Our goal is simple: to help you find the perfect vehicle that fits your lifestyle and budget while 
+                providing exceptional service that keeps you coming back. We're proud to be your neighborhood dealership.
               </p>
             </div>
             
@@ -142,7 +148,7 @@ const BoxCarsAbout = () => {
                 <img src={ChooseUs1} alt="Special Financing Offers" />
               </div>
               <h3>Special Financing Offers</h3>
-              <p>Flexible financing options with competitive rates &  customized payment plans to fit your budget and needs.</p>
+              <p>Flexible financing options with competitive rates & customized payment plans to fit your budget and needs.</p>
             </div>
 
             <div className="about-page-feature-item">
@@ -223,42 +229,8 @@ const BoxCarsAbout = () => {
         </div>
       </section>
 
-      {/* Premium Brands Section */}
-      <section className="about-page-brands-section">
-        <div className="about-page-container-inner">
-          <div className="about-page-brands-header">
-            <h2>Explore Our Premium Brands</h2>
-            <a href="#" className="about-page-view-all-link">View All Brands →</a>
-          </div>
-          
-          <div className="about-page-brands-grid">
-            <div className="about-page-brand-item">
-              <img src="https://logos-world.net/wp-content/uploads/2021/03/Audi-Logo.png" alt="Audi" />
-              <span>Audi</span>
-            </div>
-            <div className="about-page-brand-item">
-              <img src="https://logos-world.net/wp-content/uploads/2020/03/BMW-Logo.png" alt="BMW" />
-              <span>BMW</span>
-            </div>
-            <div className="about-page-brand-item">
-              <img src="https://logos-world.net/wp-content/uploads/2021/08/Ford-Logo.png" alt="Ford" />
-              <span>Ford</span>
-            </div>
-            <div className="about-page-brand-item">
-              <img src="https://logos-world.net/wp-content/uploads/2020/04/Mercedes-Logo.png" alt="Mercedes Benz" />
-              <span>Mercedes Benz</span>
-            </div>
-            <div className="about-page-brand-item">
-              <img src="https://logos-world.net/wp-content/uploads/2021/08/Peugeot-Logo.png" alt="Peugeot" />
-              <span>Peugeot</span>
-            </div>
-            <div className="about-page-brand-item">
-              <img src="https://logos-world.net/wp-content/uploads/2020/09/Volkswagen-Logo.png" alt="Volkswagen" />
-              <span>Volkswagen</span>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Improved Premium Brands Section */}
+      <BrandsSection />
 
       {/* Our Team Section */}
       <section className="about-page-team-section">
@@ -322,14 +294,14 @@ const BoxCarsAbout = () => {
           <div className="about-page-testimonials-heading">
             <h2>What our customers say</h2>
             <p className="about-page-testimonials-subtitle">
-              Rated 4.7 / 5 based on 28,370 reviews Showing our 4 & 5 star reviews
+              Rated 4.8 / 5 based on 3,247 reviews Showing our 4 & 5 star reviews
             </p>
           </div>
 
           <div className="about-page-testimonials-grid">
             <div className="about-page-testimonial-item">
-              <h4>Great Work</h4>
-              <p>"Amazing design, easy to customize and a design quality superlative account on its cloud platform for the optimized performance. And we didn't on our original designs."</p>
+              <h4>Outstanding Service</h4>
+              <p>"The team here made buying my first car such an easy experience. They were patient, answered all my questions, and helped me find the perfect vehicle within my budget. No pressure tactics, just genuine care for their customers."</p>
               <div className="about-page-testimonial-author">
                 <img 
                   src={Customer1} 
@@ -337,14 +309,14 @@ const BoxCarsAbout = () => {
                 />
                 <div>
                   <strong>Ralph Edwards</strong>
-                  <span>Tesla Driver</span>
+                  <span>Honda Civic Owner</span>
                 </div>
               </div>
             </div>
             
             <div className="about-page-testimonial-item">
-              <h4>Awesome Design</h4>
-              <p>"Amazing design, easy to customize and a design quality superlative account on its cloud platform for the optimized performance that didn't on our original designs."</p>
+              <h4>Trustworthy Dealership</h4>
+              <p>"After visiting several dealerships, this place stood out for their honesty and transparency. They showed me the full vehicle history, explained every detail, and their financing options were the best I found anywhere."</p>
               <div className="about-page-testimonial-author">
                 <img 
                   src={Customer2} 
@@ -352,29 +324,29 @@ const BoxCarsAbout = () => {
                 />
                 <div>
                   <strong>Jenna Watson</strong>
-                  <span>Audi Driver</span>
+                  <span>Toyota Camry Owner</span>
                 </div>
               </div>
             </div>
 
             <div className="about-page-testimonial-item">
-              <h4>Great Work</h4>
-              <p>"Amazing design, easy to customize and a design quality superlative account on its cloud platform for the optimized performance. And we didn't on our original designs."</p>
+              <h4>Excellent Experience</h4>
+              <p>"From test drive to paperwork, everything was handled professionally. The car was in perfect condition as promised, and they even threw in some extras. I'll definitely be coming back for my next purchase."</p>
               <div className="about-page-testimonial-author">
                 <img 
                   src={Customer3} 
-                  alt="Ralph Edwards"
+                  alt="Michael Johnson"
                 />
                 <div>
                   <strong>Michael Johnson</strong>
-                  <span>BMW Driver</span>
+                  <span>Ford F-150 Owner</span>
                 </div>
               </div>
             </div>
 
             <div className="about-page-testimonial-item">
-              <h4>Perfect Service</h4>
-              <p>"Amazing design, easy to customize and a design quality superlative account on its cloud platform for the optimized performance. And we didn't on our original designs."</p>
+              <h4>Top-Notch Service</h4>
+              <p>"Their service department is amazing! Quick, efficient, and they always explain what needs to be done. Fair pricing and they never try to sell you services you don't need. Highly recommend this dealership."</p>
               <div className="about-page-testimonial-author">
                 <img 
                   src={Customer4} 
@@ -382,14 +354,14 @@ const BoxCarsAbout = () => {
                 />
                 <div>
                   <strong>Sarah Wilson</strong>
-                  <span>Mercedes Driver</span>
+                  <span>Subaru Outback Owner</span>
                 </div>
               </div>
             </div>
             
             <div className="about-page-testimonial-item">
-              <h4>Perfect Quality</h4>
-              <p>"Amazing design, easy to customize and a design quality superlative account on its cloud platform for the optimized performance and we didn't on our original designs."</p>
+              <h4>Perfect Experience</h4>
+              <p>"Bought my dream car here and couldn't be happier! The sales team was knowledgeable, the process was smooth, and they made sure I understood all the features. Great selection and competitive prices too."</p>
               <div className="about-page-testimonial-author">
                 <img 
                   src={Customer5} 
@@ -397,7 +369,7 @@ const BoxCarsAbout = () => {
                 />
                 <div>
                   <strong>Courtney Henry</strong>
-                  <span>Ferrari Driver</span>
+                  <span>Mazda CX-5 Owner</span>
                 </div>
               </div>
             </div>
