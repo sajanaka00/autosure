@@ -1,6 +1,6 @@
 /* GetFairPrice Component Styles */
 .fair-price-section {
-  padding: 10px 0;
+  padding: 40px 0;
   background: #f8fafc;
 }
 
@@ -13,12 +13,12 @@
 .fair-price-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 35px;
+  gap: 30px;
   align-items: center;
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
   background: #EEF1FB;
   border-radius: 30px;
-  padding-right: 3rem;
+  padding-right: 2.5rem;
 }
 
 .fair-price-image {
@@ -28,7 +28,7 @@
 
 .fair-price-image > img {
   width: 100%;
-  height: 600px;
+  height: 500px; /* Reduced from 600px */
   object-fit: cover;
   border-top-left-radius: 25px;
   border-bottom-left-radius: 25px;
@@ -42,8 +42,8 @@
   transform: translate(-50%, -50%);
   background: rgba(255, 255, 255, 0.95);
   border-radius: 50%;
-  width: 80px;
-  height: 80px;
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -58,23 +58,23 @@
 }
 
 .fair-price-text {
-  padding-left: 2rem;
+  padding-left: 1.5rem; /* Reduced from 2rem */
 }
 
 .fair-price-text h2 {
   font-family: 'Karla', sans-serif;
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
+  font-size: 1.8rem; /* Slightly reduced from 2rem */
+  margin-bottom: 1.2rem; 
   color: #050B20;
   line-height: 1.2;
   letter-spacing: -0.5px;
 }
 
 .fair-price-text > p {
-  font-size: 1rem;
+  font-size: 0.95rem; /* Slightly reduced from 1rem */
   color: #050B20;
   margin-bottom: 1rem;
-  line-height: 2;
+  line-height: 1.8; /* Reduced from 2 */
   text-align: justify;
   font-family: 'Inter', sans-serif;
 }
@@ -83,11 +83,12 @@
   list-style: none;
   padding: 0;
   font-family: 'Inter', sans-serif;
+  margin-bottom: 1.5rem; /* Added margin to control spacing */
 }
 
 .benefits-list li {
   position: relative;
-  padding: 0.4rem 0;
+  padding: 0.3rem 0; /* Reduced from 0.4rem */
   padding-left: 2rem;
   color: #050B20;
   font-size: 0.9rem;
@@ -98,7 +99,7 @@
   content: "";
   position: absolute;
   left: 0;
-  top: 0.4rem;
+  top: 0.3rem; /* Adjusted to match reduced padding */
   width: 16px;
   height: 16px;
   background-image: url('../assets/images/vectors/check.png');
@@ -112,15 +113,15 @@
   background: #405FF2;
   color: white;
   border: none;
-  padding: 16px 25px;
+  padding: 14px 22px; /* Slightly reduced from 16px 25px */
   border-radius: 12px;
-  font-size: 1rem;
+  font-size: 0.95rem; /* Slightly reduced from 1rem */
   cursor: pointer;
   transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-top: 2rem;
+  margin-top: 1.5rem; /* Reduced from 2rem */
   box-shadow: 0 4px 12px rgba(64, 95, 242, 0.3);
   position: relative;
   overflow: hidden;
@@ -146,7 +147,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem 0 2rem 0;
+  padding: 1.5rem 0 0 0; /* Reduced from 2rem */
   margin-top: 1rem;
 }
 
@@ -159,7 +160,7 @@
 }
 
 .stat-item h3 {
-  font-size: 2.5rem;
+  font-size: 2.2rem; /* Reduced from 2.5rem */
   color: #1a1a1a;
   margin-bottom: 0.5rem;
   line-height: 1;
@@ -186,15 +187,15 @@
   }
 
   .fair-price-image > img {
-    height: 500px;
+    height: 350px; /* Reduced from 500px */
   }
 
   .fair-price-text h2 {
-    font-size: 1.8rem;
+    font-size: 1.7rem; /* Slightly reduced from 1.8rem */
   }
 
   .stat-item h3 {
-    font-size: 2.2rem;
+    font-size: 2rem; /* Reduced from 2.2rem */
   }
 }
 
@@ -202,13 +203,13 @@
 @media (max-width: 768px) {
   .fair-price-content {
     grid-template-columns: 1fr;
-    gap: 30px;
+    gap: 25px; /* Reduced from 30px */
     padding-right: 0;
-    padding: 30px;
+    padding: 25px; /* Reduced from 30px */
   }
 
   .fair-price-image > img {
-    height: 300px;
+    height: 280px; /* Reduced from 300px */
     border-radius: 25px;
   }
 
@@ -217,7 +218,7 @@
   }
 
   .fair-price-text h2 {
-    font-size: 1.6rem;
+    font-size: 1.5rem; /* Reduced from 1.6rem */
   }
 
   .stats-section {
@@ -232,7 +233,7 @@
   }
 
   .stat-item h3 {
-    font-size: 2rem;
+    font-size: 1.8rem; /* Reduced from 2rem */
   }
 }
 
@@ -243,16 +244,16 @@
   }
 
   .fair-price-image > img {
-    height: 250px;
+    height: 220px; /* Reduced from 250px */
   }
 
   .play-button {
-    width: 60px;
-    height: 60px;
+    width: 55px; /* Reduced from 60px */
+    height: 55px; /* Reduced from 60px */
   }
 
   .fair-price-text h2 {
-    font-size: 1.4rem;
+    font-size: 1.3rem; /* Reduced from 1.4rem */
   }
 
   .fair-price-text > p {
@@ -270,7 +271,7 @@
   }
 
   .cta-button {
-    padding: 14px 20px;
+    padding: 12px 18px; /* Reduced from 14px 20px */
     font-size: 0.9rem;
   }
 
@@ -285,7 +286,7 @@
   }
 
   .stat-item h3 {
-    font-size: 1.8rem;
+    font-size: 1.6rem; /* Reduced from 1.8rem */
   }
 
   .stat-item p {
@@ -296,7 +297,7 @@
 /* Extra Small Mobile (360px and down) */
 @media (max-width: 360px) {
   .stat-item h3 {
-    font-size: 1.5rem;
+    font-size: 1.4rem; /* Reduced from 1.5rem */
   }
 
   .stats-section {
@@ -307,6 +308,6 @@
 /* Landscape Mobile Orientation */
 @media (max-width: 768px) and (orientation: landscape) {
   .fair-price-image > img {
-    height: 220px;
+    height: 200px; /* Reduced from 220px */
   }
 }

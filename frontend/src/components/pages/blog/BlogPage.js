@@ -12,15 +12,6 @@ import car4Image from '../../../assets/images/cars/car4.png';
 import car5Image from '../../../assets/images/cars/car5.png';
 import car6Image from '../../../assets/images/cars/car6.png';
 
-// Reusable Breadcrumb Component
-const BlogBreadcrumb = () => (
-  <div className="blog-page-breadcrumb">
-    <span className="blog-page-breadcrumb-home">Home</span>
-    <span className="blog-page-breadcrumb-separator">/</span>
-    <span>Blog</span>
-  </div>
-);
-
 // Blog Article Card Component - Matching the design from image
 const BlogArticleCard = ({ 
   post,
@@ -431,7 +422,6 @@ const BlogPage = () => {
       <Navbar/>
       <div className="blog-page-header">
         <div className="blog-page-header-content">
-          <BlogBreadcrumb />
           <div className="blog-page-header-flex">
             <div>
               <h1 className="blog-page-title">Blog</h1>

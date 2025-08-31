@@ -8,6 +8,7 @@ import '../../styles/navbar.css';
 export default function Navbar({ user, onLogout }) {
   const [dropdownOpen, setDropdownOpen] = useState({});
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [nearFooter, setNearFooter] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -27,6 +28,71 @@ export default function Navbar({ user, onLogout }) {
       document.body.classList.remove('home-page');
     };
   }, [isHomePage]);
+
+  // Smart footer detection and curved section management
+  useEffect(() => {
+    const handleScroll = () => {
+      const footer = document.querySelector('footer, .footer, .site-footer');
+      const navbar = document.querySelector('.navbar-group');
+      
+      if (footer && navbar) {
+        const footerRect = footer.getBoundingClientRect();
+        const navbarHeight = 130; // Total navbar + curve height
+        
+        // Check if footer is near the top of the viewport
+        const isNearFooter = footerRect.top <= navbarHeight;
+        
+        setNearFooter(isNearFooter);
+        
+        // Add/remove class to navbar for styling
+        if (isNearFooter) {
+          navbar.classList.add('near-footer');
+        } else {
+          navbar.classList.remove('near-footer');
+        }
+        
+        // Alternative approach: Check footer background color and add class to body
+        const footerStyle = window.getComputedStyle(footer);
+        const footerBg = footerStyle.backgroundColor;
+        
+        // If footer has dark background, add class to body
+        if (isDarkColor(footerBg) && isNearFooter) {
+          document.body.classList.add('has-dark-footer');
+        } else {
+          document.body.classList.remove('has-dark-footer');
+        }
+      }
+    };
+
+    // Helper function to detect if a color is dark
+    const isDarkColor = (color) => {
+      // Convert rgb/rgba to check brightness
+      const rgb = color.match(/\d+/g);
+      if (rgb) {
+        const brightness = (parseInt(rgb[0]) * 299 + parseInt(rgb[1]) * 587 + parseInt(rgb[2]) * 114) / 1000;
+        return brightness < 128; // Dark if brightness is less than 128
+      }
+      // Check for common dark color keywords
+      return ['black', 'dark', 'navy', 'darkblue', 'darkgreen', 'darkred'].some(darkColor => 
+        color.toLowerCase().includes(darkColor)
+      );
+    };
+
+    // Add scroll listener
+    window.addEventListener('scroll', handleScroll);
+    // Initial check
+    handleScroll();
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.body.classList.remove('has-dark-footer');
+      const navbar = document.querySelector('.navbar-group');
+      if (navbar) {
+        navbar.classList.remove('near-footer');
+      }
+    };
+  }, [location.pathname]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -128,7 +194,7 @@ export default function Navbar({ user, onLogout }) {
         route = '/dealer-dashboard';
         break;
       case 'submit-listing':
-        route = '/submit-listing';
+        route = '/vehicles/add';
         break;
       default:
         route = '/';
@@ -168,24 +234,16 @@ export default function Navbar({ user, onLogout }) {
       { 
         id: 'home', 
         label: 'Home',
-        hasDropdown: isHomePage, // Only show dropdown on homepage
+        hasDropdown: isHomePage,
         dropdownItems: isHomePage ? ['Browse by Type', 'Get Fair Price', 'Why Choose Us', 'Explore All Vehicles', 'Testimonials'] : []
       },
       { 
         id: 'listings', 
-        label: 'Listings',
-        hasDropdown: true,
-        dropdownItems: ['All Cars', 'By Brand', 'By Price', 'Advanced Search']
+        label: 'Vehicles',
       },
       { id: 'blog', label: 'Blog' },
-      { 
-        id: 'pages', 
-        label: 'Pages',
-        hasDropdown: true,
-        dropdownItems: ['Services', 'FAQ', 'Terms', 'Privacy']
-      },
-      { id: 'about', label: 'About' },
-      { id: 'contact', label: 'Contact' }
+      { id: 'about', label: 'About Us' },
+      { id: 'contact', label: 'Contact Us' }
     ];
 
     if (isAdmin) {
@@ -202,7 +260,7 @@ export default function Navbar({ user, onLogout }) {
   const navItems = getNavItems();
 
   return (
-    <div className="navbar-group">
+    <div className={`navbar-group ${nearFooter ? 'near-footer' : ''}`}>
       {!isHomePage && (
         <div className="curved-background">
           <div className="white-curved-overlay"></div>

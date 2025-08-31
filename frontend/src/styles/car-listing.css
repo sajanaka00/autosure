@@ -5,8 +5,8 @@
 
 .cl-listing {
   min-height: 100vh;
-  margin: 75px 135px;
-  padding: 20px 0;
+  margin: 0 auto;
+  padding: 1rem 6rem 1rem;
 }
 
 .cl-listing-page {
