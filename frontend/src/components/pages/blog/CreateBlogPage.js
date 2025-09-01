@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { X, Plus, Minus, Upload, Eye, Save, FileText, User, Tag, Image, Clock, Hash, Edit } from 'lucide-react';
-import '../../../styles/blog-modal.css';
+import '../../../styles/create-blog.css';
 
-const BlogForm = ({ onClose = () => {}, onCreated = () => {} }) => {
+const CreateBlogPage = ({ onClose = () => {}, onCreated = () => {} }) => {
   const [formData, setFormData] = useState({
     title: '',
     category: '',
@@ -883,4 +883,4 @@ const BlogForm = ({ onClose = () => {}, onCreated = () => {} }) => {
   );
 };
 
-export default BlogForm;
+export default CreateBlogPage;

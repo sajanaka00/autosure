@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowRight, Bookmark, ChevronRight, Grid3X3, LayoutList, Plus } from 'lucide-react';
-import '../../../styles/vehicles-for-sale.css'
+import '../../../styles/vehicles-list.css'
 import Navbar from '../../common/Navbar';
 import Footer from '../../common/Footer';
 
@@ -249,7 +249,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 };
 
 // Main VehiclesForSale Component
-const VehiclesForSale = () => {
+const VehicleListPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
@@ -757,7 +757,7 @@ const VehiclesForSale = () => {
   };
 
   const handleVehicleClick = (vehicleId) => {
-    navigate(`/car-listing/${vehicleId}`);
+    navigate(`/vehicles/${vehicleId}`);
   };
 
   const handleAddVehicle = () => {
@@ -1124,4 +1124,4 @@ const VehiclesForSale = () => {
   );
 };
 
-export default VehiclesForSale;
+export default VehicleListPage;

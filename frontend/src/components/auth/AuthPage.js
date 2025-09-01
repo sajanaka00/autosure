@@ -5,7 +5,7 @@ import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
 import Dashboard from '../pages/dashboard/Dashboard';
 
-export default function AuthApp() {
+export default function AuthPage() {
   const [currentView, setCurrentView] = useState('login');
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);

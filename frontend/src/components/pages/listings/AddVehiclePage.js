@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Upload, X, Star, Image as ImageIcon, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../../services/api';
-import '../../../styles/add-car.css';
+import '../../../styles/add-vehicle.css';
 import Navbar from '../../common/Navbar';
 import Footer from '../../common/Footer';
 
-export default function AddCar({ user }) {
+export default function AddVehiclePage({ user }) {
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({

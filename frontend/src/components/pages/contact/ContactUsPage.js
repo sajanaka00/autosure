@@ -150,7 +150,7 @@ const FormField = React.memo(({ field, value, onChange, name }) => {
   );
 });
 
-const ContactPage = () => {
+const ContactUsPage = () => {
   // Form state management
   const [formData, setFormData] = useState({
     firstName: '',
@@ -364,4 +364,4 @@ const ContactPage = () => {
   );
 };
 
-export default ContactPage;
+export default ContactUsPage;

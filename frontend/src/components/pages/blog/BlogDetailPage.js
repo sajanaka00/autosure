@@ -1,614 +1,363 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React from 'react';
+import '../../../styles/blog-detail.css';
 import Navbar from '../../common/Navbar';
 import Footer from '../../common/Footer';
-import '../../../styles/blog-detail.css';
 
-const BlogDetailPage = () => {
-  const { blogId } = useParams();
-  const [blogData, setBlogData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [relatedPosts, setRelatedPosts] = useState([]);
-  const [comment, setComment] = useState('');
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [saveInfo, setSaveInfo] = useState(false);
-  const [commentLoading, setCommentLoading] = useState(false);
-  const [commentError, setCommentError] = useState(null);
-  const [likeLoading, setLikeLoading] = useState(false);
+import CarImg from '../../../assets/images/cars/bmw-series5_1.jpg'
+import CarImg2 from '../../../assets/images/cars/bmw-series5_2.jpg'
+import AdminAvatar from '../../../assets/images/avatars/avatar1.jpg'
+import User1Avatar from '../../../assets/images/avatars/avatar2.jpg'
+import User2Avatar from '../../../assets/images/avatars/avatar3.jpg'
+import User3Avatar from '../../../assets/images/avatars/avatar4.jpg'
 
-  // Base API URL - adjust this to match your backend URL
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+// Reusable Components
+const Avatar = ({ src, alt, size = 40 }) => (
+  <img 
+    className={`bp-av bp-av-${size === 40 ? 'sm' : 'lg'}`}
+    src={src} 
+    alt={alt}
+  />
+);
 
-  // Fetch blog data by ID or slug
-  useEffect(() => {
-    const fetchBlogData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        // Try to fetch by ID first, then by slug if ID fails
-        let response;
-        if (blogId.match(/^[0-9a-fA-F]{24}$/)) {
-          // It's a MongoDB ObjectId
-          response = await fetch(`${API_BASE_URL}/blogs/${blogId}`);
-        } else {
-          // It's likely a slug
-          response = await fetch(`${API_BASE_URL}/blogs/slug/${blogId}`);
-        }
+const Badge = ({ children, className = '' }) => (
+  <div className={`bp-tag ${className}`}>
+    {children}
+  </div>
+);
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+const ListItem = ({ children, icon = '✓' }) => (
+  <div className="bp-l-item">
+    <div className="bp-l-icon">
+      <span className="bp-l-symbol">{icon}</span>
+    </div>
+    <div className="bp-l-text">{children}</div>
+  </div>
+);
 
-        const result = await response.json();
-        
-        if (result.success) {
-          setBlogData(result.data);
-          // Fetch related posts
-          fetchRelatedPosts(result.data._id);
-        } else {
-          throw new Error(result.message || 'Failed to fetch blog');
-        }
-      } catch (err) {
-        setError(err.message);
-        console.error('Error fetching blog:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+const LearningList = ({ items, className = '' }) => (
+  <div className={`bp-l-list ${className}`}>
+    {items.map((item, index) => (
+      <ListItem key={index}>{item}</ListItem>
+    ))}
+  </div>
+);
 
-    if (blogId) {
-      fetchBlogData();
+const Quote = ({ text, author }) => (
+  <blockquote className="bp-quote">
+    <div className="bp-q-text">{text}</div>
+    <cite className="bp-q-auth">{author}</cite>
+  </blockquote>
+);
+
+const RequirementItem = ({ children }) => (
+  <div className="bp-r-item">
+    <div className="bp-r-bullet"></div>
+    <div className="bp-r-text">{children}</div>
+  </div>
+);
+
+const SocialButton = ({ icon, href = "#" }) => (
+  <a href={href} className="bp-s-btn">
+    <span className="bp-s-icon">{icon}</span>
+  </a>
+);
+
+const TagButton = ({ children }) => (
+  <button className="bp-t-btn">{children}</button>
+);
+
+const Comment = ({ avatar, name, date, content, onReply }) => (
+  <div className="bp-comment">
+    <div className="bp-c-av">
+      <Avatar src={avatar} alt={`${name} avatar`} size={40} />
+    </div>
+    <div className="bp-c-content">
+      <div className="bp-c-header">
+        <h4 className="bp-c-author">{name}</h4>
+        <time className="bp-c-date">{date}</time>
+        <button className="bp-c-reply" onClick={onReply}>Reply</button>
+      </div>
+      <p className="bp-c-text">{content}</p>
+    </div>
+  </div>
+);
+
+const FormInput = ({ label, placeholder, type = "text", required = false }) => (
+  <div className="bp-input">
+    <input 
+      type={type}
+      className="bp-field"
+      placeholder={placeholder}
+      required={required}
+    />
+    <label className="bp-label">{label}</label>
+  </div>
+);
+
+const NavigationPost = ({ direction, title, href = "#", icon }) => (
+  <a href={href} className={`bp-nav-item bp-nav-${direction === 'previous' ? 'prev' : 'next'}`}>
+    {direction === 'previous' && <span className="bp-nav-icon">{icon}</span>}
+    <div className="bp-nav-content">
+      <span className="bp-nav-label">{direction === 'previous' ? 'Previous Post' : 'Next Post'}</span>
+      <h4 className="bp-nav-title">{title}</h4>
+    </div>
+    {direction === 'next' && <span className="bp-nav-icon">{icon}</span>}
+  </a>
+);
+
+// Main Component
+const BlogPost = () => {
+  const leftColumnItems = [
+    "Powerful inline-6 and V8 engine options.",
+    "Advanced air suspension system.",
+    "Executive-level interior luxury.",
+    "Cutting-edge BMW Driving Assistant Pro.",
+    "Elegant and sophisticated exterior design."
+  ];
+
+  const rightColumnItems = [
+    "BMW Live Cockpit Professional.",
+    "Harman Kardon premium sound system.",
+    "Four-zone automatic climate control.",
+    "Gesture control and voice commands.",
+    "Wireless smartphone integration."
+  ];
+
+  const requirements = [
+    "The BMW 5 Series Sedan requires regular maintenance intervals every 10,000 miles or 12 months to maintain its sophisticated performance and reliability.",
+    "Premium fuel (91+ octane) is strongly recommended for optimal engine performance and fuel efficiency.",
+    "Professional service and genuine BMW parts are essential for maintaining warranty coverage and vehicle integrity."
+  ];
+
+  const comments = [
+    {
+      id: 1,
+      avatar: User1Avatar,
+      name: "David Mueller",
+      date: "January 15, 2025",
+      content: "The 5 Series continues to set the benchmark for executive sedans. The perfect balance of luxury, performance, and technology makes it an outstanding choice."
+    },
+    {
+      id: 2,
+      avatar: User2Avatar,
+      name: "Jennifer Liu",
+      date: "January 12, 2025",
+      content: "Just purchased the 540i xDrive and couldn't be happier. The inline-6 engine is smooth and powerful, while the interior is absolutely luxurious."
+    },
+    {
+      id: 3,
+      avatar: User3Avatar,
+      name: "Carlos Mendez",
+      date: "January 10, 2025",
+      content: "Excellent review! The 5 Series has always been the gold standard in this segment, and this generation raises the bar even higher."
     }
-  }, [blogId, API_BASE_URL]);
+  ];
 
-  // Fetch related posts
-  const fetchRelatedPosts = async (currentBlogId) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/blogs/${currentBlogId}/related?limit=3`);
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success) {
-          setRelatedPosts(result.data);
-        }
-      }
-    } catch (err) {
-      console.error('Error fetching related posts:', err);
-    }
+  const handleReply = (commentId) => {
+    console.log(`Replying to comment ${commentId}`);
   };
 
-  // Handle like functionality
-  const handleLike = async () => {
-    if (!blogData || likeLoading) return;
-
-    try {
-      setLikeLoading(true);
-      const response = await fetch(`${API_BASE_URL}/blogs/${blogData._id}/like`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success) {
-          setBlogData(prev => ({
-            ...prev,
-            likes: result.likes
-          }));
-        }
-      }
-    } catch (err) {
-      console.error('Error liking blog:', err);
-    } finally {
-      setLikeLoading(false);
-    }
-  };
-
-  // Handle comment submission
-  const handleSubmitComment = async (e) => {
+  const handleCommentSubmit = (e) => {
     e.preventDefault();
-    
-    if (!name.trim() || !email.trim() || !comment.trim()) {
-      setCommentError('Please fill in all required fields');
-      return;
-    }
-
-    if (!blogData) return;
-
-    try {
-      setCommentLoading(true);
-      setCommentError(null);
-
-      const response = await fetch(`${API_BASE_URL}/blogs/${blogData._id}/comments`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          author: name,
-          email: email,
-          content: comment
-        }),
-      });
-
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        // Clear form
-        setComment('');
-        if (!saveInfo) {
-          setName('');
-          setEmail('');
-        }
-        setSaveInfo(false);
-        
-        // Show success message with better UX
-        setCommentError(null);
-        // You could add a success state here instead of alert
-        alert('Comment submitted successfully! It will appear after approval.');
-        
-        // Optionally refresh the blog data to show updated comments
-        // You might want to implement a more sophisticated state update here
-      } else {
-        throw new Error(result.message || 'Failed to submit comment');
-      }
-    } catch (err) {
-      setCommentError(err.message);
-      console.error('Error submitting comment:', err);
-    } finally {
-      setCommentLoading(false);
-    }
+    console.log('Comment submitted');
   };
-
-  // Handle social sharing
-  const handleShare = (platform) => {
-    if (!blogData) return;
-    
-    const url = window.location.href;
-    const title = blogData.title;
-    const text = blogData.excerpt || blogData.title;
-    
-    let shareUrl = '';
-    
-    switch (platform) {
-      case 'facebook':
-        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
-        break;
-      case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
-        break;
-      case 'linkedin':
-        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
-        break;
-      case 'pinterest':
-        shareUrl = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(url)}&description=${encodeURIComponent(text)}`;
-        break;
-      default:
-        return;
-    }
-    
-    window.open(shareUrl, '_blank', 'width=600,height=400');
-  };
-
-  // Copy link to clipboard
-  const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      // You could show a toast notification here
-      alert('Link copied to clipboard!');
-    } catch (err) {
-      console.error('Failed to copy link:', err);
-    }
-  };
-
-  // Format date helper
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
-  // Calculate reading time
-  const getReadingTime = (content) => {
-    if (!content) return 'N/A';
-    const wordsPerMinute = 200;
-    const wordCount = content.replace(/<[^>]*>/g, '').split(/\s+/).length;
-    const readingTime = Math.ceil(wordCount / wordsPerMinute);
-    return `${readingTime} min read`;
-  };
-
-  // Loading state
-  if (loading) {
-    return (
-      <div className="blog-detail-page">
-        <Navbar />
-        <main className="main-content">
-          <div className="container">
-            <div className="loading-state">
-              <div className="loading-spinner">⟳</div>
-              <h2>Loading article...</h2>
-              <p>Please wait while we fetch the content</p>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
-
-  // Error state
-  if (error) {
-    return (
-      <div className="blog-detail-page">
-        <Navbar />
-        <main className="main-content">
-          <div className="container">
-            <div className="error-state">
-              <div className="error-icon">⚠️</div>
-              <h2>Oops! Something went wrong</h2>
-              <p>{error}</p>
-              <button 
-                onClick={() => window.location.reload()} 
-                className="retry-btn"
-              >
-                Try Again
-              </button>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
-
-  // No blog data
-  if (!blogData) {
-    return (
-      <div className="blog-detail-page">
-        <Navbar />
-        <main className="main-content">
-          <div className="container">
-            <div className="not-found-state">
-              <div className="not-found-icon">🔍</div>
-              <h2>Article not found</h2>
-              <p>The article you're looking for doesn't exist or has been removed.</p>
-              <Link to="/blog" className="back-to-blog-btn">
-                Back to Blog
-              </Link>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
 
   return (
-    <div className="blog-detail-page">
+    <article className="bp-post">
+      <Navbar/>
       {/* Header */}
-      <Navbar />
-
-      {/* Main Content */}
-      <main className="main-content">
-        <div className="container">
-          <div className="blog-content">
-            {/* Blog Header */}
-            <div className="blog-header">
-              <div className="breadcrumb">
-                <Link to="/">Home</Link>
-                <span>›</span>
-                <Link to="/blog">Blog</Link>
-                <span>›</span>
-                <span>{blogData.category}</span>
-              </div>
-              <h1 className="blog-title">{blogData.title}</h1>
-              <div className="blog-meta">
-                <div className="author-info">
-                  <img 
-                    src={blogData.authorAvatar || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=40&h=40&q=80"} 
-                    alt={blogData.author} 
-                    className="author-avatar" 
-                  />
-                  <span className="author-name">{blogData.author}</span>
-                  <span className="category">{blogData.category}</span>
-                  <span className="date">{formatDate(blogData.createdAt)}</span>
-                  <span className="views">{blogData.views} views</span>
-                  <button 
-                    onClick={handleLike} 
-                    className="like-btn"
-                    disabled={likeLoading}
-                    aria-label="Like this post"
-                  >
-                    ❤️ {blogData.likes || 0} {likeLoading && '...'}
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Featured Image */}
-            {blogData.heroImage && (
-              <div className="featured-image">
-                <img src={blogData.heroImage} alt={blogData.title} className="blog-image" />
-              </div>
-            )}
-
-            {/* Blog Excerpt */}
-            {blogData.excerpt && (
-              <div className="blog-excerpt">
-                <p>{blogData.excerpt}</p>
-              </div>
-            )}
-
-            {/* Blog Content */}
-            <div className="blog-text">
-              <div dangerouslySetInnerHTML={{ __html: blogData.content }} />
-            </div>
-
-            {/* Key Points Section */}
-            {blogData.keyPoints && blogData.keyPoints.length > 0 && (
-              <div className="learning-section">
-                <h3>Key Takeaways</h3>
-                <div className="learning-content">
-                  <div className="learning-column">
-                    {blogData.keyPoints.map((point, index) => (
-                      <div key={index} className="learning-item">
-                        <span className="check-icon">✓</span>
-                        <span>{point}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Content Image */}
-            {blogData.contentImage && (
-              <div className="second-image">
-                <img src={blogData.contentImage} alt="Additional content" className="blog-image" />
-              </div>
-            )}
-
-            {/* Requirements Section */}
-            {blogData.requirements && blogData.requirements.length > 0 && (
-              <div className="requirements-section">
-                <h3>Prerequisites</h3>
-                <ul className="requirements-list">
-                  {blogData.requirements.map((requirement, index) => (
-                    <li key={index}>{requirement}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Tags Section */}
-            {blogData.tags && blogData.tags.length > 0 && (
-              <div className="tags-section">
-                <span className="tags-label">Tags:</span>
-                <div className="tags-list">
-                  {blogData.tags.map((tag, index) => (
-                    <span key={index} className="tag" onClick={() => console.log(`Search tag: ${tag}`)}>{tag}</span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Share Section */}
-            <div className="share-section">
-              <div className="share-left">
-                <span className="share-text">Share this article:</span>
-                <div className="social-icons">
-                  <button 
-                    onClick={() => handleShare('facebook')} 
-                    className="social-icon facebook"
-                    aria-label="Share on Facebook"
-                  >
-                    f
-                  </button>
-                  <button 
-                    onClick={() => handleShare('twitter')} 
-                    className="social-icon twitter"
-                    aria-label="Share on Twitter"
-                  >
-                    t
-                  </button>
-                  <button 
-                    onClick={() => handleShare('linkedin')} 
-                    className="social-icon linkedin"
-                    aria-label="Share on LinkedIn"
-                  >
-                    in
-                  </button>
-                  <button 
-                    onClick={() => handleShare('pinterest')} 
-                    className="social-icon pinterest"
-                    aria-label="Share on Pinterest"
-                  >
-                    p
-                  </button>
-                  <button 
-                    onClick={handleCopyLink} 
-                    className="social-icon copy-link"
-                    aria-label="Copy link"
-                  >
-                    🔗
-                  </button>
-                </div>
-              </div>
-              <div className="post-meta">
-                <span className="reading-time">
-                  📖 {blogData.estimatedReadTime || getReadingTime(blogData.content)}
-                </span>
-              </div>
-            </div>
-
-            {/* Author Section */}
-            <div className="author-section">
-              <img 
-                src={blogData.authorAvatar || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&h=80&q=80"} 
-                alt={blogData.author} 
-                className="author-large-avatar" 
-              />
-              <div className="author-details">
-                <h4>About {blogData.author}</h4>
-                <p>{blogData.authorBio || 'This author hasn\'t provided a bio yet, but their content speaks for itself!'}</p>
-                <div className="author-social">
-                  <button className="author-follow-btn">Follow</button>
-                </div>
-              </div>
-            </div>
-
-            {/* Comments Section */}
-            <div className="comments-section">
-              <h3>
-                {blogData.comments?.filter(comment => comment.approved).length || 0} Comments
-              </h3>
-              
-              {blogData.comments?.filter(comment => comment.approved).map((comment, index) => (
-                <div key={comment._id || index} className="comment">
-                  <img 
-                    src={`https://ui-avatars.com/api/?name=${encodeURIComponent(comment.author)}&size=50&background=random`} 
-                    alt={comment.author} 
-                    className="comment-avatar" 
-                  />
-                  <div className="comment-content">
-                    <div className="comment-header">
-                      <span className="comment-author">{comment.author}</span>
-                      <span className="comment-date">{formatDate(comment.createdAt)}</span>
-                    </div>
-                    <p>{comment.content}</p>
-                    <div className="comment-actions">
-                      <button className="comment-reply-btn">Reply</button>
-                      <button className="comment-like-btn">👍 {comment.likes || 0}</button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-
-              {blogData.comments?.filter(comment => comment.approved).length === 0 && (
-                <div className="no-comments">
-                  <p>No comments yet. Be the first to share your thoughts!</p>
-                </div>
-              )}
-            </div>
-
-            {/* Comment Form */}
-            <div className="comment-form-section">
-              <h3>Join the Discussion</h3>
-              {commentError && (
-                <div className="error-message">
-                  {commentError}
-                </div>
-              )}
-              <form onSubmit={handleSubmitComment} className="comment-form">
-                <div className="form-row">
-                  <input
-                    type="text"
-                    placeholder="Your Name*"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="form-input"
-                    disabled={commentLoading}
-                    required
-                  />
-                  <input
-                    type="email"
-                    placeholder="Your Email*"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="form-input"
-                    disabled={commentLoading}
-                    required
-                  />
-                </div>
-                <textarea
-                  placeholder="Share your thoughts...*"
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  className="form-textarea"
-                  disabled={commentLoading}
-                  required
-                ></textarea>
-                <div className="form-checkbox">
-                  <input
-                    type="checkbox"
-                    id="save-info"
-                    checked={saveInfo}
-                    onChange={(e) => setSaveInfo(e.target.checked)}
-                    disabled={commentLoading}
-                  />
-                  <label htmlFor="save-info">
-                    Save my name and email for next time
-                  </label>
-                </div>
-                <button 
-                  type="submit"
-                  className="submit-btn"
-                  disabled={commentLoading}
-                >
-                  {commentLoading ? (
-                    <>
-                      <span className="spinner">⟳</span>
-                      Submitting...
-                    </>
-                  ) : (
-                    'Post Comment'
-                  )}
-                </button>
-              </form>
-            </div>
-
-            {/* Related Posts */}
-            {relatedPosts.length > 0 && (
-              <div className="related-posts-section">
-                <h3>You Might Also Like</h3>
-                <div className="related-posts-grid">
-                  {relatedPosts.map((post) => (
-                    <Link 
-                      key={post._id} 
-                      to={`/blog/${post.slug || post._id}`} 
-                      className="related-post"
-                    >
-                      <div className="related-post-image-container">
-                        <img 
-                          src={post.heroImage || "https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"} 
-                          alt={post.title} 
-                          className="related-post-image" 
-                        />
-                        <div className="related-post-overlay">
-                          <span className="read-more">Read More →</span>
-                        </div>
-                      </div>
-                      <div className="related-post-content">
-                        <span className="related-post-category">{post.category}</span>
-                        <span className="related-post-date">{formatDate(post.createdAt)}</span>
-                        <h4>{post.title}</h4>
-                        <p>{post.excerpt}</p>
-                        <div className="related-post-meta">
-                          <span className="reading-time">
-                            {post.estimatedReadTime || getReadingTime(post.content)}
-                          </span>
-                          <span className="views">{post.views} views</span>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
+      <header className="bp-hdr">
+        <h1 className="bp-title">
+          BMW 5 Series Sedan: The Ultimate Executive Driving Experience
+        </h1>
+        
+        <div className="bp-meta">
+          <div className="bp-author">
+            <Avatar 
+              src={AdminAvatar}
+              alt="Admin avatar"
+              size={40}
+            />
+            <span className="bp-author-name">BMW Enthusiast</span>
           </div>
+          
+          <div className="bp-tags">
+            <Badge className="bp-tag">Executive</Badge>
+            <Badge className="bp-tag">Luxury</Badge>
+          </div>
+          
+          <time className="bp-date">January 15, 2025</time>
         </div>
-      </main>
+      </header>
 
-      {/* Footer */}
-      <Footer />
-    </div>
+      {/* Featured Image */}
+      <div className="bp-hero">
+        <img 
+          src={CarImg}
+          alt="BMW 2 Series Gran Coupé"
+          className="bp-hero-img"
+        />
+      </div>
+
+      {/* Content */}
+      <div className="bp-content">
+        <p className="bp-intro">
+          The BMW 5 Series Sedan represents the pinnacle of executive luxury and driving dynamics. 
+          As BMW's flagship business sedan, it seamlessly combines cutting-edge technology, refined 
+          comfort, and exceptional performance to create the ultimate driving machine for discerning 
+          professionals. The{' '}
+          <a href="#" className="bp-link">seventh generation</a>{' '}
+          sets new standards in sophistication and innovation.
+        </p>
+
+        <p className="bp-body">
+          Under the sculpted hood, the 5 Series offers a comprehensive range of powertrains, from the 
+          efficient 530i with its turbocharged 2.0-liter four-cylinder producing 248 horsepower, to the 
+          commanding M550i xDrive with its twin-turbocharged 4.4-liter V8 delivering 523 horsepower. 
+          The intelligent xDrive all-wheel drive system and adaptive air suspension ensure optimal 
+          traction and ride quality in any condition. Inside, the cabin exemplifies German luxury 
+          craftsmanship with premium Nappa leather, real wood trim, and the latest BMW Live Cockpit 
+          Professional, creating an environment that elevates every journey into a first-class experience.
+        </p>
+
+        <Quote 
+          text="The BMW 5 Series doesn't just transport you to your destination—it transforms the journey into an experience of refined luxury and dynamic performance that defines executive motoring excellence."
+          author="automotive expert, Automotive News"
+        />
+
+        {/* Learning Section */}
+        <section className="bp-learn">
+          <h2 className="bp-learn-title">Key Features & Benefits</h2>
+          
+          <div className="bp-learn-grid">
+            <LearningList 
+              items={leftColumnItems}
+              className="bp-learn-col bp-learn-left"
+            />
+            <LearningList 
+              items={rightColumnItems}
+              className="bp-learn-col bp-learn-right"
+            />
+          </div>
+        </section>
+
+        {/* Requirements Section */}
+        <section className="bp-req">
+          <h2 className="bp-req-title">Ownership Considerations</h2>
+          <div className="bp-req-img-wrap">
+            <img src={CarImg2} alt="BMW 2 Series interior details" className="bp-req-img" />
+          </div>
+          <div className="bp-req-list">
+            {requirements.map((requirement, index) => (
+              <RequirementItem key={index}>{requirement}</RequirementItem>
+            ))}
+          </div>
+        </section>
+
+        {/* Social Share Section */}
+        <section className="bp-share">
+          <div className="bp-share-wrap">
+            <span className="bp-share-label"><strong>Share this post</strong></span>
+            <div className="bp-share-btns">
+              <SocialButton icon="📘" href="#facebook" />
+              <SocialButton icon="🐦" href="#twitter" />
+              <SocialButton icon="📧" href="#email" />
+              <SocialButton icon="📌" href="#pinterest" />
+            </div>
+            <div className="bp-share-tags">
+              <TagButton>Executive</TagButton>
+              <TagButton>Technology</TagButton>
+              <TagButton>Luxury</TagButton>
+            </div>
+          </div>
+        </section>
+
+        {/* Author Bio Section */}
+        <section className="bp-bio">
+          <div className="bp-bio-av">
+            <Avatar src={AdminAvatar} alt="BMW Enthusiast" size={70} />
+          </div>
+          <div className="bp-bio-content">
+            <h3 className="bp-bio-name">BMW Enthusiast</h3>
+            <p className="bp-bio-desc">
+              With over a decade of experience in automotive journalism and a passion for German engineering, 
+              I specialize in providing comprehensive reviews and insights into BMW's latest innovations. 
+              From track testing to daily driving experiences, I bring you authentic perspectives on what 
+              makes each BMW model unique and exceptional in today's competitive automotive landscape.
+            </p>
+          </div>
+        </section>
+
+        {/* Post Navigation */}
+        <nav className="bp-nav">
+          <NavigationPost 
+            direction="previous"
+            title="BMW X5 M50i: Luxury SUV Performance Redefined"
+            icon="←"
+          />
+          <NavigationPost 
+            direction="next"
+            title="2025 BMW 7 Series: The Flagship Experience"
+            icon="→"
+          />
+        </nav>
+
+        {/* Comments Section */}
+        <section className="bp-comments">
+          <h2 className="bp-c-title">3 Comments</h2>
+          <div className="bp-c-list">
+            {comments.map((comment) => (
+              <Comment
+                key={comment.id}
+                avatar={comment.avatar}
+                name={comment.name}
+                date={comment.date}
+                content={comment.content}
+                onReply={() => handleReply(comment.id)}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* Comment Form */}
+        <section className="bp-form-wrap">
+          <h2 className="bp-form-title">Leave a Comment</h2>
+          <form className="bp-form" onSubmit={handleCommentSubmit}>
+            <div className="bp-form-row">
+              <FormInput label="Name" placeholder="Your Name" required />
+              <FormInput label="Email" placeholder="Your Email" type="email" required />
+            </div>
+            <FormInput label="Website" placeholder="Your Website" />
+            
+            <div className="bp-textarea-wrap">
+              <textarea 
+                className="bp-textarea"
+                placeholder="Write your comment here..."
+                required
+              ></textarea>
+              <label className="bp-textarea-label">Comment</label>
+            </div>
+            
+            <div className="bp-check-wrap">
+              <input 
+                type="checkbox" 
+                id="save-info"
+                className="bp-checkbox"
+              />
+              <label htmlFor="save-info" className="bp-check-label">
+                Save my name, email, and website in this browser for the next time I comment.
+              </label>
+            </div>
+            
+            <button type="submit" className="bp-submit">
+              Submit Comment
+            </button>
+          </form>
+        </section>
+      </div>
+      <Footer/>
+    </article>
   );
 };
 
-export default BlogDetailPage;
+export default BlogPost;

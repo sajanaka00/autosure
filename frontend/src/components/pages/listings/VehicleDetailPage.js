@@ -3,7 +3,7 @@ import { Star } from 'lucide-react';
 
 import Navbar from '../../common/Navbar';
 import Footer from '../../common/Footer';
-import '../../../styles/car-listing.css';
+import '../../../styles/vehicle-detail.css';
 
 import Share from '../../../assets/images/vectors/share.png'
 import Bookmark from '../../../assets/images/vectors/bookmark.png'
@@ -962,7 +962,7 @@ const ReviewsSection = () => {
   );
 };
 
-const CarListing = () => {
+const VehicleDetailPage = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   return (
@@ -999,4 +999,4 @@ const CarListing = () => {
   );
 };
 
-export default CarListing;
+export default VehicleDetailPage;

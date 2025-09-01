@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../common/Navbar';
 import Footer from '../../common/Footer';
-import '../../../styles/blog.css';
+import '../../../styles/blog-list.css';
 
 // Default fallback images
 import car1Image from '../../../assets/images/cars/bmw.jpg';
@@ -175,7 +175,7 @@ const BlogPagination = ({ pagination, onPageChange }) => {
 };
 
 // Main Blog Page Component
-const BlogPage = () => {
+const BlogListPage = () => {
   const navigate = useNavigate();
   const [blogPosts, setBlogPosts] = useState([]);
   const [allPosts, setAllPosts] = useState([]);
@@ -496,4 +496,4 @@ const BlogPage = () => {
   );
 };
 
-export default BlogPage;
+export default BlogListPage;

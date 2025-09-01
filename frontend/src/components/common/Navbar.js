@@ -182,10 +182,10 @@ export default function Navbar({ user, onLogout }) {
         route = '/pages';
         break;
       case 'about':
-        route = '/about';
+        route = '/about-us';
         break;
       case 'contact':
-        route = '/contact';
+        route = '/contact-us';
         break;
       case 'admin':
         route = '/admin';
@@ -216,8 +216,8 @@ export default function Navbar({ user, onLogout }) {
     if (path.startsWith('/vehicles')) return 'listings';
     if (path.startsWith('/blog')) return 'blog';
     if (path.startsWith('/pages')) return 'pages';
-    if (path.startsWith('/about')) return 'about';
-    if (path.startsWith('/contact')) return 'contact';
+    if (path.startsWith('/about-us')) return 'about';
+    if (path.startsWith('/contact-us')) return 'contact';
     if (path.startsWith('/admin')) return 'admin';
     if (path.startsWith('/dealer-dashboard')) return 'dealer-dashboard';
     return '';

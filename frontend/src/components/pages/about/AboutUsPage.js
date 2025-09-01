@@ -24,7 +24,7 @@ import Customer5 from '../../../assets/images/avatars/avatar5.jpg'
 import BrandsSection from './BrandsSection'
 import '../../../styles/about-us.css';
 
-const BoxCarsAbout = () => {
+const AboutUsPage = () => {
   const [openFaq, setOpenFaq] = useState(null);
 
   const toggleFaq = (index) => {
@@ -408,4 +408,4 @@ const BoxCarsAbout = () => {
   );
 };
 
-export default BoxCarsAbout;
+export default AboutUsPage;
