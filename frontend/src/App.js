@@ -9,7 +9,6 @@ import CreateBlogPage from './components/pages/blog/CreateBlogPage';
 import BlogDetailPage from './components/pages/blog/BlogDetailPage';
 import AboutUsPage from './components/pages/about/AboutUsPage';
 import ContactUsPage from './components/pages/contact/ContactUsPage';
-// import NewsDetailPage from './components/pages/blog/NewsDetailPage';
 
 function App() {
   return (  
@@ -35,9 +34,6 @@ function App() {
           <Route path="/blog" element={<BlogListPage />} />
           <Route path="/blog/create" element={<CreateBlogPage />} />
           <Route path="/blog/:blogId" element={<BlogDetailPage />} />
-
-          {/* <Route path="/news" element={<BlogListPage />} />
-          <Route path="/news/:newsId" element={<NewsDetailPage />} /> */}
                     
           {/* Fallback route */}
           <Route path="*" element={<AuthPage />} />
