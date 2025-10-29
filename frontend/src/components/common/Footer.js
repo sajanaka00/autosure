@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Facebook, Twitter, Instagram, Linkedin, ChevronUp } from 'lucide-react';
+import Apple from '../../assets/images/vectors/apple.png'
+import PlayStore from '../../assets/images/vectors/google-play.png'
 import '../../styles/footer.css';
 
 const Footer = () => {
@@ -118,9 +120,7 @@ const Footer = () => {
               <div className="boxcar-footer-app-buttons">
                 {/* App Store Button */}
                 <a href="#" className="boxcar-footer-app-button">
-                  <div className="boxcar-footer-app-icon">
-                    📱
-                  </div>
+                  <img src={Apple} alt="" className="boxcar-footer-app-icon" />
                   <div className="boxcar-footer-app-text">
                     <div className="boxcar-footer-app-subtitle">Download on the</div>
                     <div className="boxcar-footer-app-title">App Store</div>
@@ -129,9 +129,7 @@ const Footer = () => {
 
                 {/* Google Play Button */}
                 <a href="#" className="boxcar-footer-app-button">
-                  <div className="boxcar-footer-app-icon">
-                    📱
-                  </div>
+                  <img src={PlayStore} alt="" className="boxcar-footer-app-icon" />
                   <div className="boxcar-footer-app-text">
                     <div className="boxcar-footer-app-subtitle">Get it on</div>
                     <div className="boxcar-footer-app-title">Google Play</div>
