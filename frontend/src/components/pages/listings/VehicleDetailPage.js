@@ -38,7 +38,7 @@ import CylinderImg from '../../../assets/images/vectors/cylinder.png'
 import ColorImg from '../../../assets/images/vectors/color.png'
 import VINImg from '../../../assets/images/vectors/vin.png'
 
-import DealerImg from '../../../assets/images/vectors/dealer.png'
+import DealerImg from '../../../assets/images/avatars/avatar4.jpg'
 import Location from '../../../assets/images/vectors/location.png'
 import Phone from '../../../assets/images/vectors/phone.png'
 
