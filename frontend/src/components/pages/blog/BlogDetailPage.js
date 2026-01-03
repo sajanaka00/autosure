@@ -1,14 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../../styles/blog-detail.css';
 import Navbar from '../../common/Navbar';
 import Footer from '../../common/Footer';
 
-import CarImg from '../../../assets/images/cars/bmw-series5_1.jpg'
-import CarImg2 from '../../../assets/images/cars/bmw-series5_2.jpg'
-import AdminAvatar from '../../../assets/images/avatars/avatar1.jpg'
-import User1Avatar from '../../../assets/images/avatars/avatar2.jpg'
-import User2Avatar from '../../../assets/images/avatars/avatar3.jpg'
-import User3Avatar from '../../../assets/images/avatars/avatar4.jpg'
+import Facebook from '../../../assets/images/vectors/facebook.png'
+import Instagram from '../../../assets/images/vectors/instagram.png'
+import Twitter from '../../../assets/images/vectors/twitter.png'
+import Pinterest from '../../../assets/images/vectors/pinterest.png'
 
 // Reusable Components
 const Avatar = ({ src, alt, size = 40 }) => (
@@ -19,8 +17,8 @@ const Avatar = ({ src, alt, size = 40 }) => (
   />
 );
 
-const Badge = ({ children, className = '' }) => (
-  <div className={`bp-tag ${className}`}>
+const Badge = ({ children }) => (
+  <div className="bp-tag">
     {children}
   </div>
 );
@@ -34,8 +32,8 @@ const ListItem = ({ children, icon = '✓' }) => (
   </div>
 );
 
-const LearningList = ({ items, className = '' }) => (
-  <div className={`bp-l-list ${className}`}>
+const LearningList = ({ items }) => (
+  <div className="bp-l-list">
     {items.map((item, index) => (
       <ListItem key={index}>{item}</ListItem>
     ))}
@@ -56,12 +54,6 @@ const RequirementItem = ({ children }) => (
   </div>
 );
 
-const SocialButton = ({ icon, href = "#" }) => (
-  <a href={href} className="bp-s-btn">
-    <span className="bp-s-icon">{icon}</span>
-  </a>
-);
-
 const TagButton = ({ children }) => (
   <button className="bp-t-btn">{children}</button>
 );
@@ -74,7 +66,7 @@ const Comment = ({ avatar, name, date, content, onReply }) => (
     <div className="bp-c-content">
       <div className="bp-c-header">
         <h4 className="bp-c-author">{name}</h4>
-        <time className="bp-c-date">{date}</time>
+        <time className="bp-c-date">{new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
         <button className="bp-c-reply" onClick={onReply}>Reply</button>
       </div>
       <p className="bp-c-text">{content}</p>
@@ -82,20 +74,23 @@ const Comment = ({ avatar, name, date, content, onReply }) => (
   </div>
 );
 
-const FormInput = ({ label, placeholder, type = "text", required = false }) => (
+const FormInput = ({ label, placeholder, type = "text", required = false, name, value, onChange }) => (
   <div className="bp-input">
     <input 
       type={type}
+      name={name}
       className="bp-field"
       placeholder={placeholder}
       required={required}
+      value={value}
+      onChange={onChange}
     />
     <label className="bp-label">{label}</label>
   </div>
 );
 
-const NavigationPost = ({ direction, title, href = "#", icon }) => (
-  <a href={href} className={`bp-nav-item bp-nav-${direction === 'previous' ? 'prev' : 'next'}`}>
+const NavigationPost = ({ direction, title, slug, icon }) => (
+  <a href={`/blog/${slug}`} className={`bp-nav-item bp-nav-${direction === 'previous' ? 'prev' : 'next'}`}>
     {direction === 'previous' && <span className="bp-nav-icon">{icon}</span>}
     <div className="bp-nav-content">
       <span className="bp-nav-label">{direction === 'previous' ? 'Previous Post' : 'Next Post'}</span>
@@ -107,60 +102,175 @@ const NavigationPost = ({ direction, title, href = "#", icon }) => (
 
 // Main Component
 const BlogPost = () => {
-  const leftColumnItems = [
-    "Powerful inline-6 and V8 engine options.",
-    "Advanced air suspension system.",
-    "Executive-level interior luxury.",
-    "Cutting-edge BMW Driving Assistant Pro.",
-    "Elegant and sophisticated exterior design."
-  ];
+  // Extract ID from URL
+  const getBlogIdFromUrl = () => {
+    const path = window.location.pathname;
+    const parts = path.split('/');
+    return parts[parts.length - 1]; // Get the last part of the URL
+  };
 
-  const rightColumnItems = [
-    "BMW Live Cockpit Professional.",
-    "Harman Kardon premium sound system.",
-    "Four-zone automatic climate control.",
-    "Gesture control and voice commands.",
-    "Wireless smartphone integration."
-  ];
+  const [blogId] = useState(getBlogIdFromUrl());
+  const [blog, setBlog] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [commentForm, setCommentForm] = useState({
+    author: '',
+    email: '',
+    website: '',
+    content: ''
+  });
+  const [commentSubmitting, setCommentSubmitting] = useState(false);
+  const [commentSuccess, setCommentSuccess] = useState(false);
 
-  const requirements = [
-    "The BMW 5 Series Sedan requires regular maintenance intervals every 10,000 miles or 12 months to maintain its sophisticated performance and reliability.",
-    "Premium fuel (91+ octane) is strongly recommended for optimal engine performance and fuel efficiency.",
-    "Professional service and genuine BMW parts are essential for maintaining warranty coverage and vehicle integrity."
-  ];
+  useEffect(() => {
+    fetchBlogPost();
+  }, [blogId]);
 
-  const comments = [
-    {
-      id: 1,
-      avatar: User1Avatar,
-      name: "David Mueller",
-      date: "January 15, 2025",
-      content: "The 5 Series continues to set the benchmark for executive sedans. The perfect balance of luxury, performance, and technology makes it an outstanding choice."
-    },
-    {
-      id: 2,
-      avatar: User2Avatar,
-      name: "Jennifer Liu",
-      date: "January 12, 2025",
-      content: "Just purchased the 540i xDrive and couldn't be happier. The inline-6 engine is smooth and powerful, while the interior is absolutely luxurious."
-    },
-    {
-      id: 3,
-      avatar: User3Avatar,
-      name: "Carlos Mendez",
-      date: "January 10, 2025",
-      content: "Excellent review! The 5 Series has always been the gold standard in this segment, and this generation raises the bar even higher."
+  const fetchBlogPost = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`http://localhost:3001/api/blogs/${blogId}`);
+      
+      // Check if response is ok
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      // Check content type before parsing
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Response is not JSON. The API endpoint may not exist or is returning HTML.");
+      }
+      
+      const data = await response.json();
+
+      if (data.success) {
+        setBlog(data.data);
+      } else {
+        setError(data.message || 'Blog post not found');
+      }
+    } catch (err) {
+      setError(`Error loading blog post: ${err.message}`);
+      console.error('Error fetching blog:', err);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  const handleCommentInputChange = (e) => {
+    const { name, value } = e.target;
+    setCommentForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    setCommentSubmitting(true);
+    setCommentSuccess(false);
+
+    try {
+      const response = await fetch(`/api/blogs/${blog._id}/comments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(commentForm)
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setCommentSuccess(true);
+        setCommentForm({
+          author: '',
+          email: '',
+          website: '',
+          content: ''
+        });
+        // Optionally refresh blog data to show new comment count
+        setTimeout(() => setCommentSuccess(false), 5000);
+      } else {
+        alert('Error submitting comment: ' + (data.message || 'Please try again'));
+      }
+    } catch (err) {
+      console.error('Error submitting comment:', err);
+      alert('Error submitting comment. Please try again.');
+    } finally {
+      setCommentSubmitting(false);
+    }
+  };
 
   const handleReply = (commentId) => {
     console.log(`Replying to comment ${commentId}`);
+    // You can implement reply functionality here
   };
 
-  const handleCommentSubmit = (e) => {
-    e.preventDefault();
-    console.log('Comment submitted');
+  const handleLike = async () => {
+    try {
+      const response = await fetch(`/api/blogs/${blog._id}/like`, {
+        method: 'PUT'
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        setBlog(prev => ({
+          ...prev,
+          likes: data.data.likes
+        }));
+      }
+    } catch (err) {
+      console.error('Error liking post:', err);
+    }
   };
+
+  const handleShare = async (platform) => {
+    try {
+      const response = await fetch(`/api/blogs/${blog._id}/share`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ platform })
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        setBlog(prev => ({
+          ...prev,
+          socialShares: data.data.socialShares
+        }));
+      }
+    } catch (err) {
+      console.error('Error tracking share:', err);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div>
+        <Navbar />
+        <div style={{ padding: '50px', textAlign: 'center' }}>
+          <p>Loading blog post...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error || !blog) {
+    return (
+      <div>
+        <Navbar />
+        <div style={{ padding: '50px', textAlign: 'center' }}>
+          <h2>Blog Post Not Found</h2>
+          <p>{error || 'The blog post you are looking for does not exist.'}</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <article className="bp-post">
@@ -168,33 +278,40 @@ const BlogPost = () => {
       {/* Header */}
       <header className="bp-hdr">
         <h1 className="bp-title">
-          BMW 5 Series Sedan: The Ultimate Executive Driving Experience
+          {blog.title}
         </h1>
         
         <div className="bp-meta">
           <div className="bp-author">
             <Avatar 
-              src={AdminAvatar}
-              alt="Admin avatar"
+              src={blog.author.avatar || '/default-avatar.jpg'}
+              alt={`${blog.author.name} avatar`}
               size={40}
             />
-            <span className="bp-author-name">BMW Enthusiast</span>
+            <span className="bp-author-name">{blog.author.name}</span>
           </div>
           
           <div className="bp-tags">
-            <Badge className="bp-tag">Executive</Badge>
-            <Badge className="bp-tag">Luxury</Badge>
+            {blog.tags && blog.tags.slice(0, 2).map((tag, index) => (
+              <Badge key={index}>{tag}</Badge>
+            ))}
           </div>
           
-          <time className="bp-date">January 15, 2025</time>
+          <time className="bp-date">
+            {new Date(blog.createdAt).toLocaleDateString('en-US', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            })}
+          </time>
         </div>
       </header>
 
       {/* Featured Image */}
       <div className="bp-hero">
         <img 
-          src={CarImg}
-          alt="BMW 2 Series Gran Coupé"
+          src={blog.images.hero}
+          alt={blog.images.alt || blog.title}
           className="bp-hero-img"
         />
       </div>
@@ -202,137 +319,170 @@ const BlogPost = () => {
       {/* Content */}
       <div className="bp-content">
         <p className="bp-intro">
-          The BMW 5 Series Sedan represents the pinnacle of executive luxury and driving dynamics. 
-          As BMW's flagship business sedan, it seamlessly combines cutting-edge technology, refined 
-          comfort, and exceptional performance to create the ultimate driving machine for discerning 
-          professionals. The{' '}
-          <a href="#" className="bp-link">seventh generation</a>{' '}
-          sets new standards in sophistication and innovation.
+          {blog.content.intro}
         </p>
 
         <p className="bp-body">
-          Under the sculpted hood, the 5 Series offers a comprehensive range of powertrains, from the 
-          efficient 530i with its turbocharged 2.0-liter four-cylinder producing 248 horsepower, to the 
-          commanding M550i xDrive with its twin-turbocharged 4.4-liter V8 delivering 523 horsepower. 
-          The intelligent xDrive all-wheel drive system and adaptive air suspension ensure optimal 
-          traction and ride quality in any condition. Inside, the cabin exemplifies German luxury 
-          craftsmanship with premium Nappa leather, real wood trim, and the latest BMW Live Cockpit 
-          Professional, creating an environment that elevates every journey into a first-class experience.
+          {blog.content.body}
         </p>
 
-        <Quote 
-          text="The BMW 5 Series doesn't just transport you to your destination—it transforms the journey into an experience of refined luxury and dynamic performance that defines executive motoring excellence."
-          author="automotive expert, Automotive News"
-        />
+        {blog.content.quote && blog.content.quote.text && (
+          <Quote 
+            text={blog.content.quote.text}
+            author={blog.content.quote.author}
+          />
+        )}
 
         {/* Learning Section */}
-        <section className="bp-learn">
-          <h2 className="bp-learn-title">Key Features & Benefits</h2>
-          
-          <div className="bp-learn-grid">
-            <LearningList 
-              items={leftColumnItems}
-              className="bp-learn-col bp-learn-left"
-            />
-            <LearningList 
-              items={rightColumnItems}
-              className="bp-learn-col bp-learn-right"
-            />
-          </div>
-        </section>
+        {(blog.keyFeatures?.leftColumn?.length > 0 || blog.keyFeatures?.rightColumn?.length > 0) && (
+          <section className="bp-learn">
+            <h2 className="bp-learn-title">Key Features & Benefits</h2>
+            
+            <div className="bp-learn-grid">
+              {blog.keyFeatures.leftColumn && (
+                <LearningList items={blog.keyFeatures.leftColumn} />
+              )}
+              {blog.keyFeatures.rightColumn && (
+                <LearningList items={blog.keyFeatures.rightColumn} />
+              )}
+            </div>
+          </section>
+        )}
 
         {/* Requirements Section */}
-        <section className="bp-req">
-          <h2 className="bp-req-title">Ownership Considerations</h2>
-          <div className="bp-req-img-wrap">
-            <img src={CarImg2} alt="BMW 2 Series interior details" className="bp-req-img" />
-          </div>
-          <div className="bp-req-list">
-            {requirements.map((requirement, index) => (
-              <RequirementItem key={index}>{requirement}</RequirementItem>
-            ))}
-          </div>
-        </section>
+        {blog.requirements && blog.requirements.length > 0 && (
+          <section className="bp-req">
+            <h2 className="bp-req-title">Ownership Considerations</h2>
+            {blog.images.content && (
+              <div className="bp-req-img-wrap">
+                <img src={blog.images.content} alt={blog.images.alt || 'Content image'} className="bp-req-img" />
+              </div>
+            )}
+            <div className="bp-req-list">
+              {blog.requirements.map((requirement, index) => (
+                <RequirementItem key={index}>{requirement}</RequirementItem>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Social Share Section */}
         <section className="bp-share">
           <div className="bp-share-wrap">
             <span className="bp-share-label"><strong>Share this post</strong></span>
             <div className="bp-share-btns">
-              <SocialButton icon="📘" href="#facebook" />
-              <SocialButton icon="🐦" href="#twitter" />
-              <SocialButton icon="📧" href="#email" />
-              <SocialButton icon="📌" href="#pinterest" />
+              <img src={Facebook} alt="Facebook" onClick={() => handleShare('facebook')} style={{cursor: 'pointer'}} />
+              <img src={Instagram} alt="Instagram" style={{cursor: 'pointer'}} />
+              <img src={Twitter} alt="Twitter" onClick={() => handleShare('twitter')} style={{cursor: 'pointer'}} />
+              <img src={Pinterest} alt="Pinterest" onClick={() => handleShare('pinterest')} style={{cursor: 'pointer'}} />
             </div>
             <div className="bp-share-tags">
-              <TagButton>Executive</TagButton>
-              <TagButton>Technology</TagButton>
-              <TagButton>Luxury</TagButton>
+              {blog.tags && blog.tags.map((tag, index) => (
+                <TagButton key={index}>{tag}</TagButton>
+              ))}
             </div>
           </div>
         </section>
 
         {/* Author Bio Section */}
-        <section className="bp-bio">
-          <div className="bp-bio-av">
-            <Avatar src={AdminAvatar} alt="BMW Enthusiast" size={70} />
-          </div>
-          <div className="bp-bio-content">
-            <h3 className="bp-bio-name">BMW Enthusiast</h3>
-            <p className="bp-bio-desc">
-              With over a decade of experience in automotive journalism and a passion for German engineering, 
-              I specialize in providing comprehensive reviews and insights into BMW's latest innovations. 
-              From track testing to daily driving experiences, I bring you authentic perspectives on what 
-              makes each BMW model unique and exceptional in today's competitive automotive landscape.
-            </p>
-          </div>
-        </section>
+        {blog.author.bio && (
+          <section className="bp-bio">
+            <div className="bp-bio-av">
+              <Avatar src={blog.author.avatar || '/default-avatar.jpg'} alt={blog.author.name} size={70} />
+            </div>
+            <div className="bp-bio-content">
+              <h3 className="bp-bio-name">{blog.author.name}</h3>
+              <p className="bp-bio-desc">
+                {blog.author.bio}
+              </p>
+            </div>
+          </section>
+        )}
 
         {/* Post Navigation */}
-        <nav className="bp-nav">
-          <NavigationPost 
-            direction="previous"
-            title="BMW X5 M50i: Luxury SUV Performance Redefined"
-            icon="←"
-          />
-          <NavigationPost 
-            direction="next"
-            title="2025 BMW 7 Series: The Flagship Experience"
-            icon="→"
-          />
-        </nav>
+        {(blog.navigation?.previous || blog.navigation?.next) && (
+          <nav className="bp-nav">
+            {blog.navigation.previous && blog.navigation.previous.title && (
+              <NavigationPost 
+                direction="previous"
+                title={blog.navigation.previous.title}
+                slug={blog.navigation.previous.slug}
+                icon="←"
+              />
+            )}
+            {blog.navigation.next && blog.navigation.next.title && (
+              <NavigationPost 
+                direction="next"
+                title={blog.navigation.next.title}
+                slug={blog.navigation.next.slug}
+                icon="→"
+              />
+            )}
+          </nav>
+        )}
 
         {/* Comments Section */}
-        <section className="bp-comments">
-          <h2 className="bp-c-title">3 Comments</h2>
-          <div className="bp-c-list">
-            {comments.map((comment) => (
-              <Comment
-                key={comment.id}
-                avatar={comment.avatar}
-                name={comment.name}
-                date={comment.date}
-                content={comment.content}
-                onReply={() => handleReply(comment.id)}
-              />
-            ))}
-          </div>
-        </section>
+        {blog.approvedComments && blog.approvedComments.length > 0 && (
+          <section className="bp-comments">
+            <h2 className="bp-c-title">{blog.approvedComments.length} Comment{blog.approvedComments.length !== 1 ? 's' : ''}</h2>
+            <div className="bp-c-list">
+              {blog.approvedComments.map((comment) => (
+                <Comment
+                  key={comment._id}
+                  avatar={'/default-avatar.jpg'} // You can add avatar field to comment schema
+                  name={comment.author}
+                  date={comment.createdAt}
+                  content={comment.content}
+                  onReply={() => handleReply(comment._id)}
+                />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Comment Form */}
         <section className="bp-form-wrap">
           <h2 className="bp-form-title">Leave a Comment</h2>
+          {commentSuccess && (
+            <div style={{ padding: '15px', marginBottom: '20px', backgroundColor: '#d4edda', color: '#155724', borderRadius: '5px' }}>
+              Comment submitted successfully! It will be visible after approval.
+            </div>
+          )}
           <form className="bp-form" onSubmit={handleCommentSubmit}>
             <div className="bp-form-row">
-              <FormInput label="Name" placeholder="Your Name" required />
-              <FormInput label="Email" placeholder="Your Email" type="email" required />
+              <FormInput 
+                label="Name" 
+                placeholder="Your Name" 
+                name="author"
+                value={commentForm.author}
+                onChange={handleCommentInputChange}
+                required 
+              />
+              <FormInput 
+                label="Email" 
+                placeholder="Your Email" 
+                type="email" 
+                name="email"
+                value={commentForm.email}
+                onChange={handleCommentInputChange}
+                required 
+              />
             </div>
-            <FormInput label="Website" placeholder="Your Website" />
+            <FormInput 
+              label="Website" 
+              placeholder="Your Website" 
+              name="website"
+              value={commentForm.website}
+              onChange={handleCommentInputChange}
+            />
             
             <div className="bp-textarea-wrap">
               <textarea 
                 className="bp-textarea"
+                name="content"
                 placeholder="Write your comment here..."
+                value={commentForm.content}
+                onChange={handleCommentInputChange}
                 required
               ></textarea>
               <label className="bp-textarea-label">Comment</label>
@@ -349,8 +499,8 @@ const BlogPost = () => {
               </label>
             </div>
             
-            <button type="submit" className="bp-submit">
-              Submit Comment
+            <button type="submit" className="bp-submit" disabled={commentSubmitting}>
+              {commentSubmitting ? 'Submitting...' : 'Submit Comment'}
             </button>
           </form>
         </section>

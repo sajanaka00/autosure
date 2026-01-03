@@ -206,7 +206,6 @@ const blogSchema = new mongoose.Schema({
 // Index for better search performance
 blogSchema.index({ title: 'text', 'content.intro': 'text', 'content.body': 'text', excerpt: 'text' });
 blogSchema.index({ category: 1, published: 1 });
-blogSchema.index({ slug: 1 }, { unique: true });
 blogSchema.index({ featured: 1, published: 1 });
 blogSchema.index({ tags: 1 });
 blogSchema.index({ createdAt: -1 });
