@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Eye, EyeOff, User, Mail, Lock, Phone, AlertCircle } from 'lucide-react';
 import { api } from '../../services/api';
 import { tokenManager } from '../../utils/tokenManager';
-import signupImage from '../../assets/images/cars/bmwx1.jpg'; // Signup image
+import signupImage from '../../assets/images/signup-bg.jpg'; // Signup image
 import '../../styles/signupForm.css';
 
 export default function SignupForm({ onSignup, onSwitchToLogin }) {
@@ -22,55 +22,55 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.firstName.trim()) {
       newErrors.firstName = 'First name is required';
     }
-    
+
     if (!formData.lastName.trim()) {
       newErrors.lastName = 'Last name is required';
     }
-    
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Email is invalid';
     }
-    
+
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
-    
+
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     setIsLoading(true);
     setApiError('');
-    
+
     console.log('Attempting signup with:', { email: formData.email });
-    
+
     try {
       // Remove confirmPassword before sending to backend
       const { confirmPassword, ...userData } = formData;
       const response = await api.register(userData);
-      
+
       console.log('Signup response:', response);
-      
+
       tokenManager.setToken(response.token);
       tokenManager.setUser(response.user);
-      
+
       if (onSignup) {
         onSignup(response.user);
       }
@@ -88,7 +88,7 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
       ...prev,
       [name]: value
     }));
-    
+
     // Clear specific field error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -96,7 +96,7 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
         [name]: ''
       }));
     }
-    
+
     // Clear API error when user makes changes
     if (apiError) setApiError('');
   };
@@ -106,8 +106,8 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
       <div className="signup-auth-container">
         <div className="signup-auth-form">
           <div className="signup-auth-header">
-            <h2 className="signup-auth-title">Create Your Account</h2>
-            <p className="signup-subtitle">Sign up to get started</p>
+            <h2 className="signup-auth-title">Create Account</h2>
+            <p className="signup-subtitle">Join us to explore the best auto deals</p>
           </div>
 
           {apiError && (
@@ -120,11 +120,8 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
           <div className="signup-auth-form-fields">
             <div className="signup-auth-field-row">
               <div className="signup-auth-field-group">
-                <label className="signup-auth-field-label" htmlFor="firstName">
-                  First Name
-                </label>
+                <label className="signup-auth-field-label" htmlFor="firstName">First Name</label>
                 <div className="signup-auth-input-wrapper">
-                  <User className="signup-auth-input-icon" />
                   <input
                     type="text"
                     id="firstName"
@@ -132,20 +129,16 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
                     value={formData.firstName}
                     onChange={handleInputChange}
                     className={`signup-auth-form-input ${errors.firstName ? 'signup-auth-input-error' : ''}`}
-                    placeholder="First name"
+                    placeholder="John"
                   />
+                  <User className="signup-auth-input-icon" />
                 </div>
-                {errors.firstName && (
-                  <p className="signup-auth-field-error-text">{errors.firstName}</p>
-                )}
+                {errors.firstName && <p className="signup-auth-field-error-text">{errors.firstName}</p>}
               </div>
 
               <div className="signup-auth-field-group">
-                <label className="signup-auth-field-label" htmlFor="lastName">
-                  Last Name
-                </label>
+                <label className="signup-auth-field-label" htmlFor="lastName">Last Name</label>
                 <div className="signup-auth-input-wrapper">
-                  <User className="signup-auth-input-icon" />
                   <input
                     type="text"
                     id="lastName"
@@ -153,22 +146,18 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
                     value={formData.lastName}
                     onChange={handleInputChange}
                     className={`signup-auth-form-input ${errors.lastName ? 'signup-auth-input-error' : ''}`}
-                    placeholder="Last name"
+                    placeholder="Doe"
                   />
+                  <User className="signup-auth-input-icon" />
                 </div>
-                {errors.lastName && (
-                  <p className="signup-auth-field-error-text">{errors.lastName}</p>
-                )}
+                {errors.lastName && <p className="signup-auth-field-error-text">{errors.lastName}</p>}
               </div>
             </div>
 
             <div className="signup-auth-field-row">
               <div className="signup-auth-field-group">
-                <label className="signup-auth-field-label" htmlFor="email">
-                  Email Address
-                </label>
+                <label className="signup-auth-field-label" htmlFor="email">Email</label>
                 <div className="signup-auth-input-wrapper">
-                  <Mail className="signup-auth-input-icon" />
                   <input
                     type="email"
                     id="email"
@@ -176,20 +165,16 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
                     value={formData.email}
                     onChange={handleInputChange}
                     className={`signup-auth-form-input ${errors.email ? 'signup-auth-input-error' : ''}`}
-                    placeholder="Enter your email"
+                    placeholder="name@example.com"
                   />
+                  <Mail className="signup-auth-input-icon" />
                 </div>
-                {errors.email && (
-                  <p className="signup-auth-field-error-text">{errors.email}</p>
-                )}
+                {errors.email && <p className="signup-auth-field-error-text">{errors.email}</p>}
               </div>
 
               <div className="signup-auth-field-group">
-                <label className="signup-auth-field-label" htmlFor="phone">
-                  Phone Number (Optional)
-                </label>
+                <label className="signup-auth-field-label" htmlFor="phone">Phone</label>
                 <div className="signup-auth-input-wrapper">
-                  <Phone className="signup-auth-input-icon" />
                   <input
                     type="tel"
                     id="phone"
@@ -197,47 +182,34 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
                     value={formData.phone}
                     onChange={handleInputChange}
                     className="signup-auth-form-input"
-                    placeholder="Enter your phone number"
+                    placeholder="+1 234 567 890"
                   />
+                  <Phone className="signup-auth-input-icon" />
                 </div>
               </div>
             </div>
 
             <div className="signup-auth-field-row">
               <div className="signup-auth-field-group">
-                <label className="signup-auth-field-label" htmlFor="password">
-                  Password
-                </label>
-                <div className="signup-auth-input-wrapper signup-auth-password-wrapper">
-                  <Lock className="signup-auth-input-icon" />
+                <label className="signup-auth-field-label" htmlFor="password">Password</label>
+                <div className="signup-auth-input-wrapper">
                   <input
                     type={showPassword ? 'text' : 'password'}
                     id="password"
                     name="password"
                     value={formData.password}
                     onChange={handleInputChange}
-                    className={`signup-auth-form-input signup-auth-password-input ${errors.password ? 'signup-auth-input-error' : ''}`}
-                    placeholder="Enter your password"
+                    className={`signup-auth-form-input ${errors.password ? 'signup-auth-input-error' : ''}`}
+                    placeholder="••••••••"
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="signup-auth-password-toggle"
-                  >
-                    {showPassword ? <EyeOff /> : <Eye />}
-                  </button>
+                  <Lock className="signup-auth-input-icon" />
                 </div>
-                {errors.password && (
-                  <p className="signup-auth-field-error-text">{errors.password}</p>
-                )}
+                {errors.password && <p className="signup-auth-field-error-text">{errors.password}</p>}
               </div>
 
               <div className="signup-auth-field-group">
-                <label className="signup-auth-field-label" htmlFor="confirmPassword">
-                  Confirm Password
-                </label>
+                <label className="signup-auth-field-label" htmlFor="confirmPassword">Confirm</label>
                 <div className="signup-auth-input-wrapper">
-                  <Lock className="signup-auth-input-icon" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     id="confirmPassword"
@@ -250,17 +222,23 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
                       }
                     }}
                     className={`signup-auth-form-input ${errors.confirmPassword ? 'signup-auth-input-error' : ''}`}
-                    placeholder="Confirm your password"
+                    placeholder="••••••••"
                   />
+                  <Lock className="signup-auth-input-icon" />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="signup-auth-password-toggle"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
                 </div>
-                {errors.confirmPassword && (
-                  <p className="signup-auth-field-error-text">{errors.confirmPassword}</p>
-                )}
+                {errors.confirmPassword && <p className="signup-auth-field-error-text">{errors.confirmPassword}</p>}
               </div>
             </div>
 
             <div className="signup-auth-field-group">
-              <label className="signup-auth-field-label">Role</label>
+              <label className="signup-auth-field-label">I am a</label>
               <div className="signup-auth-radio-group">
                 <label className="signup-auth-radio-option">
                   <input
@@ -288,7 +266,7 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
                 </label>
               </div>
             </div>
-            
+
             <button
               type="button"
               onClick={handleSubmit}
@@ -314,9 +292,9 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
         </div>
 
         <div className="signup-auth-image-section">
-          <img 
-            src={signupImage} 
-            alt="Signup illustration" 
+          <img
+            src={signupImage}
+            alt="Signup illustration"
             className="signup-auth-image"
           />
         </div>
