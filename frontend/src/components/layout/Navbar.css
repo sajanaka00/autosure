@@ -219,6 +219,8 @@
 
 /* Mobile Menu */
 .mobile-menu {
+  display: none;
+  /* Default hidden on desktop */
   position: fixed;
   top: 80px;
   left: 0;
@@ -267,6 +269,11 @@
   }
 
   .mobile-menu-toggle {
+    display: block;
+  }
+
+  /* Show mobile menu when screen is small (but still depends on .active class via JS) */
+  .mobile-menu {
     display: block;
   }
 }

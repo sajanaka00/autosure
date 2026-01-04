@@ -28,7 +28,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
+  background:
     radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
     radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 40% 80%, rgba(102, 126, 234, 0.2) 0%, transparent 50%);
@@ -45,8 +45,14 @@ body {
   transition: all 0.3s ease;
 }
 
+.dashboard-main.full-width {
+  padding: 0;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
 /* Content Area Styling */
-.dashboard-main > * {
+.dashboard-main>* {
   animation: slideIn 0.5s ease-out;
 }
 
@@ -55,6 +61,7 @@ body {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -66,17 +73,29 @@ body {
   .dashboard-main {
     padding: 1.5rem;
   }
+
+  .dashboard-main.full-width {
+    padding: 0;
+  }
 }
 
 @media (max-width: 768px) {
   .dashboard-main {
     padding: 1rem;
   }
+
+  .dashboard-main.full-width {
+    padding: 0;
+  }
 }
 
 @media (max-width: 480px) {
   .dashboard-main {
     padding: 0.5rem;
+  }
+
+  .dashboard-main.full-width {
+    padding: 0;
   }
 }
 
@@ -121,8 +140,13 @@ body {
 }
 
 @keyframes spin {
-  0% { transform: translate(-50%, -50%) rotate(0deg); }
-  100% { transform: translate(-50%, -50%) rotate(360deg); }
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 /* Error State */
@@ -179,14 +203,19 @@ body {
   .dashboard-container {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   }
-  
+
   .dashboard-main {
     padding-top: 1rem;
+  }
+
+  .dashboard-main.full-width {
+    padding-top: 0;
   }
 }
 
 /* High DPI Displays */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
   .dashboard-container::before {
     background-size: 100% 100%;
   }
@@ -197,9 +226,9 @@ body {
   .dashboard-container {
     background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
   }
-  
+
   .dashboard-container::before {
-    background: 
+    background:
       radial-gradient(circle at 20% 50%, rgba(66, 153, 225, 0.2) 0%, transparent 50%),
       radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
       radial-gradient(circle at 40% 80%, rgba(102, 126, 234, 0.1) 0%, transparent 50%);
@@ -208,12 +237,13 @@ body {
 
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
-  .dashboard-main > *,
+
+  .dashboard-main>*,
   .dashboard-main [class*="container"] {
     animation: none;
     transition: none;
   }
-  
+
   .dashboard-main [class*="container"]:hover {
     transform: none;
   }
@@ -224,11 +254,11 @@ body {
   .dashboard-container {
     background: white;
   }
-  
+
   .dashboard-container::before {
     display: none;
   }
-  
+
   .dashboard-main {
     padding: 0;
   }

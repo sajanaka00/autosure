@@ -64,11 +64,14 @@ export default function AuthPage() {
     );
   }
 
+  // FIXED: Return Dashboard directly without the styled wrapper
+  if (currentView === 'dashboard') {
+    return <Dashboard user={user} onLogout={handleLogout} />;
+  }
+
   return (
     <div className="auth-page-root">
-      {currentView === 'dashboard' ? (
-        <Dashboard user={user} onLogout={handleLogout} />
-      ) : currentView === 'login' ? (
+      {currentView === 'login' ? (
         <LoginForm onLogin={handleLogin} onSwitchToSignup={switchToSignup} />
       ) : (
         <SignupForm onSignup={handleSignup} onSwitchToLogin={switchToLogin} />

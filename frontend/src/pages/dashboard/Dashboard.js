@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Navbar from '../../components/layout/Navbar';
 import Home from './Home';
 import BrowseCars from '../listings/BrowseCars';
+import './Dashboard.css'; // Ensure CSS is imported
 
 export default function Dashboard({ user, onLogout }) {
   const [activeTab, setActiveTab] = useState('home');
@@ -26,7 +27,7 @@ export default function Dashboard({ user, onLogout }) {
         onLogout={onLogout}
       />
 
-      <main className="dashboard-main">
+      <main className={`dashboard-main ${activeTab === 'home' ? 'full-width' : ''}`}>
         {renderContent()}
       </main>
     </div>
