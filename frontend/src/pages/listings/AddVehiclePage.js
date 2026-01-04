@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Upload, X, Star, Image as ImageIcon, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../../../services/api';
-import '../../../styles/add-vehicle.css';
-import Navbar from '../../common/Navbar';
-import Footer from '../../common/Footer';
+import { api } from '../../services/api';
+import './AddVehiclePage.css';
+import Navbar from '../../components/layout/Navbar';
+import Footer from '../../components/layout/Footer';
 
 export default function AddVehiclePage({ user }) {
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState({
     // Basic Information
     make: '',
@@ -16,7 +16,7 @@ export default function AddVehiclePage({ user }) {
     year: '',
     condition: '',
     bodyType: '',
-    
+
     // Technical Specifications
     engineSize: '',
     engineType: '',
@@ -26,7 +26,7 @@ export default function AddVehiclePage({ user }) {
     cylinders: '',
     doors: '',
     seatingCapacity: '',
-    
+
     // Performance & Condition
     mileage: '',
     avgFuelConsumption: '',
@@ -34,22 +34,22 @@ export default function AddVehiclePage({ user }) {
     vehicleNumber: '',
     vin: '',
     color: '',
-    
+
     // Pricing
     price: '',
     originalPrice: '',
     downPayment: '',
-    
+
     // Location & Contact
     dealerName: '',
     dealerAddress: '',
     dealerPhone: '',
-    
+
     // Description & Features
     title: '',
     description: '',
     features: [],
-    
+
     // Additional
     category: '',
     badge: '',
@@ -281,7 +281,7 @@ export default function AddVehiclePage({ user }) {
 
       if (data.success) {
         setSuccess('Vehicle added successfully!');
-        
+
         // Reset form
         setFormData({
           make: '', model: '', year: '', condition: '', bodyType: '',
@@ -319,7 +319,7 @@ export default function AddVehiclePage({ user }) {
   const renderStepIndicator = () => {
     const stepNames = ['Basic Info', 'Specifications', 'Details', 'Images', 'Review'];
     const progress = (activeStep / 5) * 100;
-    
+
     return (
       <div className="add-car-step-indicator">
         <div className="add-car-progress-header">
@@ -330,22 +330,21 @@ export default function AddVehiclePage({ user }) {
             Step {activeStep} of 5
           </div>
         </div>
-        
+
         <div className="add-car-progress-container">
-          <div 
-            className="add-car-progress-bar" 
+          <div
+            className="add-car-progress-bar"
             style={{ width: `${progress}%` }}
           />
         </div>
-        
+
         <ul className="add-car-steps-list">
           {stepNames.map((name, index) => (
-            <li 
-              key={index} 
-              className={`add-car-step-item ${
-                index + 1 < activeStep ? 'completed' : 
+            <li
+              key={index}
+              className={`add-car-step-item ${index + 1 < activeStep ? 'completed' :
                 index + 1 === activeStep ? 'active' : ''
-              }`}
+                }`}
             >
               {name}
             </li>
@@ -361,7 +360,7 @@ export default function AddVehiclePage({ user }) {
         return (
           <div className="add-car-form-step">
             <h3 className="add-car-step-title">Basic Information</h3>
-            
+
             <div className="add-car-form-grid">
               <div className="add-car-form-group">
                 <label className="add-car-form-label">Make *</label>
@@ -466,7 +465,7 @@ export default function AddVehiclePage({ user }) {
         return (
           <div className="add-car-form-step">
             <h3 className="add-car-step-title">Technical Specifications</h3>
-            
+
             <div className="add-car-form-grid">
               <div className="add-car-form-group">
                 <label className="add-car-form-label">Engine Size *</label>
@@ -622,7 +621,7 @@ export default function AddVehiclePage({ user }) {
         return (
           <div className="add-car-form-step">
             <h3 className="add-car-step-title">Details & Pricing</h3>
-            
+
             <div className="add-car-form-group">
               <label className="add-car-form-label">Vehicle Title *</label>
               <input
@@ -719,7 +718,7 @@ export default function AddVehiclePage({ user }) {
 
             <div className="add-car-form-section">
               <h4 className="add-car-section-subtitle">Dealer Information</h4>
-              
+
               <div className="add-car-form-group">
                 <label className="add-car-form-label">Dealer Name</label>
                 <input
@@ -765,7 +764,7 @@ export default function AddVehiclePage({ user }) {
         return (
           <div className="add-car-form-step">
             <h3 className="add-car-step-title">Vehicle Images</h3>
-            
+
             <div className="add-car-upload-section">
               <div className="add-car-upload-area">
                 <input
@@ -793,7 +792,7 @@ export default function AddVehiclePage({ user }) {
                 <h4 className="add-car-preview-title">
                   Image Previews ({imagePreviews.length}/5)
                 </h4>
-                
+
                 <div className="add-car-preview-grid">
                   {imagePreviews.map((preview, index) => (
                     <div key={index} className="add-car-preview-item">
@@ -803,14 +802,14 @@ export default function AddVehiclePage({ user }) {
                           alt={`Preview ${index + 1}`}
                           className="add-car-preview-image"
                         />
-                        
+
                         {featuredImageIndex === index && (
                           <div className="add-car-featured-badge">
                             <Star className="add-car-featured-icon" />
                             <span>Featured</span>
                           </div>
                         )}
-                        
+
                         <button
                           type="button"
                           onClick={() => removeImage(index)}
@@ -820,7 +819,7 @@ export default function AddVehiclePage({ user }) {
                           <X className="add-car-remove-icon" />
                         </button>
                       </div>
-                      
+
                       <div className="add-car-preview-controls">
                         <input
                           type="text"
@@ -829,7 +828,7 @@ export default function AddVehiclePage({ user }) {
                           onChange={(e) => updateImageCaption(index, e.target.value)}
                           className="add-car-caption-input"
                         />
-                        
+
                         <button
                           type="button"
                           onClick={() => setFeaturedImage(index)}
@@ -848,7 +847,7 @@ export default function AddVehiclePage({ user }) {
             {/* Features Section */}
             <div className="add-car-features-section">
               <h4 className="add-car-section-subtitle">Vehicle Features</h4>
-              
+
               <div className="add-car-features-grid">
                 {commonFeatures.map(feature => (
                   <div key={feature} className="add-car-feature-item">
@@ -912,57 +911,57 @@ export default function AddVehiclePage({ user }) {
         return (
           <div className="add-car-form-step">
             <h3 className="add-car-step-title">Review & Submit</h3>
-            
+
             <div className="add-car-review-section">
               <div className="add-car-review-card">
                 <h4 className="add-car-review-title">Vehicle Summary</h4>
-                
+
                 <div className="add-car-review-content">
                   <div className="add-car-review-row">
                     <span className="add-car-review-label">Title:</span>
                     <span className="add-car-review-value">{formData.title || 'Not specified'}</span>
                   </div>
-                  
+
                   <div className="add-car-review-row">
                     <span className="add-car-review-label">Vehicle:</span>
                     <span className="add-car-review-value">{formData.year} {formData.make} {formData.model}</span>
                   </div>
-                  
+
                   <div className="add-car-review-row">
                     <span className="add-car-review-label">Condition:</span>
                     <span className="add-car-review-value">{formData.condition}</span>
                   </div>
-                  
+
                   <div className="add-car-review-row">
                     <span className="add-car-review-label">Body Type:</span>
                     <span className="add-car-review-value">{formData.bodyType}</span>
                   </div>
-                  
+
                   <div className="add-car-review-row">
                     <span className="add-car-review-label">Engine:</span>
                     <span className="add-car-review-value">{formData.engineSize || 'Not specified'}</span>
                   </div>
-                  
+
                   <div className="add-car-review-row">
                     <span className="add-car-review-label">Transmission:</span>
                     <span className="add-car-review-value">{formData.transmission}</span>
                   </div>
-                  
+
                   <div className="add-car-review-row">
                     <span className="add-car-review-label">Fuel Type:</span>
                     <span className="add-car-review-value">{formData.fuelType}</span>
                   </div>
-                  
+
                   <div className="add-car-review-row">
                     <span className="add-car-review-label">Mileage:</span>
                     <span className="add-car-review-value">{formData.mileage || 'Not specified'}</span>
                   </div>
-                  
+
                   <div className="add-car-review-row">
                     <span className="add-car-review-label">Price:</span>
                     <span className="add-car-review-value">${parseFloat(formData.price || 0).toLocaleString()}</span>
                   </div>
-                  
+
                   {formData.badge && (
                     <div className="add-car-review-row">
                       <span className="add-car-review-label">Badge:</span>
@@ -971,12 +970,12 @@ export default function AddVehiclePage({ user }) {
                       </span>
                     </div>
                   )}
-                  
+
                   <div className="add-car-review-row">
                     <span className="add-car-review-label">Images:</span>
                     <span className="add-car-review-value">{imageFiles.length} uploaded</span>
                   </div>
-                  
+
                   {formData.features.length > 0 && (
                     <div className="add-car-review-row">
                       <span className="add-car-review-label">Features:</span>
@@ -1013,7 +1012,7 @@ export default function AddVehiclePage({ user }) {
   return (
     <div>
       <Navbar />
-      
+
       <div className="add-car-page">
         <div className="add-car-container">
           {/* Header */}
@@ -1025,7 +1024,7 @@ export default function AddVehiclePage({ user }) {
               <ArrowLeft className="add-car-back-icon" />
               Back to Listings
             </button>
-            
+
             <h1 className="add-car-title">Add New Vehicle</h1>
             <p className="add-car-subtitle">Fill in the details to list your vehicle</p>
           </div>
@@ -1039,7 +1038,7 @@ export default function AddVehiclePage({ user }) {
               {error}
             </div>
           )}
-          
+
           {success && (
             <div className="add-car-message add-car-message--success">
               {success}

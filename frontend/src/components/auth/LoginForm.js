@@ -3,7 +3,7 @@ import { Eye, EyeOff, Mail, Lock, AlertCircle } from 'lucide-react';
 import { api } from '../../services/api';
 import { tokenManager } from '../../utils/tokenManager';
 import loginImage from '../../assets/images/login-bg.jpg'; // Dental office image
-import '../../styles/loginForm.css';
+import './LoginForm.css';
 
 export default function LoginForm({ onLogin, onSwitchToSignup }) {
   const [formData, setFormData] = useState({

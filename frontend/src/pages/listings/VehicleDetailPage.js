@@ -1,48 +1,48 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { Star } from 'lucide-react';
 
-import Navbar from '../../common/Navbar';
-import Footer from '../../common/Footer';
-import '../../../styles/vehicle-detail.css';
+import Navbar from '../../components/layout/Navbar';
+import Footer from '../../components/layout/Footer';
+import './VehicleDetailPage.css';
 
-import Share from '../../../assets/images/vectors/share.png'
-import Bookmark from '../../../assets/images/vectors/bookmark.png'
-import Compare from '../../../assets/images/vectors/compare.png'
-import Tag from '../../../assets/images/vectors/tag.png'
-import Video from '../../../assets/images/vectors/video.png'
-import Print from '../../../assets/images/vectors/print.png'
-import Arrow from '../../../assets/images/vectors/arrow.png'
-import ArrowGreen from '../../../assets/images/vectors/arrow-green.png'
-import ArrowWhite from '../../../assets/images/vectors/arrow-white.png'
+import Share from '../../assets/images/vectors/share.png'
+import Bookmark from '../../assets/images/vectors/bookmark.png'
+import Compare from '../../assets/images/vectors/compare.png'
+import Tag from '../../assets/images/vectors/tag.png'
+import Video from '../../assets/images/vectors/video.png'
+import Print from '../../assets/images/vectors/print.png'
+import Arrow from '../../assets/images/vectors/arrow.png'
+import ArrowGreen from '../../assets/images/vectors/arrow-green.png'
+import ArrowWhite from '../../assets/images/vectors/arrow-white.png'
 
-import YearBlue from '../../../assets/images/vectors/year-blue.png'
-import SpeedometerBlue from '../../../assets/images/vectors/speedometer-blue.png'
-import FuelBlueImg from '../../../assets/images/vectors/fuel-blue.png'
-import TransmissionBlue from '../../../assets/images/vectors/transmission-blue.png'
+import YearBlue from '../../assets/images/vectors/year-blue.png'
+import SpeedometerBlue from '../../assets/images/vectors/speedometer-blue.png'
+import FuelBlueImg from '../../assets/images/vectors/fuel-blue.png'
+import TransmissionBlue from '../../assets/images/vectors/transmission-blue.png'
 
-import BMW1 from '../../../assets/images/cars/bmw.jpg'
-import BMW2 from '../../../assets/images/cars/bmw2.jpg'
-import BMW3 from '../../../assets/images/cars/bmw3.jpg'
-import BMW4 from '../../../assets/images/cars/bmw4.jpg'
-import BMW5 from '../../../assets/images/cars/bmw5.jpg'
+import BMW1 from '../../assets/images/cars/bmw.jpg'
+import BMW2 from '../../assets/images/cars/bmw2.jpg'
+import BMW3 from '../../assets/images/cars/bmw3.jpg'
+import BMW4 from '../../assets/images/cars/bmw4.jpg'
+import BMW5 from '../../assets/images/cars/bmw5.jpg'
 
-import BodyImg from '../../../assets/images/vectors/body.png'
-import Speedometer from '../../../assets/images/vectors/speedometer.png'
-import FuelImg from '../../../assets/images/vectors/fuel.png'
-import YearImg from '../../../assets/images/vectors/year.png'
-import TransmissionImg from '../../../assets/images/vectors/transmission.png'
-import DriveTypeImg from '../../../assets/images/vectors/drive-type.png'
-import EngineImg from '../../../assets/images/vectors/engine.png'
-import DoorImg from '../../../assets/images/vectors/door.png'
-import CylinderImg from '../../../assets/images/vectors/cylinder.png'
-import ColorImg from '../../../assets/images/vectors/color.png'
-import VINImg from '../../../assets/images/vectors/vin.png'
+import BodyImg from '../../assets/images/vectors/body.png'
+import Speedometer from '../../assets/images/vectors/speedometer.png'
+import FuelImg from '../../assets/images/vectors/fuel.png'
+import YearImg from '../../assets/images/vectors/year.png'
+import TransmissionImg from '../../assets/images/vectors/transmission.png'
+import DriveTypeImg from '../../assets/images/vectors/drive-type.png'
+import EngineImg from '../../assets/images/vectors/engine.png'
+import DoorImg from '../../assets/images/vectors/door.png'
+import CylinderImg from '../../assets/images/vectors/cylinder.png'
+import ColorImg from '../../assets/images/vectors/color.png'
+import VINImg from '../../assets/images/vectors/vin.png'
 
-import DealerImg from '../../../assets/images/avatars/avatar4.jpg'
-import Location from '../../../assets/images/vectors/location.png'
-import Phone from '../../../assets/images/vectors/phone.png'
+import DealerImg from '../../assets/images/avatars/avatar4.jpg'
+import Location from '../../assets/images/vectors/location.png'
+import Phone from '../../assets/images/vectors/phone.png'
 
-import CheckImg from '../../../assets/images/vectors/check.png'
+import CheckImg from '../../assets/images/vectors/check.png'
 
 const Badge = ({ text, variant = 'default' }) => (
   <div className={`cl-badge cl-badge--${variant}`}>
@@ -63,12 +63,12 @@ const InfoItem = ({ icon, label, value, isLink = false }) => (
 );
 
 const CarHeader = () => (
-  <div className="cl-car-header">    
+  <div className="cl-car-header">
     <div className="cl-car-header__main">
       <div className="cl-car-header__left">
         <h1 className="cl-car-header__title">BMW M235i xDrive Gran Coupé</h1>
         <p className="cl-car-header__subtitle">2.0L 4-Cylinder TwinPower Turbo All-Wheel Drive 8-Speed Automatic</p>
-        
+
         <div className="cl-car-header__badges">
           <div className="cl-car-header__badge">
             <img className="cl-car-header__badge-icon" src={YearBlue} alt="" />
@@ -88,7 +88,7 @@ const CarHeader = () => (
           </div>
         </div>
       </div>
-      
+
       <div className="cl-car-header__right">
         <div className="cl-car-header__actions">
           <div className="cl-car-header__action">
@@ -104,7 +104,7 @@ const CarHeader = () => (
             <img className="cl-car-header__action-icon" src={Compare} alt="" />
           </div>
         </div>
-        
+
         <div className="cl-car-header__price">
           <span className="cl-car-header__price-amount">$45,900</span>
           <a href="#" className="cl-car-header__offer-link">
@@ -120,9 +120,9 @@ const CarHeader = () => (
 const ImageGallery = () => (
   <div className="cl-gallery">
     <div className="cl-gallery__main">
-      <img 
-        className="cl-gallery__main-image" 
-        src={BMW1} 
+      <img
+        className="cl-gallery__main-image"
+        src={BMW1}
         alt="BMW M235i xDrive Gran Coupé"
       />
       <div className="cl-gallery__badges">
@@ -133,7 +133,7 @@ const ImageGallery = () => (
         <span>Video</span>
       </div>
     </div>
-    
+
     <div className="cl-gallery__thumbnails">
       {[
         BMW2,
@@ -197,7 +197,7 @@ const Description = () => (
         This M Performance model comes equipped with premium features including Dakota leather upholstery, M Sport Package, adaptive LED headlights, and the latest BMW iDrive 7.0 infotainment system. The Gran Coupé body style offers a perfect balance of sporty aesthetics and practical functionality with four doors and generous rear seating.
       </p>
     </div>
-    
+
     <div className="cl-description__downloads">
       <a href="#" className="cl-description__download-link">
         <img className="cl-description__download-icon" src={Print} alt="" />
@@ -221,7 +221,7 @@ const DealerCard = () => (
       <h3 className="cl-dealer__name">BMW of Manhattan</h3>
       <p className="cl-dealer__address">555 West 57th Street, New York</p>
     </div>
-    
+
     <div className="cl-dealer__actions">
       <div className="cl-dealer__contact-row">
         <div className="cl-dealer__contact-item">
@@ -237,17 +237,17 @@ const DealerCard = () => (
           <span className="cl-dealer__contact-text">+1-212-586-8787</span>
         </div>
       </div>
-      
+
       <button className="cl-dealer__btn cl-dealer__btn--primary">
         Message Dealer
         <img className="cl-dealer__btn-icon" src={ArrowWhite} alt="" />
       </button>
-      
+
       <button className="cl-dealer__btn cl-dealer__btn--whatsapp">
         Chat Via Whatsapp
         <img className="cl-dealer__btn-icon" src={ArrowGreen} alt="" />
       </button>
-      
+
       <a href="#" className="cl-dealer__link">
         View All BMW inventory
         <img className="cl-dealer__link-icon" src={Arrow} alt="" />
@@ -275,9 +275,9 @@ const FeatureItem = ({ name, isSpecial = false }) => (
 const FeatureList = ({ features }) => (
   <div className="cl-feature-list">
     {features.map((feature, index) => (
-      <FeatureItem 
-        key={index} 
-        name={feature.name} 
+      <FeatureItem
+        key={index}
+        name={feature.name}
         isSpecial={feature.isSpecial}
       />
     ))}
@@ -468,7 +468,7 @@ const CarFeatures = () => {
         <div className="cl-directions-link">
           <div className="cl-directions-text">Get Direction</div>
           <svg className="cl-directions-icon" width="14" height="14" viewBox="0 0 14 14">
-            <path d="M7 0L8.5 5.5L14 7L8.5 8.5L7 14L5.5 8.5L0 7L5.5 5.5L7 0Z" fill="#405ff2"/>
+            <path d="M7 0L8.5 5.5L14 7L8.5 8.5L7 14L5.5 8.5L0 7L5.5 5.5L7 0Z" fill="#405ff2" />
           </svg>
         </div>
         <MapContainer />
@@ -482,16 +482,16 @@ const CarFeatures = () => {
 const CircularRating = ({ rating, size = 120, strokeWidth = 8 }) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
-  
+
   // Calculate the correct progress based on rating out of 5
   const percentage = (rating / 5) * 100;
   const strokeDashoffset = circumference - (circumference * percentage) / 100;
-  
+
   return (
-    <div 
-      className="cl-circular-rating" 
-      style={{ 
-        width: size, 
+    <div
+      className="cl-circular-rating"
+      style={{
+        width: size,
         height: size,
         '--rating-percentage': percentage
       }}
@@ -544,7 +544,7 @@ const CircularRating = ({ rating, size = 120, strokeWidth = 8 }) => {
 // Optimized Reviews Components
 const StarRating = ({ rating, isInteractive = false, onRatingChange }) => {
   const [hoverRating, setHoverRating] = useState(0);
-  
+
   const handleStarClick = useCallback((index) => {
     if (isInteractive && onRatingChange) {
       onRatingChange(index + 1);
@@ -566,16 +566,15 @@ const StarRating = ({ rating, isInteractive = false, onRatingChange }) => {
   const displayRating = isInteractive && hoverRating > 0 ? hoverRating : rating;
 
   return (
-    <div 
+    <div
       className={`cl-star-rating ${isInteractive ? 'cl-star-rating--interactive' : ''}`}
       onMouseLeave={handleMouseLeave}
     >
       {[...Array(5)].map((_, index) => (
         <Star
           key={index}
-          className={`cl-star ${index < displayRating ? 'cl-star--filled' : 'cl-star--empty'} ${
-            isInteractive ? 'cl-star--clickable' : ''
-          }`}
+          className={`cl-star ${index < displayRating ? 'cl-star--filled' : 'cl-star--empty'} ${isInteractive ? 'cl-star--clickable' : ''
+            }`}
           onClick={isInteractive ? () => handleStarClick(index) : undefined}
           onMouseEnter={isInteractive ? () => handleStarHover(index) : undefined}
         />
@@ -617,9 +616,9 @@ const ReviewItem = ({ reviewer, date, rating, text }) => (
 const RatingInput = ({ label, rating, onRatingChange }) => (
   <div className="cl-rating-input-group">
     <label>{label}</label>
-    <StarRating 
-      rating={rating} 
-      isInteractive={true} 
+    <StarRating
+      rating={rating}
+      isInteractive={true}
       onRatingChange={onRatingChange}
     />
   </div>
@@ -676,23 +675,23 @@ const ReviewsSection = () => {
     // For now, I'll create dynamic values based on the overall rating with some variation
     const baseRating = parseFloat(overallRating);
     const variations = [0.2, -0.1, 0.3, -0.2, 0.4, 0.1];
-    
+
     const categories = [
-      "Comfort", "Interior Design", "Exterior Styling", 
+      "Comfort", "Interior Design", "Exterior Styling",
       "Value For The Money", "Performance", "Reliability"
     ];
-    
+
     return categories.map((category, index) => {
       const categoryRating = Math.max(1, Math.min(5, baseRating + variations[index]));
       const roundedRating = Math.round(categoryRating * 10) / 10;
       let status = "Good";
-      
+
       if (roundedRating >= 4.5) status = "Perfect";
       else if (roundedRating >= 4.0) status = "Excellent";
       else if (roundedRating >= 3.5) status = "Very Good";
       else if (roundedRating >= 3.0) status = "Good";
       else status = "Fair";
-      
+
       return {
         name: category,
         status: status,
@@ -731,7 +730,7 @@ const ReviewsSection = () => {
   // Submit review
   const submitReview = useCallback(async (e) => {
     e.preventDefault();
-    
+
     if (!isFormValid || isSubmitting) return;
 
     setIsSubmitting(true);
@@ -739,7 +738,7 @@ const ReviewsSection = () => {
     try {
       // Calculate average rating from form ratings
       const ratingValues = Object.values(formData.ratings).filter(r => r > 0);
-      const averageRating = ratingValues.length > 0 
+      const averageRating = ratingValues.length > 0
         ? Math.round(ratingValues.reduce((sum, r) => sum + r, 0) / ratingValues.length * 10) / 10
         : 5;
 
@@ -747,10 +746,10 @@ const ReviewsSection = () => {
       const newReview = {
         id: Date.now(),
         reviewer: formData.name,
-        date: new Date().toLocaleDateString('en-US', { 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
+        date: new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
         }),
         rating: averageRating,
         text: formData.review
@@ -777,7 +776,7 @@ const ReviewsSection = () => {
 
       // Here you would typically send the data to your backend
       console.log('Review submitted:', newReview);
-      
+
       // Show success message (you could use a toast or alert)
       alert('Review submitted successfully!');
 
@@ -792,7 +791,7 @@ const ReviewsSection = () => {
   return (
     <div className="cl-reviews-section">
       <SectionTitle>Reviews</SectionTitle>
-      
+
       {/* New layout structure */}
       <div className="cl-reviews-main-content">
         {/* Left side - Reviews count and overall rating */}
@@ -800,13 +799,13 @@ const ReviewsSection = () => {
           <div className="cl-reviews-count">
             <h3>{reviews.length} Review{reviews.length !== 1 ? 's' : ''}</h3>
           </div>
-          
+
           <div className="cl-overall-rating">
             <CircularRating rating={parseFloat(overallRating)} />
             <span className="cl-overall-label">Overall Rating</span>
           </div>
         </div>
-        
+
         {/* Right side - Rating breakdown in 2 columns */}
         <div className="cl-rating-breakdown">
           <div className="cl-rating-categories">
@@ -823,7 +822,7 @@ const ReviewsSection = () => {
               </div>
             ))}
           </div>
-          
+
           <div className="cl-rating-categories">
             {ratingCategories.slice(3).map((category, index) => (
               <div key={index + 3} className="cl-rating-row">
@@ -840,7 +839,7 @@ const ReviewsSection = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Individual reviews */}
       <div className="cl-individual-reviews">
         {reviews.map((review) => (
@@ -860,11 +859,11 @@ const ReviewsSection = () => {
           </div>
         ))}
       </div>
-      
+
       {/* Add review form */}
       <div className="cl-add-review-section">
         <h3 className="cl-add-review-title">Add a review</h3>
-        
+
         <form className="cl-review-form" onSubmit={submitReview}>
           <div className="cl-rating-inputs">
             <div className="cl-rating-input-row">
@@ -879,7 +878,7 @@ const ReviewsSection = () => {
                 onRatingChange={(rating) => handleRatingChange('interiorDesign', rating)}
               />
             </div>
-            
+
             <div className="cl-rating-input-row">
               <RatingInput
                 label="Exterior Styling"
@@ -892,7 +891,7 @@ const ReviewsSection = () => {
                 onRatingChange={(rating) => handleRatingChange('valueForMoney', rating)}
               />
             </div>
-            
+
             <div className="cl-rating-input-row">
               <RatingInput
                 label="Performance"
@@ -906,19 +905,19 @@ const ReviewsSection = () => {
               />
             </div>
           </div>
-          
+
           <div className="cl-form-inputs">
             <div className="cl-input-row">
-              <input 
-                type="text" 
+              <input
+                type="text"
                 placeholder="Name"
                 className="cl-form-input"
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
                 required
               />
-              <input 
-                type="email" 
+              <input
+                type="email"
                 placeholder="Email"
                 className="cl-form-input"
                 value={formData.email}
@@ -926,10 +925,10 @@ const ReviewsSection = () => {
                 required
               />
             </div>
-            
+
             <div className="cl-checkbox-row">
-              <input 
-                type="checkbox" 
+              <input
+                type="checkbox"
                 id="save-info"
                 checked={formData.saveInfo}
                 onChange={(e) => handleInputChange('saveInfo', e.target.checked)}
@@ -938,8 +937,8 @@ const ReviewsSection = () => {
                 Save my name, email, and website in this browser for the next time I comment.
               </label>
             </div>
-            
-            <textarea 
+
+            <textarea
               placeholder="Review"
               className="cl-review-textarea"
               rows="4"
@@ -947,8 +946,8 @@ const ReviewsSection = () => {
               onChange={(e) => handleInputChange('review', e.target.value)}
               required
             />
-            
-            <button 
+
+            <button
               type="submit"
               className="cl-submit-review-btn"
               disabled={!isFormValid || isSubmitting}
@@ -974,7 +973,7 @@ const VehicleDetailPage = () => {
           <div className="cl-listing-page__content">
             <CarHeader />
             <ImageGallery />
-            
+
             {/* New wrapper for main content and DealerCard side by side */}
             <div className="cl-overview-section">
               <div className="cl-overview-section__main">
@@ -986,15 +985,15 @@ const VehicleDetailPage = () => {
               </aside>
             </div>
           </div>
-        </div>  
+        </div>
 
-        <CarFeatures />    
+        <CarFeatures />
 
         {/* Optimized Reviews Section */}
         <ReviewsSection />
       </div>
-        
-      <Footer/>
+
+      <Footer />
     </div>
   );
 };

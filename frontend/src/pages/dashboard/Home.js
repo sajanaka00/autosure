@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown, Search, ChevronLeft, ChevronRight } from 'lucide-react';
-import backgroundImage from '../../../assets/images/cars/bmw6.jpg'; 
-import whatsappIcon from '../../../assets/images/vectors/whatsapp.png';
-import sedanImg from '../../../assets/images/cars/bmw.jpg';
+import backgroundImage from '../../assets/images/cars/bmw6.jpg';
+import whatsappIcon from '../../assets/images/vectors/whatsapp.png';
+import sedanImg from '../../assets/images/cars/bmw.jpg';
 import ExploreAllVehicles from '../listings/ExploreAllVehicles';
-import Footer from '../../common/Footer';
-import TestimonialsSection from '../../common/TestimonialsSection';
-import GetFairPrice from '../../common/GetFairPrice';
-import WhyChooseUs from '../../common/WhyChooseUs';
-import '../../../styles/home.css';
+import Footer from '../../components/layout/Footer';
+import TestimonialsSection from '../../components/common/TestimonialsSection';
+import GetFairPrice from '../../components/common/GetFairPrice';
+import WhyChooseUs from '../../components/common/WhyChooseUs';
+import './Home.css';
 
 export default function FilterBar() {
   const navigate = useNavigate();
@@ -90,14 +90,14 @@ export default function FilterBar() {
     const handleDocumentClick = (event) => {
       if (activeDropdown) {
         let clickedInside = false;
-        
+
         // Check if click was inside any dropdown
         Object.values(dropdownRefs.current).forEach(ref => {
           if (ref && ref.contains(event.target)) {
             clickedInside = true;
           }
         });
-        
+
         if (!clickedInside) {
           setActiveDropdown(null);
         }
@@ -114,7 +114,7 @@ export default function FilterBar() {
       ...prev,
       [dropdownKey]: option
     }));
-    
+
     // Close dropdown after a brief delay to ensure selection is visible
     setTimeout(() => {
       setActiveDropdown(null);
@@ -133,21 +133,21 @@ export default function FilterBar() {
   const openWhatsApp = (serviceType) => {
     const config = whatsappConfig[serviceType];
     let message = config.message;
-    
+
     if (serviceType === 'personal') {
       message = `Hello! I am interested in purchasing a personal vehicle.`;
-      
+
       if (dropdownValues.makes !== 'Any Makes') message += ` I'm looking for ${dropdownValues.makes}`;
       if (dropdownValues.models !== 'Any Models') message += ` ${dropdownValues.models}`;
       if (dropdownValues.prices !== 'All Prices') message += ` in the ${dropdownValues.prices} range`;
-      
+
       message += `. Can you help me with more information?`;
     }
 
     const formattedNumber = config.phoneNumber.replace(/[^\d+]/g, '');
     const encodedMessage = encodeURIComponent(message);
     const whatsappURL = `https://wa.me/${formattedNumber}?text=${encodedMessage}`;
-    
+
     window.open(whatsappURL, '_blank');
     setShowWhatsAppCard(false);
   };
@@ -160,12 +160,12 @@ export default function FilterBar() {
   const handleSearch = () => {
     // Build search parameters
     const searchParams = new URLSearchParams();
-    
+
     // Add make filter if not default
     if (dropdownValues.makes !== 'Any Makes') {
       searchParams.append('make', dropdownValues.makes);
     }
-    
+
     // Add model filter if not default (and if it's a specific model, not a category)
     if (dropdownValues.models !== 'Any Models') {
       // Check if it's a specific model name rather than a body type
@@ -173,7 +173,7 @@ export default function FilterBar() {
         'Model S', 'Model 3', 'X5', '3 Series', 'F-150 Lightning', 'Mustang',
         'Camry', 'RAV4', 'C-Class', 'GLE', 'Wrangler', 'Civic', 'CR-V'
       ];
-      
+
       if (specificModels.includes(dropdownValues.models)) {
         searchParams.append('model', dropdownValues.models);
       } else {
@@ -181,7 +181,7 @@ export default function FilterBar() {
         searchParams.append('bodyType', dropdownValues.models);
       }
     }
-    
+
     // Add price range filter if not default
     if (dropdownValues.prices !== 'All Prices') {
       let priceRange = '';
@@ -212,7 +212,7 @@ export default function FilterBar() {
         searchParams.append('priceRange', priceRange);
       }
     }
-    
+
     // Add condition filter if not 'all'
     if (activeCondition !== 'all') {
       const conditionMap = {
@@ -221,7 +221,7 @@ export default function FilterBar() {
       };
       searchParams.append('condition', conditionMap[activeCondition]);
     }
-    
+
     // Navigate to vehicles page with search parameters
     const queryString = searchParams.toString();
     navigate(`/vehicles${queryString ? `?${queryString}` : ''}`);
@@ -232,16 +232,16 @@ export default function FilterBar() {
     const isActive = activeDropdown === key;
     const currentValue = dropdownValues[key];
     const options = dropdownOptions[key];
-    
+
     return (
       <div className={`filter-section filter-${key}`} key={key}>
         <div className="filter-border"></div>
-        <div 
+        <div
           className="filter-container"
           ref={el => dropdownRefs.current[key] = el}
         >
           {label && <div className="filter-label">{label}</div>}
-          <div 
+          <div
             className="filter-dropdown"
             onClick={(e) => {
               e.stopPropagation();
@@ -255,7 +255,7 @@ export default function FilterBar() {
               <ChevronDown size={12} />
             </div>
           </div>
-          
+
           {isActive && (
             <div className="dropdown-menu dropdown-show">
               <div className="dropdown-content">
@@ -302,11 +302,11 @@ export default function FilterBar() {
               Lorem ipsum dolor sit amet consectetur. Tellus diam at commodo egestas eu.
             </div>
             <div className="h-hero-title">Find Your Perfect Car</div>
-            
+
             <div className="h-form">
               <div className="h-tabs">
                 {conditionTabs.map(tab => (
-                  <div 
+                  <div
                     key={tab.key}
                     className={`h-tab ${activeCondition === tab.key ? 'h-tab-active' : ''}`}
                     onClick={() => handleConditionChange(tab.key)}
@@ -316,12 +316,12 @@ export default function FilterBar() {
                   </div>
                 ))}
               </div>
-              
+
               <div className="h-form-container">
                 {renderDropdown('makes')}
                 {renderDropdown('models')}
                 {renderDropdown('prices', 'Prices:')}
-                
+
                 <div className="h-search-btn" onClick={handleSearch}>
                   <Search className="h-search-icon" size={15} />
                   <div className="h-search-text">Search Cars</div>

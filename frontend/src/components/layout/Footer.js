@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Facebook, Twitter, Instagram, Linkedin, ChevronUp } from 'lucide-react';
 import Apple from '../../assets/images/vectors/apple.png'
 import PlayStore from '../../assets/images/vectors/google-play.png'
-import '../../styles/footer.css';
+import './Footer.css';
 
 const Footer = () => {
   const [email, setEmail] = useState('');
@@ -170,9 +170,9 @@ const Footer = () => {
             <div className="boxcar-footer-bottom-links">
               <a href="#" className="boxcar-footer-legal-link">Terms & Conditions</a>
               <a href="#" className="boxcar-footer-legal-link">Privacy Notice</a>
-              <button 
-                onClick={scrollToTop} 
-                className="boxcar-footer-scroll-top-btn" 
+              <button
+                onClick={scrollToTop}
+                className="boxcar-footer-scroll-top-btn"
                 aria-label="Scroll to top"
               >
                 <ChevronUp size={20} />

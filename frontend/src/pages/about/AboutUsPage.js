@@ -1,28 +1,28 @@
 import React, { useState, useRef, useEffect } from 'react';
-import Navbar from '../../common/Navbar';
-import Footer from '../../common/Footer';
-import AboutGrid1 from '../../../assets/images/cars/car-about1.jpeg'
-import AboutGrid2 from '../../../assets/images/cars/car-about2.jpg'
-import AboutGrid3 from '../../../assets/images/cars/car-about3.jpg'
-import AboutGrid4 from '../../../assets/images/cars/car-about4.jpeg'
-import AboutGrid5 from '../../../assets/images/cars/car-about5.jpeg'
-import ChooseUs1 from '../../../assets/images/vectors/choose-us1.png'
-import ChooseUs2 from '../../../assets/images/vectors/choose-us2.png'
-import ChooseUs3 from '../../../assets/images/vectors/choose-us3.png'
-import ChooseUs4 from '../../../assets/images/vectors/choose-us4.png'
-import FairPrice from '../../../assets/images/about/fair-price.jpg'
-import PlayBtn from '../../../assets/images/vectors/play-btn.png'
-import Team1 from '../../../assets/images/about/team1.png'
-import Team2 from '../../../assets/images/about/team2.png'
-import Team3 from '../../../assets/images/about/team3.png'
-import Team4 from '../../../assets/images/about/team4.png'
-import Customer1 from '../../../assets/images/avatars/avatar1.jpg'
-import Customer2 from '../../../assets/images/avatars/avatar2.jpg'
-import Customer3 from '../../../assets/images/avatars/avatar3.jpg'
-import Customer4 from '../../../assets/images/avatars/avatar4.jpg'
-import Customer5 from '../../../assets/images/avatars/avatar5.jpg'
+import Navbar from '../../components/layout/Navbar';
+import Footer from '../../components/layout/Footer';
+import AboutGrid1 from '../../assets/images/cars/car-about1.jpeg'
+import AboutGrid2 from '../../assets/images/cars/car-about2.jpg'
+import AboutGrid3 from '../../assets/images/cars/car-about3.jpg'
+import AboutGrid4 from '../../assets/images/cars/car-about4.jpeg'
+import AboutGrid5 from '../../assets/images/cars/car-about5.jpeg'
+import ChooseUs1 from '../../assets/images/vectors/choose-us1.png'
+import ChooseUs2 from '../../assets/images/vectors/choose-us2.png'
+import ChooseUs3 from '../../assets/images/vectors/choose-us3.png'
+import ChooseUs4 from '../../assets/images/vectors/choose-us4.png'
+import FairPrice from '../../assets/images/about/fair-price.jpg'
+import PlayBtn from '../../assets/images/vectors/play-btn.png'
+import Team1 from '../../assets/images/about/team1.png'
+import Team2 from '../../assets/images/about/team2.png'
+import Team3 from '../../assets/images/about/team3.png'
+import Team4 from '../../assets/images/about/team4.png'
+import Customer1 from '../../assets/images/avatars/avatar1.jpg'
+import Customer2 from '../../assets/images/avatars/avatar2.jpg'
+import Customer3 from '../../assets/images/avatars/avatar3.jpg'
+import Customer4 from '../../assets/images/avatars/avatar4.jpg'
+import Customer5 from '../../assets/images/avatars/avatar5.jpg'
 import BrandsSection from './BrandsSection'
-import '../../../styles/about-us.css';
+import './AboutUsPage.css';
 
 const AboutUsPage = () => {
   const [openFaq, setOpenFaq] = useState(null);
@@ -62,31 +62,31 @@ const AboutUsPage = () => {
       <section className="about-us-hero-section">
         <div className="about-page-container-inner">
           <h1 className="about-page-main-title">About Us</h1>
-          
+
           <div className="about-us-content-wrapper">
             <div className="about-us-text-content">
               <h2>We value our clients and want them to have a nice experience</h2>
               <p>
-                At our dealership, we understand that buying a car is one of life's most important decisions. 
-                That's why we're committed to making your vehicle shopping experience as smooth and enjoyable as 
-                possible. Our knowledgeable team takes the time to listen to your needs, whether you're looking 
-                for a reliable family sedan, an efficient commuter car, or a powerful truck for work. We believe 
+                At our dealership, we understand that buying a car is one of life's most important decisions.
+                That's why we're committed to making your vehicle shopping experience as smooth and enjoyable as
+                possible. Our knowledgeable team takes the time to listen to your needs, whether you're looking
+                for a reliable family sedan, an efficient commuter car, or a powerful truck for work. We believe
                 every customer deserves honest advice and transparent pricing from the moment you step onto our lot.
               </p>
               <p>
-                With over two decades of experience in the automotive industry, we've built our reputation on 
-                trust and quality service. Every vehicle in our inventory undergoes a comprehensive inspection 
-                to ensure it meets our high standards before we offer it to our customers. We work with trusted 
-                financing partners to help you secure competitive rates, and our service department is staffed 
-                with certified technicians who use genuine parts. From your first visit through years of ownership, 
+                With over two decades of experience in the automotive industry, we've built our reputation on
+                trust and quality service. Every vehicle in our inventory undergoes a comprehensive inspection
+                to ensure it meets our high standards before we offer it to our customers. We work with trusted
+                financing partners to help you secure competitive rates, and our service department is staffed
+                with certified technicians who use genuine parts. From your first visit through years of ownership,
                 we're here to support you with maintenance, repairs, and any questions you might have.
               </p>
               <p>
-                Our goal is simple: to help you find the perfect vehicle that fits your lifestyle and budget while 
+                Our goal is simple: to help you find the perfect vehicle that fits your lifestyle and budget while
                 providing exceptional service that keeps you coming back. We're proud to be your neighborhood dealership.
               </p>
             </div>
-            
+
             <div className="about-us-images-section">
               <div className="about-us-images-grid">
                 {/* Column 1: years badge + one image below */}
@@ -95,8 +95,8 @@ const AboutUsPage = () => {
                     <span className="about-us-years-number">45</span>
                     <span className="about-us-years-text">Years in Business</span>
                   </div>
-                  <img 
-                    src={AboutGrid1} 
+                  <img
+                    src={AboutGrid1}
                     alt="Luxury car interior"
                     className="about-us-grid-image-2"
                   />
@@ -104,8 +104,8 @@ const AboutUsPage = () => {
 
                 {/* Column 2 */}
                 <div className="about-us-grid-column-2">
-                  <img 
-                    src={AboutGrid2} 
+                  <img
+                    src={AboutGrid2}
                     alt="Professional car salesman"
                     className="about-us-grid-image-3"
                   />
@@ -113,19 +113,19 @@ const AboutUsPage = () => {
 
                 {/* Column 3 */}
                 <div className="about-us-grid-column-3">
-                  <img 
-                    src={AboutGrid3} 
+                  <img
+                    src={AboutGrid3}
                     alt="Car showroom interior"
                     className="about-us-grid-image-4"
                   />
                   <div className="about-us-bottom-images">
-                    <img 
-                      src={AboutGrid4} 
+                    <img
+                      src={AboutGrid4}
                       alt="Car details"
                       className="about-us-grid-image-5"
                     />
-                    <img 
-                      src={AboutGrid5} 
+                    <img
+                      src={AboutGrid5}
                       alt="Car handover"
                       className="about-us-grid-image-6"
                     />
@@ -141,7 +141,7 @@ const AboutUsPage = () => {
       <section className="about-page-features-section">
         <div className="about-page-container-inner">
           <h2 className="about-page-section-title">Why Choose Us?</h2>
-          
+
           <div className="about-page-features-grid">
             <div className="about-page-feature-item">
               <div className="about-page-feature-icon">
@@ -176,38 +176,38 @@ const AboutUsPage = () => {
             </div>
           </div>
         </div>
-      </section>  
+      </section>
 
       {/* Get Fair Price Section */}
       <section className="about-page-pricing-section">
         <div className="about-page-container-inner">
           <div className="about-page-pricing-content">
             <div className="about-page-pricing-image">
-              <img 
-                src={FairPrice} 
+              <img
+                src={FairPrice}
                 alt="Luxury car on mountain road"
               />
               <div className="about-page-play-button">
                 <img src={PlayBtn} alt="Play Button" />
               </div>
             </div>
-            
+
             <div className="about-page-pricing-text">
               <h2>Get A Fair Price For Your Car Sell To Us Today</h2>
               <p>
                 We are committed to providing our customers with exceptional service, competitive pricing, and a wide range of vehicles to choose from.
               </p>
-              
+
               <ul className="about-page-benefits-list">
                 <li>We are the UK's largest provider, with more patrols in more places</li>
                 <li>You get 24/7 roadside assistance</li>
                 <li>We fix 4 out of 5 cars at the roadside</li>
               </ul>
-              
+
               <button className="about-page-cta-button">Get Started</button>
             </div>
           </div>
-          
+
           <div className="about-page-stats-section">
             <div className="about-page-stat-item">
               <h3>89M</h3>
@@ -239,11 +239,11 @@ const AboutUsPage = () => {
             <h2>Our Team</h2>
             <a href="#" className="about-page-view-all-link">View All</a>
           </div>
-          
+
           <div className="about-page-team-grid">
             <div className="about-page-team-member">
-              <img 
-                src={Team1} 
+              <img
+                src={Team1}
                 alt="Courtney Henry"
               />
               <div className="about-page-team-member-info">
@@ -251,10 +251,10 @@ const AboutUsPage = () => {
                 <p>Development Manager</p>
               </div>
             </div>
-            
+
             <div className="about-page-team-member">
-              <img 
-                src={Team2} 
+              <img
+                src={Team2}
                 alt="Jerome Bell"
               />
               <div className="about-page-team-member-info">
@@ -262,10 +262,10 @@ const AboutUsPage = () => {
                 <p>Software Tester</p>
               </div>
             </div>
-            
+
             <div className="about-page-team-member">
-              <img 
-                src={Team3} 
+              <img
+                src={Team3}
                 alt="Arlene McCoy"
               />
               <div className="about-page-team-member-info">
@@ -273,10 +273,10 @@ const AboutUsPage = () => {
                 <p>Software Developer</p>
               </div>
             </div>
-            
+
             <div className="about-page-team-member">
-              <img 
-                src={Team4} 
+              <img
+                src={Team4}
                 alt="Jenny Wilson"
               />
               <div className="about-page-team-member-info">
@@ -303,8 +303,8 @@ const AboutUsPage = () => {
               <h4>Outstanding Service</h4>
               <p>"The team here made buying my first car such an easy experience. They were patient, answered all my questions, and helped me find the perfect vehicle within my budget. No pressure tactics, just genuine care for their customers."</p>
               <div className="about-page-testimonial-author">
-                <img 
-                  src={Customer1} 
+                <img
+                  src={Customer1}
                   alt="Ralph Edwards"
                 />
                 <div>
@@ -313,13 +313,13 @@ const AboutUsPage = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="about-page-testimonial-item">
               <h4>Trustworthy Dealership</h4>
               <p>"After visiting several dealerships, this place stood out for their honesty and transparency. They showed me the full vehicle history, explained every detail, and their financing options were the best I found anywhere."</p>
               <div className="about-page-testimonial-author">
-                <img 
-                  src={Customer2} 
+                <img
+                  src={Customer2}
                   alt="Jenna Watson"
                 />
                 <div>
@@ -333,8 +333,8 @@ const AboutUsPage = () => {
               <h4>Excellent Experience</h4>
               <p>"From test drive to paperwork, everything was handled professionally. The car was in perfect condition as promised, and they even threw in some extras. I'll definitely be coming back for my next purchase."</p>
               <div className="about-page-testimonial-author">
-                <img 
-                  src={Customer3} 
+                <img
+                  src={Customer3}
                   alt="Michael Johnson"
                 />
                 <div>
@@ -348,8 +348,8 @@ const AboutUsPage = () => {
               <h4>Top-Notch Service</h4>
               <p>"Their service department is amazing! Quick, efficient, and they always explain what needs to be done. Fair pricing and they never try to sell you services you don't need. Highly recommend this dealership."</p>
               <div className="about-page-testimonial-author">
-                <img 
-                  src={Customer4} 
+                <img
+                  src={Customer4}
                   alt="Sarah Wilson"
                 />
                 <div>
@@ -358,13 +358,13 @@ const AboutUsPage = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="about-page-testimonial-item">
               <h4>Perfect Experience</h4>
               <p>"Bought my dream car here and couldn't be happier! The sales team was knowledgeable, the process was smooth, and they made sure I understood all the features. Great selection and competitive prices too."</p>
               <div className="about-page-testimonial-author">
-                <img 
-                  src={Customer5} 
+                <img
+                  src={Customer5}
                   alt="Courtney Henry"
                 />
                 <div>
@@ -381,11 +381,11 @@ const AboutUsPage = () => {
       <section className="about-page-faq-section">
         <div className="about-page-container-inner">
           <h2>Frequently Asked Questions</h2>
-          
+
           <div className="about-page-faq-list">
             {faqData.map((faq, index) => (
               <div key={index} className={`about-page-faq-item ${openFaq === index ? 'active' : ''}`}>
-                <button 
+                <button
                   className="about-page-faq-question"
                   onClick={() => toggleFaq(index)}
                 >

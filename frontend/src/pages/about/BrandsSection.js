@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import '../../../styles/brands-section.css';
+import './BrandsSection.css';
 
 const ModernBrandsSection = () => {
   const scrollContainerRef = useRef(null);
@@ -31,10 +31,10 @@ const ModernBrandsSection = () => {
   const scroll = (direction) => {
     if (scrollContainerRef.current) {
       const scrollAmount = 300;
-      const targetScroll = direction === 'left' 
+      const targetScroll = direction === 'left'
         ? scrollContainerRef.current.scrollLeft - scrollAmount
         : scrollContainerRef.current.scrollLeft + scrollAmount;
-      
+
       scrollContainerRef.current.scrollTo({
         left: targetScroll,
         behavior: 'smooth'
@@ -47,7 +47,7 @@ const ModernBrandsSection = () => {
     if (container) {
       container.addEventListener('scroll', checkScrollButtons);
       checkScrollButtons();
-      
+
       return () => {
         container.removeEventListener('scroll', checkScrollButtons);
       };
@@ -65,28 +65,28 @@ const ModernBrandsSection = () => {
             <span className="arrow">→</span>
           </a>
         </div>
-        
+
         {/* Scrollable Content */}
         <div className="brands-scroll-wrapper">
           {/* Navigation Buttons */}
-          <button 
+          <button
             onClick={() => scroll('left')}
             disabled={!canScrollLeft}
             className={`scroll-btn scroll-btn-left ${!canScrollLeft ? 'disabled' : ''}`}
           >
             <ChevronLeft size={20} />
           </button>
-          
-          <button 
+
+          <button
             onClick={() => scroll('right')}
             disabled={!canScrollRight}
             className={`scroll-btn scroll-btn-right ${!canScrollRight ? 'disabled' : ''}`}
           >
             <ChevronRight size={20} />
           </button>
-          
+
           {/* Brands Grid */}
-          <div 
+          <div
             ref={scrollContainerRef}
             className="brands-scroll-container"
           >
@@ -104,15 +104,15 @@ const BrandCard = ({ brand }) => {
   return (
     <div className="brand-card">
       <div className="brand-card-shine" />
-      
+
       <div className="brand-logo-container">
-        <img 
-          src={brand.logo} 
+        <img
+          src={brand.logo}
           alt={`${brand.name} logo`}
           className="brand-logo"
         />
       </div>
-      
+
       <h3 className="brand-name">{brand.name}</h3>
     </div>
   );

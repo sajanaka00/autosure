@@ -225,6 +225,7 @@ body.has-dark-footer .curved-background {
     transform: translateX(-50%) translateY(-10px) scale(0.95);
     visibility: hidden;
   }
+
   100% {
     opacity: 1;
     transform: translateX(-50%) translateY(0) scale(1);
@@ -568,11 +569,12 @@ body.has-dark-footer .curved-background {
 /* Body Padding for Fixed Navbar - UPDATED */
 body {
   overflow-x: hidden;
-  padding-top: 130px;
+  /* padding-top: 130px; */
   background: #ffffff;
   /* Ensure content starts below the curved section */
   position: relative;
-  z-index: 1; /* Lower z-index than navbar elements */
+  z-index: 1;
+  /* Lower z-index than navbar elements */
 }
 
 body.home-page {
@@ -580,14 +582,16 @@ body.home-page {
 }
 
 /* Ensure main content stays below navbar - NEW */
-main, 
-.main-content, 
+main,
+.main-content,
 .page-content,
 article,
 section {
   position: relative;
-  z-index: 1; /* Lower than navbar z-index */
-  background: #ffffff; /* Ensure white background */
+  z-index: 1;
+  /* Lower than navbar z-index */
+  background: #ffffff;
+  /* Ensure white background */
 }
 
 /* Responsive Design */
@@ -601,11 +605,11 @@ section {
   .navbar-container {
     width: calc(100% - 60px);
   }
-  
+
   .navbar-navigation {
     gap: 20px;
   }
-  
+
   .navbar-actions {
     gap: 16px;
   }
@@ -615,7 +619,7 @@ section {
   .navbar-main {
     height: 60px;
   }
-  
+
   .curved-background {
     top: 60px;
     height: 50px;
@@ -627,7 +631,7 @@ section {
     height: 50px;
     z-index: 1000;
   }
-  
+
   .navbar-container {
     top: 15px;
     height: 30px;
@@ -635,29 +639,29 @@ section {
     left: 20px;
     transform: none;
   }
-  
+
   .navbar-logo-link,
   .navbar-logo {
     width: 125px;
     height: 22px;
   }
-  
+
   .logo-image {
     width: 90px;
     height: 22px;
   }
-  
+
   /* Hide desktop navigation and actions on mobile */
   .navbar-navigation,
   .navbar-actions {
     display: none;
   }
-  
+
   /* Show mobile menu toggle */
   .mobile-menu-toggle {
     display: flex;
   }
-  
+
   /* Update mobile body padding */
   body {
     padding-top: 110px;
@@ -669,13 +673,13 @@ section {
     width: calc(100% - 32px);
     left: 16px;
   }
-  
+
   .navbar-logo-link,
   .navbar-logo {
     width: 80px;
     height: 20px;
   }
-  
+
   .logo-image {
     width: 80px;
     height: 20px;
@@ -688,6 +692,7 @@ section {
     opacity: 0;
     transform: scale(0.8);
   }
+
   to {
     opacity: 1;
     transform: scale(1);

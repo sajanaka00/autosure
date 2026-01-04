@@ -1,24 +1,24 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowRight, Bookmark, ChevronRight, Grid3X3, LayoutList, Plus } from 'lucide-react';
-import '../../../styles/vehicles-list.css'
-import Navbar from '../../common/Navbar';
-import Footer from '../../common/Footer';
+import './VehicleListPage.css';
+import Navbar from '../../components/layout/Navbar';
+import Footer from '../../components/layout/Footer';
 
 // Reusable Range Slider Component
 const RangeSlider = ({ label, min, max, value, onChange, unit = '' }) => {
   const [minValue, maxValue] = value;
-  
+
   const handleMinChange = (e) => {
     const newMin = Math.min(Number(e.target.value), maxValue - 1);
     onChange([newMin, maxValue]);
   };
-  
+
   const handleMaxChange = (e) => {
     const newMax = Math.max(Number(e.target.value), minValue + 1);
     onChange([minValue, newMax]);
   };
-  
+
   return (
     <div className="vehicles-sale-range-slider">
       <div className="vehicles-sale-range-values">
@@ -27,7 +27,7 @@ const RangeSlider = ({ label, min, max, value, onChange, unit = '' }) => {
       </div>
       <div className="vehicles-sale-slider-container">
         <div className="vehicles-sale-slider-track">
-          <div 
+          <div
             className="vehicles-sale-slider-range"
             style={{
               left: `${((minValue - min) / (max - min)) * 100}%`,
@@ -59,19 +59,19 @@ const RangeSlider = ({ label, min, max, value, onChange, unit = '' }) => {
 // Filter Category Component
 const FilterCategory = ({ title, children, isOpen = true }) => {
   const [expanded, setExpanded] = useState(isOpen);
-  
+
   // Check if this category should have scroll (more than 5 children)
   const shouldScroll = React.Children.count(children) > 5;
-  
+
   return (
     <div className="vehicles-sale-filter-category">
-      <div 
+      <div
         className="vehicles-sale-filter-header"
         onClick={() => setExpanded(!expanded)}
       >
         <h3 className="vehicles-sale-filter-title">{title}</h3>
-        <ChevronRight 
-          className={`vehicles-sale-filter-chevron ${expanded ? 'vehicles-sale-filter-chevron-expanded' : ''}`} 
+        <ChevronRight
+          className={`vehicles-sale-filter-chevron ${expanded ? 'vehicles-sale-filter-chevron-expanded' : ''}`}
         />
       </div>
       {expanded && (
@@ -105,13 +105,13 @@ const VehicleCard = ({ vehicle, onClick, viewMode }) => (
     {/* Image Container */}
     <div className="vehicles-sale-img-container">
       <div className="vehicles-sale-img-wrapper">
-        <img 
-          src={vehicle.image} 
+        <img
+          src={vehicle.image}
           alt={vehicle.title}
           className="vehicles-sale-img"
         />
       </div>
-      
+
       {/* Badge */}
       {vehicle.badge && (
         <div className={`vehicles-sale-badge ${vehicle.badgeColor === 'green' ? 'vehicles-sale-badge-green' : 'vehicles-sale-badge-blue'}`}>
@@ -120,7 +120,7 @@ const VehicleCard = ({ vehicle, onClick, viewMode }) => (
           </span>
         </div>
       )}
-      
+
       {/* Bookmark Icon */}
       <div className="vehicles-sale-bookmark" onClick={(e) => {
         e.stopPropagation();
@@ -131,66 +131,66 @@ const VehicleCard = ({ vehicle, onClick, viewMode }) => (
         </div>
       </div>
     </div>
-    
+
     {/* Content */}
     <div className="vehicles-sale-content">
       {/* Title */}
       <div className="vehicles-sale-title-container">
         <h3 className="vehicles-sale-title">{vehicle.title}</h3>
       </div>
-      
+
       {/* Description */}
       <div className="vehicles-sale-desc-container">
         <p className="vehicles-sale-desc">
           {vehicle.description}
         </p>
       </div>
-      
+
       {/* Specifications Row 1 */}
       <div className="vehicles-sale-specs-row">
         <div className="vehicles-sale-spec-item">
           <svg className="vehicles-sale-spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 6v6l4 2"/>
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 6v6l4 2" />
           </svg>
           <span className="vehicles-sale-spec-text">{vehicle.mileage}</span>
         </div>
         <div className="vehicles-sale-spec-item">
           <svg className="vehicles-sale-spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14,2 14,8 20,8"/>
-            <line x1="16" y1="13" x2="8" y2="13"/>
-            <line x1="16" y1="17" x2="8" y2="17"/>
-            <polyline points="10,9 9,9 8,9"/>
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14,2 14,8 20,8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10,9 9,9 8,9" />
           </svg>
           <span className="vehicles-sale-spec-text">{vehicle.fuelType}</span>
         </div>
       </div>
-      
+
       {/* Specifications Row 2 */}
       <div className="vehicles-sale-specs-row">
         <div className="vehicles-sale-spec-item">
           <svg className="vehicles-sale-spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="3"/>
-            <path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/>
+            <circle cx="12" cy="12" r="3" />
+            <path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24" />
           </svg>
           <span className="vehicles-sale-spec-text">{vehicle.transmission}</span>
         </div>
         <div className="vehicles-sale-spec-item">
           <svg className="vehicles-sale-spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10"/>
-            <polyline points="12,6 12,12 16,14"/>
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12,6 12,12 16,14" />
           </svg>
           <span className="vehicles-sale-spec-text">{vehicle.year}</span>
         </div>
       </div>
-      
+
       {/* Price and Action */}
       <div className="vehicles-sale-footer">
         <div className="vehicles-sale-price-section">
           <div className="vehicles-sale-price">{vehicle.price}</div>
         </div>
-        <div 
+        <div
           className="vehicles-sale-view-details"
           onClick={(e) => {
             e.stopPropagation();
@@ -208,18 +208,18 @@ const VehicleCard = ({ vehicle, onClick, viewMode }) => (
 // Pagination Component
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const pages = [];
-  
+
   // Always show first page
   if (totalPages > 0) pages.push(1);
-  
+
   // Add current page and surrounding pages
   for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
     if (!pages.includes(i)) pages.push(i);
   }
-  
+
   // Always show last page
   if (totalPages > 1 && !pages.includes(totalPages)) pages.push(totalPages);
-  
+
   return (
     <div className="vehicles-sale-pagination">
       {pages.map((page, index) => (
@@ -235,7 +235,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           </button>
         </React.Fragment>
       ))}
-      
+
       {currentPage < totalPages && (
         <button
           className="vehicles-sale-pagination-btn vehicles-sale-pagination-next"
@@ -267,13 +267,13 @@ const VehicleListPage = () => {
     engineSizes: [],
     conditions: []
   });
-  
+
   const itemsPerPage = viewMode === 'list' ? 5 : (viewMode === 'compact' ? 12 : 9);
-  
+
   // Parse URL parameters and apply filters on component mount
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
-    
+
     // Apply filters from URL parameters
     const newFilters = {
       makes: [],
@@ -284,43 +284,43 @@ const VehicleListPage = () => {
       engineSizes: [],
       conditions: []
     };
-    
+
     // Parse make filter
     const make = searchParams.get('make');
     if (make) {
       newFilters.makes = [make];
     }
-    
+
     // Parse model filter
     const model = searchParams.get('model');
     if (model) {
       newFilters.models = [model];
     }
-    
+
     // Parse bodyType filter
     const bodyType = searchParams.get('bodyType');
     if (bodyType) {
       newFilters.bodyTypes = [bodyType];
     }
-    
+
     // Parse condition filter
     const condition = searchParams.get('condition');
     if (condition) {
       newFilters.conditions = [condition];
     }
-    
+
     // Parse price range filter
     const priceRangeParam = searchParams.get('priceRange');
     if (priceRangeParam) {
       const [min, max] = priceRangeParam.split('-').map(Number);
       setPriceRange([min, max]);
     }
-    
+
     // Set the filters
     setFilters(newFilters);
-    
+
   }, [location.search]);
-  
+
   // Enhanced vehicle data with multiple models per make
   const allVehicles = [
     {
@@ -664,9 +664,9 @@ const VehicleListPage = () => {
       // If no makes selected, show all models
       return filterOptions.allModels;
     }
-    
+
     // Filter models based on selected makes
-    return filterOptions.allModels.filter(model => 
+    return filterOptions.allModels.filter(model =>
       filters.makes.includes(model.make)
     );
   };
@@ -677,14 +677,14 @@ const VehicleListPage = () => {
       // Price filter
       const price = parseInt(vehicle.price.replace(/[$,]/g, ''));
       if (price < priceRange[0] * 1000 || price > priceRange[1] * 1000) return false;
-      
+
       // Year filter
       if (vehicle.year < yearRange[0] || vehicle.year > yearRange[1]) return false;
-      
+
       // Mileage filter (convert to thousands)
       const mileage = parseInt(vehicle.mileage.replace(/[^0-9]/g, '')) / 1000;
       if (mileage < mileageRange[0] || mileage > mileageRange[1]) return false;
-      
+
       // Category filters
       if (filters.makes.length > 0 && !filters.makes.includes(vehicle.make)) return false;
       if (filters.models.length > 0 && !filters.models.includes(vehicle.model)) return false;
@@ -693,7 +693,7 @@ const VehicleListPage = () => {
       if (filters.fuelTypes.length > 0 && !filters.fuelTypes.includes(vehicle.fuelType)) return false;
       if (filters.engineSizes.length > 0 && !filters.engineSizes.includes(vehicle.engineSize)) return false;
       if (filters.conditions.length > 0 && !filters.conditions.includes(vehicle.condition)) return false;
-      
+
       return true;
     });
 
@@ -733,7 +733,7 @@ const VehicleListPage = () => {
     setFilters(prev => {
       const newFilters = {
         ...prev,
-        [category]: checked 
+        [category]: checked
           ? [...prev[category], value]
           : prev[category].filter(item => item !== value)
       };
@@ -744,9 +744,9 @@ const VehicleListPage = () => {
         const modelsToRemove = filterOptions.allModels
           .filter(model => model.make === value)
           .map(model => model.value);
-        
+
         // Remove those models from selected models
-        newFilters.models = newFilters.models.filter(model => 
+        newFilters.models = newFilters.models.filter(model =>
           !modelsToRemove.includes(model)
         );
       }
@@ -802,7 +802,7 @@ const VehicleListPage = () => {
 
   const getActiveFilters = () => {
     const activeFilters = [];
-    
+
     Object.entries(filters).forEach(([category, values]) => {
       values.forEach(value => {
         activeFilters.push({ category, value });
@@ -811,25 +811,25 @@ const VehicleListPage = () => {
 
     // Add price range if not default
     if (priceRange[0] !== 15 || priceRange[1] !== 85) {
-      activeFilters.push({ 
-        category: 'priceRange', 
-        value: `${priceRange[0]}k - ${priceRange[1]}k` 
+      activeFilters.push({
+        category: 'priceRange',
+        value: `${priceRange[0]}k - ${priceRange[1]}k`
       });
     }
 
     // Add year range if not default
     if (yearRange[0] !== 2020 || yearRange[1] !== 2024) {
-      activeFilters.push({ 
-        category: 'yearRange', 
-        value: `${yearRange[0]} - ${yearRange[1]}` 
+      activeFilters.push({
+        category: 'yearRange',
+        value: `${yearRange[0]} - ${yearRange[1]}`
       });
     }
 
     // Add mileage range if not default
     if (mileageRange[0] !== 0 || mileageRange[1] !== 100) {
-      activeFilters.push({ 
-        category: 'mileageRange', 
-        value: `${mileageRange[0]}k - ${mileageRange[1]}k mi` 
+      activeFilters.push({
+        category: 'mileageRange',
+        value: `${mileageRange[0]}k - ${mileageRange[1]}k mi`
       });
     }
 
@@ -854,7 +854,7 @@ const VehicleListPage = () => {
 
   return (
     <div>
-      <Navbar/>
+      <Navbar />
       <div className="vehicles-sale-page">
         {/* Sidebar Filters */}
         <aside className="vehicles-sale-sidebar">
@@ -885,7 +885,7 @@ const VehicleListPage = () => {
               ))
             ) : (
               <div className="vehicles-sale-no-options">
-                {filters.makes.length > 0 
+                {filters.makes.length > 0
                   ? "No models available for selected makes"
                   : "Select a make to see available models"
                 }
@@ -1002,19 +1002,19 @@ const VehicleListPage = () => {
             <div className="vehicles-sale-results-info">
               Showing {startIndex + 1}–{Math.min(startIndex + itemsPerPage, filteredAndSortedVehicles.length)} of {filteredAndSortedVehicles.length} vehicles
             </div>
-            
+
             <div className="vehicles-sale-controls">
               <div className="vehicles-sale-view-buttons">
-                <button 
+                <button
                   className={`vehicles-sale-view-btn ${viewMode === 'list' ? 'active' : ''}`}
-                  onClick={() => {setViewMode('list'); setCurrentPage(1);}}
+                  onClick={() => { setViewMode('list'); setCurrentPage(1); }}
                   title="List View (1 per row)"
                 >
                   <LayoutList className="vehicles-sale-view-icon" />
                 </button>
-                <button 
+                <button
                   className={`vehicles-sale-view-btn ${viewMode === 'grid' ? 'active' : ''}`}
-                  onClick={() => {setViewMode('grid'); setCurrentPage(1);}}
+                  onClick={() => { setViewMode('grid'); setCurrentPage(1); }}
                   title="Grid View (3 per row)"
                 >
                   <div className="vehicles-sale-grid-icon">
@@ -1024,18 +1024,18 @@ const VehicleListPage = () => {
                     </div>
                   </div>
                 </button>
-                <button 
+                <button
                   className={`vehicles-sale-view-btn ${viewMode === 'compact' ? 'active' : ''}`}
-                  onClick={() => {setViewMode('compact'); setCurrentPage(1);}}
+                  onClick={() => { setViewMode('compact'); setCurrentPage(1); }}
                   title="Compact View (4 per row)"
                 >
                   <Grid3X3 className="vehicles-sale-view-icon" />
                 </button>
               </div>
-              
+
               <div className="vehicles-sale-sort-container">
                 <label className="vehicles-sale-sort-label">Sort by:</label>
-                <select 
+                <select
                   className="vehicles-sale-sort-select"
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
@@ -1049,7 +1049,7 @@ const VehicleListPage = () => {
                 </select>
               </div>
 
-              <button 
+              <button
                 className="vehicles-sale-add-btn"
                 onClick={handleAddVehicle}
                 title="Add Vehicle"
@@ -1067,10 +1067,10 @@ const VehicleListPage = () => {
                 {getActiveFilters().map((filter, index) => {
                   const colors = getFilterColor(filter.category);
                   return (
-                    <div 
+                    <div
                       key={`${filter.category}-${filter.value}-${index}`}
                       className="vehicles-sale-filter-tag"
-                      style={{ 
+                      style={{
                         backgroundColor: colors.bg,
                         color: colors.text
                       }}
@@ -1100,9 +1100,9 @@ const VehicleListPage = () => {
           {/* Vehicle Grid */}
           <div className={`vehicles-sale-grid ${viewMode === 'compact' ? 'vehicles-sale-grid-compact' : viewMode === 'list' ? 'vehicles-sale-grid-list' : 'vehicles-sale-grid-normal'}`}>
             {currentVehicles.map(vehicle => (
-              <VehicleCard 
-                key={vehicle.id} 
-                vehicle={vehicle} 
+              <VehicleCard
+                key={vehicle.id}
+                vehicle={vehicle}
                 onClick={handleVehicleClick}
                 viewMode={viewMode}
               />
@@ -1119,7 +1119,7 @@ const VehicleListPage = () => {
           )}
         </main>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

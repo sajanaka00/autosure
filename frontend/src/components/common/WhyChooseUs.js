@@ -3,13 +3,13 @@ import ChooseUs1 from '../../assets/images/vectors/choose-us1.png'
 import ChooseUs2 from '../../assets/images/vectors/choose-us2.png'
 import ChooseUs3 from '../../assets/images/vectors/choose-us3.png'
 import ChooseUs4 from '../../assets/images/vectors/choose-us4.png'
-import '../../styles/why-choose-us.css';
+import './WhyChooseUs.css';
 
 const WhyChooseUs = () => {
   return (
     <div className="wcu-section">
       <div className="wcu-title">Why Choose Us?</div>
-      
+
       <div className="wcu-features-grid">
         {/* First Feature - Special Financing Offers */}
         <div className="wcu-feature">

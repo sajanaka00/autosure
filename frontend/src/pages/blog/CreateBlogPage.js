@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { X, Plus, Minus, Upload, Eye, Save, FileText, User, Tag, Image, Clock, Hash, Edit } from 'lucide-react';
-import '../../../styles/create-blog.css';
+import './CreateBlogPage.css';
 
-const CreateBlogPage = ({ onClose = () => {}, onCreated = () => {} }) => {
+const CreateBlogPage = ({ onClose = () => { }, onCreated = () => { } }) => {
   const [formData, setFormData] = useState({
     title: '',
     category: '',
@@ -56,7 +56,7 @@ const CreateBlogPage = ({ onClose = () => {}, onCreated = () => {} }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const categories = [
-    'Sound', 'Accessories', 'Exterior', 'Body Kit', 'Fuel Systems', 
+    'Sound', 'Accessories', 'Exterior', 'Body Kit', 'Fuel Systems',
     'Oil & Filters', 'Interior', 'Performance', 'Safety', 'Technology',
     'Executive', 'Luxury', 'SUV', 'Sedan', 'Reviews'
   ];
@@ -65,7 +65,7 @@ const CreateBlogPage = ({ onClose = () => {}, onCreated = () => {} }) => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
+
     // Handle nested objects
     if (name.includes('.')) {
       const keys = name.split('.');
@@ -227,7 +227,7 @@ const CreateBlogPage = ({ onClose = () => {}, onCreated = () => {} }) => {
         // Use FormData for file uploads
         const formDataToSend = new FormData();
         formDataToSend.append('blogData', JSON.stringify(submitData));
-        
+
         if (heroImageFile) {
           formDataToSend.append('heroImage', heroImageFile);
         }
@@ -808,8 +808,8 @@ const CreateBlogPage = ({ onClose = () => {}, onCreated = () => {} }) => {
           </div>
           <button
             type="button"
-            onClick={() => { 
-              resetForm(); 
+            onClick={() => {
+              resetForm();
               if (typeof onClose === 'function') {
                 onClose();
               }
@@ -848,8 +848,8 @@ const CreateBlogPage = ({ onClose = () => {}, onCreated = () => {} }) => {
           <div className="form-actions">
             <button
               type="button"
-              onClick={() => { 
-                resetForm(); 
+              onClick={() => {
+                resetForm();
                 if (typeof onClose === 'function') {
                   onClose();
                 }

@@ -228,7 +228,7 @@
 .about-page-feature-icon {
   width: 70px;
   height: 70px;
-  background: #eef2ff; 
+  background: #eef2ff;
   border-radius: 20%;
   display: flex;
   align-items: center;
@@ -282,7 +282,7 @@
   overflow: hidden;
 }
 
-.about-page-pricing-image > img {
+.about-page-pricing-image>img {
   width: 100%;
   height: 600px;
   object-fit: cover;
@@ -326,7 +326,7 @@
   letter-spacing: -0.5px;
 }
 
-.about-page-pricing-text > p {
+.about-page-pricing-text>p {
   font-size: 1rem;
   color: #050B20;
   margin-bottom: 1rem;
@@ -357,7 +357,7 @@
   top: 0.4rem;
   width: 16px;
   height: 16px;
-  background-image: url('../assets/images/vectors/check.png');
+  /* background-image: url('../../../assets/images/vectors/check.png'); */
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -686,6 +686,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -694,6 +695,7 @@
 
 /* Comprehensive Tablet Responsive Design (max-width: 768px) */
 @media (max-width: 768px) {
+
   /* Container and Layout */
   .about-page-container-inner {
     padding: 0 20px;
@@ -840,7 +842,7 @@
     order: 1;
   }
 
-  .about-page-pricing-image > img {
+  .about-page-pricing-image>img {
     height: 300px;
     border-radius: 20px 20px 0 0;
   }
@@ -856,7 +858,7 @@
     margin-bottom: 1rem;
   }
 
-  .about-page-pricing-text > p {
+  .about-page-pricing-text>p {
     font-size: 0.9rem;
     text-align: center;
     line-height: 1.6;
@@ -947,23 +949,23 @@
     gap: 1.5rem;
     padding: 15px 0 25px 0;
   }
-  
+
   .about-page-brand-item {
     flex: 0 0 140px;
     padding: 1.5rem 1rem;
   }
-  
+
   .about-page-brand-item img {
     width: 50px;
     height: 35px;
     margin-bottom: 1rem;
   }
-  
+
   .about-page-brand-item span {
     font-size: 0.9rem;
     font-weight: 500;
   }
-  
+
   /* Hide navigation arrows on tablet */
   .brands-nav {
     display: none;
@@ -1106,13 +1108,14 @@
   }
 
   /* Additional Tablet Optimizations */
-  
+
   /* Improve touch targets */
   .about-page-feature-item,
   .about-page-brand-item,
   .about-page-team-member,
   .about-page-testimonial-item {
-    min-height: 44px; /* Minimum touch target size */
+    min-height: 44px;
+    /* Minimum touch target size */
   }
 
   /* Reduce motion for better performance on tablets */

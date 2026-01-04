@@ -3,10 +3,10 @@ import {
   Facebook, Twitter, Instagram, Linkedin,
   Phone, Mail, MapPin, ExternalLink
 } from 'lucide-react';
-import '../../../styles/contact.css'
-import Navbar from '../../common/Navbar';
-import Footer from '../../common/Footer';
-import { api } from '../../../services/api';
+import './ContactUsPage.css';
+import Navbar from '../../components/layout/Navbar';
+import Footer from '../../components/layout/Footer';
+import { api } from '../../services/api';
 
 // Form field configuration - moved outside component to prevent re-creation on each render
 const FORM_FIELDS = {
@@ -99,9 +99,9 @@ const OfficeCard = React.memo(({ office, onLocationSelect }) => (
     <p className="office-address">{office.address}</p>
     <div className="office-actions">
       {/* Button to select location and update map */}
-      <button 
+      <button
         onClick={() => onLocationSelect(office)}
-        className="office-link" 
+        className="office-link"
         aria-label={`See ${office.name} on map`}
       >
         <ExternalLink size={16} /> See on Map
@@ -160,27 +160,27 @@ const ContactUsPage = () => {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // Track currently selected location for map display - defaults to first office
   const [selectedLocation, setSelectedLocation] = useState(OFFICES[0]);
 
   // Form validation check
-  const isFormValid = formData.firstName && 
-         formData.lastName && 
-         formData.email && 
-         formData.message;
+  const isFormValid = formData.firstName &&
+    formData.lastName &&
+    formData.email &&
+    formData.message;
 
   // Handle location selection and smooth scroll to map
   const handleLocationSelect = useCallback((office) => {
     console.log('Location selected:', office.name);
     setSelectedLocation(office);
-    
+
     // Smooth scroll to map section when location is selected
     const mapContainer = document.querySelector('.contact-hero');
     if (mapContainer) {
-      mapContainer.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'center' 
+      mapContainer.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
       });
     }
   }, []);
@@ -206,7 +206,7 @@ const ContactUsPage = () => {
 
     try {
       const response = await api.submitContact(formData);
-      
+
       if (response.success) {
         alert('Thank you for your inquiry! One of our sales representatives will contact you within 24 hours.');
         // Reset form on successful submission
@@ -222,7 +222,7 @@ const ContactUsPage = () => {
       }
     } catch (error) {
       console.error('Error:', error);
-      
+
       // Fallback for development when API endpoint is not available
       if (error.message.includes('404') || error.message.includes('Not Found')) {
         console.log('Contact form data (backend endpoint not available):', formData);
@@ -244,7 +244,7 @@ const ContactUsPage = () => {
   };
 
   // Memoized form fields to prevent unnecessary re-renders
-  const formFields = useMemo(() => 
+  const formFields = useMemo(() =>
     Object.entries(FORM_FIELDS).map(([name, field]) => (
       <FormField
         key={name}
@@ -262,13 +262,13 @@ const ContactUsPage = () => {
   return (
     <div className="contact-page">
       <Navbar />
-      
+
       {/* Hero Section with Interactive Map */}
       <section className="contact-hero">
         <h1 className="contact-title">Contact Us</h1>
         <div className="map-container" style={{ height: '400px', width: '100%' }}>
           {/* Dynamic map that updates based on selected location */}
-          <iframe 
+          <iframe
             src={selectedLocation.mapSrc}
             width="100%"
             height="100%"
@@ -287,7 +287,7 @@ const ContactUsPage = () => {
         <div className="contact-form-section">
           <h2>Ready to Find Your Perfect Vehicle?</h2>
           <p className="form-description">
-            Whether you're looking for a new car, need financing information, or want to schedule a test drive, 
+            Whether you're looking for a new car, need financing information, or want to schedule a test drive,
             our experienced team is here to help. Fill out the form below and we'll get back to you promptly.
           </p>
 
@@ -304,9 +304,9 @@ const ContactUsPage = () => {
             {/* Message field (full width) */}
             {remainingFields.slice(2)}
 
-            <button 
+            <button
               type="button"
-              onClick={handleSubmit} 
+              onClick={handleSubmit}
               className="send-btn"
               disabled={isSubmitting}
               aria-describedby="submit-status"
@@ -320,8 +320,8 @@ const ContactUsPage = () => {
         <aside className="contact-details">
           <h3>Visit Our Showroom</h3>
           <p className="contact-details-description">
-            Stop by our state-of-the-art showroom to browse our extensive inventory, 
-            speak with our knowledgeable sales team, and take a test drive. We're open 
+            Stop by our state-of-the-art showroom to browse our extensive inventory,
+            speak with our knowledgeable sales team, and take a test drive. We're open
             7 days a week to serve you better.
           </p>
 
@@ -350,9 +350,9 @@ const ContactUsPage = () => {
         <div className="offices-grid">
           {/* Render office cards with interactive map functionality */}
           {OFFICES.map(office => (
-            <OfficeCard 
-              key={office.id} 
-              office={office} 
+            <OfficeCard
+              key={office.id}
+              office={office}
               onLocationSelect={handleLocationSelect}
             />
           ))}

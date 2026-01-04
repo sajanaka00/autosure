@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Navbar from '../../common/Navbar';
-import Home from '../dashboard/Home';
+import Navbar from '../../components/layout/Navbar';
+import Home from './Home';
 import BrowseCars from '../listings/BrowseCars';
 
 export default function Dashboard({ user, onLogout }) {
@@ -19,11 +19,11 @@ export default function Dashboard({ user, onLogout }) {
 
   return (
     <div className="dashboard-container">
-      <Navbar 
-        user={user} 
-        activeTab={activeTab} 
-        onTabChange={setActiveTab} 
-        onLogout={onLogout} 
+      <Navbar
+        user={user}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        onLogout={onLogout}
       />
 
       <main className="dashboard-main">

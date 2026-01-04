@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../../common/Navbar';
-import Footer from '../../common/Footer';
-import '../../../styles/blog-list.css';
+import Navbar from '../../components/layout/Navbar';
+import Footer from '../../components/layout/Footer';
+import './BlogListPage.css';
 
 // Default fallback images
-import car1Image from '../../../assets/images/cars/bmw.jpg';
-import car2Image from '../../../assets/images/cars/car1.jpg';
-import car3Image from '../../../assets/images/cars/car3.png';
-import car4Image from '../../../assets/images/cars/car4.png';
-import car5Image from '../../../assets/images/cars/car5.png';
-import car6Image from '../../../assets/images/cars/car6.png';
+import car1Image from '../../assets/images/cars/bmw.jpg';
+import car2Image from '../../assets/images/cars/car1.jpg';
+import car3Image from '../../assets/images/cars/car3.png';
+import car4Image from '../../assets/images/cars/car4.png';
+import car5Image from '../../assets/images/cars/car5.png';
+import car6Image from '../../assets/images/cars/car6.png';
 
 // Blog Article Card Component - Matching the design from image
-const BlogArticleCard = ({ 
+const BlogArticleCard = ({
   post,
   onClick,
   onTagClick,
@@ -21,9 +21,9 @@ const BlogArticleCard = ({
 }) => (
   <div className="blog-article-card" onClick={() => onClick(post._id)}>
     <div className="blog-article-image-container">
-      <img 
+      <img
         className="blog-article-image"
-        src={post.image || post.heroImage} 
+        src={post.image || post.heroImage}
         alt={post.title}
         onError={(e) => {
           e.target.src = car1Image;
@@ -33,7 +33,7 @@ const BlogArticleCard = ({
         {post.category}
       </div>
     </div>
-    
+
     <div className="blog-article-content">
       <div className="blog-article-meta">
         {/* <div className="blog-article-meta-dot"></div> */}
@@ -43,16 +43,16 @@ const BlogArticleCard = ({
         <span className="blog-article-date-separator">•</span>
         <span className="blog-article-date">{formatDate(post.createdAt)}</span>
       </div>
-      
+
       <h3 className="blog-article-title">{post.title}</h3>
-      
+
       {/* Tags rendering */}
       {post.tags && post.tags.length > 0 && (
         <div className="blog-article-tags">
           {post.tags.map(tag => (
-            <button 
-              key={tag} 
-              className="blog-article-tag-btn" 
+            <button
+              key={tag}
+              className="blog-article-tag-btn"
               onClick={(e) => {
                 e.stopPropagation();
                 onTagClick(tag);
@@ -76,14 +76,14 @@ const BlogPagination = ({ pagination, onPageChange }) => {
     // Previous button
     if (currentPage > 1) {
       buttons.push(
-        <button 
-          key="prev" 
-          className="blog-page-pagination-btn blog-page-pagination-nav" 
+        <button
+          key="prev"
+          className="blog-page-pagination-btn blog-page-pagination-nav"
           onClick={() => onPageChange(currentPage - 1)}
           aria-label="Previous page"
         >
           <svg className="blog-page-pagination-arrow" viewBox="0 0 12 12" fill="none">
-            <path d="M7.5 2L3.5 6L7.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M7.5 2L3.5 6L7.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
       );
@@ -100,9 +100,9 @@ const BlogPagination = ({ pagination, onPageChange }) => {
     // First page and ellipsis if needed
     if (startPage > 1) {
       buttons.push(
-        <button 
-          key={1} 
-          className="blog-page-pagination-btn" 
+        <button
+          key={1}
+          className="blog-page-pagination-btn"
           onClick={() => onPageChange(1)}
         >
           1
@@ -118,9 +118,9 @@ const BlogPagination = ({ pagination, onPageChange }) => {
     // Page numbers
     for (let i = startPage; i <= endPage; i++) {
       buttons.push(
-        <button 
-          key={i} 
-          className={`blog-page-pagination-btn ${currentPage === i ? 'active' : ''}`} 
+        <button
+          key={i}
+          className={`blog-page-pagination-btn ${currentPage === i ? 'active' : ''}`}
           onClick={() => onPageChange(i)}
         >
           {i}
@@ -136,9 +136,9 @@ const BlogPagination = ({ pagination, onPageChange }) => {
         );
       }
       buttons.push(
-        <button 
-          key={totalPages} 
-          className="blog-page-pagination-btn" 
+        <button
+          key={totalPages}
+          className="blog-page-pagination-btn"
           onClick={() => onPageChange(totalPages)}
         >
           {totalPages}
@@ -149,14 +149,14 @@ const BlogPagination = ({ pagination, onPageChange }) => {
     // Next button
     if (currentPage < totalPages) {
       buttons.push(
-        <button 
-          key="next" 
-          className="blog-page-pagination-btn blog-page-pagination-nav" 
+        <button
+          key="next"
+          className="blog-page-pagination-btn blog-page-pagination-nav"
           onClick={() => onPageChange(currentPage + 1)}
           aria-label="Next page"
         >
           <svg className="blog-page-pagination-arrow" viewBox="0 0 12 12" fill="none">
-            <path d="M4.5 2L8.5 6L4.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M4.5 2L8.5 6L4.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
       );
@@ -203,7 +203,7 @@ const BlogListPage = () => {
     try {
       setLoading(true);
       const response = await fetch(`${API_BASE_URL}/blogs`);
-      
+
       if (!response.ok) throw new Error('Failed to fetch blogs');
 
       const data = await response.json();
@@ -223,111 +223,111 @@ const BlogListPage = () => {
       // Enhanced fallback data - 12 items to demonstrate pagination
       const fallbackData = [
         {
-          _id: '1', 
-          category: "Sound", 
-          image: car1Image, 
+          _id: '1',
+          category: "Sound",
+          image: car1Image,
           title: "2024 BMW ALPINA XB7 with exclusive details, extraordinary",
-          author: "admin", 
-          createdAt: "2023-11-22T00:00:00.000Z", 
+          author: "admin",
+          createdAt: "2023-11-22T00:00:00.000Z",
           tags: ['luxury', 'sound']
         },
         {
-          _id: '2', 
-          category: "Accessories", 
-          image: car2Image, 
+          _id: '2',
+          category: "Accessories",
+          image: car2Image,
           title: "BMW X6 M50i is designed to exceed your sportiest",
-          author: "admin", 
-          createdAt: "2023-11-22T00:00:00.000Z", 
+          author: "admin",
+          createdAt: "2023-11-22T00:00:00.000Z",
           tags: ['accessories', 'performance']
         },
         {
-          _id: '3', 
-          category: "Exterior", 
-          image: car3Image, 
+          _id: '3',
+          category: "Exterior",
+          image: car3Image,
           title: "BMW X5 Gold 2024 Sport Review: Light on Sport",
-          author: "admin", 
-          createdAt: "2023-11-22T00:00:00.000Z", 
+          author: "admin",
+          createdAt: "2023-11-22T00:00:00.000Z",
           tags: ['exterior', 'review']
         },
         {
-          _id: '4', 
-          category: "Body Kit", 
-          image: car4Image, 
+          _id: '4',
+          category: "Body Kit",
+          image: car4Image,
           title: "2024 Kia Sorento Hybrid Review: Big Vehicle With Small-Vehicle",
-          author: "admin", 
-          createdAt: "2023-11-22T00:00:00.000Z", 
+          author: "admin",
+          createdAt: "2023-11-22T00:00:00.000Z",
           tags: ['hybrid', 'efficiency']
         },
         {
-          _id: '5', 
-          category: "Fuel Systems", 
-          image: car5Image, 
+          _id: '5',
+          category: "Fuel Systems",
+          image: car5Image,
           title: "2024 Audi Hybrid gives up nothing with its optimized",
-          author: "admin", 
-          createdAt: "2023-11-22T00:00:00.000Z", 
+          author: "admin",
+          createdAt: "2023-11-22T00:00:00.000Z",
           tags: ['fuel-systems', 'technology']
         },
         {
-          _id: '6', 
-          category: "Interior", 
-          image: car6Image, 
+          _id: '6',
+          category: "Interior",
+          image: car6Image,
           title: "2024 BMW X3 M Sport Seats – available as a standalone option",
-          author: "admin", 
-          createdAt: "2023-11-22T00:00:00.000Z", 
+          author: "admin",
+          createdAt: "2023-11-22T00:00:00.000Z",
           tags: ['interior', 'comfort']
         },
         {
-          _id: '7', 
-          category: "Safety", 
-          image: car1Image, 
+          _id: '7',
+          category: "Safety",
+          image: car1Image,
           title: "2023 Carnival Standard blind-spot & forward collision avoidance",
-          author: "admin", 
-          createdAt: "2023-11-22T00:00:00.000Z", 
+          author: "admin",
+          createdAt: "2023-11-22T00:00:00.000Z",
           tags: ['safety', 'technology']
         },
         {
-          _id: '8', 
-          category: "Sound", 
-          image: car2Image, 
+          _id: '8',
+          category: "Sound",
+          image: car2Image,
           title: "Golf vs Polo: A Comparison of Two Volkswagen Classics",
-          author: "admin", 
-          createdAt: "2023-09-19T00:00:00.000Z", 
+          author: "admin",
+          createdAt: "2023-09-19T00:00:00.000Z",
           tags: ['comparison', 'volkswagen']
         },
         {
-          _id: '9', 
-          category: "Performance", 
-          image: car3Image, 
+          _id: '9',
+          category: "Performance",
+          image: car3Image,
           title: "Battle of the SUVs – Kia Sportage vs Hyundai Tucson",
-          author: "admin", 
-          createdAt: "2023-09-19T00:00:00.000Z", 
+          author: "admin",
+          createdAt: "2023-09-19T00:00:00.000Z",
           tags: ['suv', 'comparison']
         },
         {
-          _id: '10', 
-          category: "Performance", 
-          image: car4Image, 
+          _id: '10',
+          category: "Performance",
+          image: car4Image,
           title: "Mercedes-AMG GT 63 S Review: Ultimate Performance Machine",
-          author: "admin", 
-          createdAt: "2023-08-15T00:00:00.000Z", 
+          author: "admin",
+          createdAt: "2023-08-15T00:00:00.000Z",
           tags: ['performance', 'mercedes']
         },
         {
-          _id: '11', 
-          category: "Safety", 
-          image: car5Image, 
+          _id: '11',
+          category: "Safety",
+          image: car5Image,
           title: "Advanced Driver Assistance Systems: The Future of Road Safety",
-          author: "admin", 
-          createdAt: "2023-08-10T00:00:00.000Z", 
+          author: "admin",
+          createdAt: "2023-08-10T00:00:00.000Z",
           tags: ['safety', 'technology', 'adas']
         },
         {
-          _id: '12', 
-          category: "Technology", 
-          image: car6Image, 
+          _id: '12',
+          category: "Technology",
+          image: car6Image,
           title: "Electric Vehicle Charging Infrastructure: What You Need to Know",
-          author: "admin", 
-          createdAt: "2023-07-28T00:00:00.000Z", 
+          author: "admin",
+          createdAt: "2023-07-28T00:00:00.000Z",
           tags: ['electric', 'technology', 'charging']
         }
       ];
@@ -407,19 +407,19 @@ const BlogListPage = () => {
   if (loading) {
     return (
       <div className="blog-page-container">
-        <Navbar/>
+        <Navbar />
         <div className="blog-page-loading">
           <div className="blog-page-loading-spinner"></div>
           <p>Loading blogs...</p>
         </div>
-        <Footer/>
+        <Footer />
       </div>
     );
   }
 
   return (
     <div className="blog-page-container">
-      <Navbar/>
+      <Navbar />
       <div className="blog-page-header">
         <div className="blog-page-header-content">
           <div className="blog-page-header-flex">
@@ -447,9 +447,9 @@ const BlogListPage = () => {
         <div className="blog-page-category-filters">
           <div className="blog-page-category-filters-container">
             {categories.map((category) => (
-              <button 
-                key={category} 
-                className={`blog-page-category-tag ${selectedCategory === category ? 'active' : ''}`} 
+              <button
+                key={category}
+                className={`blog-page-category-tag ${selectedCategory === category ? 'active' : ''}`}
                 onClick={() => handleCategoryFilter(category)}
               >
                 {category}
@@ -486,12 +486,12 @@ const BlogListPage = () => {
           </div>
         )}
 
-        <BlogPagination 
-          pagination={pagination} 
-          onPageChange={handlePageChange} 
+        <BlogPagination
+          pagination={pagination}
+          onPageChange={handlePageChange}
         />
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import '../../../styles/blog-detail.css';
-import Navbar from '../../common/Navbar';
-import Footer from '../../common/Footer';
+import './BlogDetailPage.css';
+import Navbar from '../../components/layout/Navbar';
+import Footer from '../../components/layout/Footer';
 
-import Facebook from '../../../assets/images/vectors/facebook.png'
-import Instagram from '../../../assets/images/vectors/instagram.png'
-import Twitter from '../../../assets/images/vectors/twitter.png'
-import Pinterest from '../../../assets/images/vectors/pinterest.png'
+import Facebook from '../../assets/images/vectors/facebook.png'
+import Instagram from '../../assets/images/vectors/instagram.png'
+import Twitter from '../../assets/images/vectors/twitter.png'
+import Pinterest from '../../assets/images/vectors/pinterest.png'
 
 // Reusable Components
 const Avatar = ({ src, alt, size = 40 }) => (
-  <img 
+  <img
     className={`bp-av bp-av-${size === 40 ? 'sm' : 'lg'}`}
-    src={src} 
+    src={src}
     alt={alt}
   />
 );
@@ -76,7 +76,7 @@ const Comment = ({ avatar, name, date, content, onReply }) => (
 
 const FormInput = ({ label, placeholder, type = "text", required = false, name, value, onChange }) => (
   <div className="bp-input">
-    <input 
+    <input
       type={type}
       name={name}
       className="bp-field"
@@ -130,18 +130,18 @@ const BlogPost = () => {
     try {
       setLoading(true);
       const response = await fetch(`http://localhost:3001/api/blogs/${blogId}`);
-      
+
       // Check if response is ok
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       // Check content type before parsing
       const contentType = response.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
         throw new Error("Response is not JSON. The API endpoint may not exist or is returning HTML.");
       }
-      
+
       const data = await response.json();
 
       if (data.success) {
@@ -213,7 +213,7 @@ const BlogPost = () => {
         method: 'PUT'
       });
       const data = await response.json();
-      
+
       if (data.success) {
         setBlog(prev => ({
           ...prev,
@@ -235,7 +235,7 @@ const BlogPost = () => {
         body: JSON.stringify({ platform })
       });
       const data = await response.json();
-      
+
       if (data.success) {
         setBlog(prev => ({
           ...prev,
@@ -274,34 +274,34 @@ const BlogPost = () => {
 
   return (
     <article className="bp-post">
-      <Navbar/>
+      <Navbar />
       {/* Header */}
       <header className="bp-hdr">
         <h1 className="bp-title">
           {blog.title}
         </h1>
-        
+
         <div className="bp-meta">
           <div className="bp-author">
-            <Avatar 
+            <Avatar
               src={blog.author.avatar || '/default-avatar.jpg'}
               alt={`${blog.author.name} avatar`}
               size={40}
             />
             <span className="bp-author-name">{blog.author.name}</span>
           </div>
-          
+
           <div className="bp-tags">
             {blog.tags && blog.tags.slice(0, 2).map((tag, index) => (
               <Badge key={index}>{tag}</Badge>
             ))}
           </div>
-          
+
           <time className="bp-date">
-            {new Date(blog.createdAt).toLocaleDateString('en-US', { 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric' 
+            {new Date(blog.createdAt).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
             })}
           </time>
         </div>
@@ -309,7 +309,7 @@ const BlogPost = () => {
 
       {/* Featured Image */}
       <div className="bp-hero">
-        <img 
+        <img
           src={blog.images.hero}
           alt={blog.images.alt || blog.title}
           className="bp-hero-img"
@@ -327,7 +327,7 @@ const BlogPost = () => {
         </p>
 
         {blog.content.quote && blog.content.quote.text && (
-          <Quote 
+          <Quote
             text={blog.content.quote.text}
             author={blog.content.quote.author}
           />
@@ -337,7 +337,7 @@ const BlogPost = () => {
         {(blog.keyFeatures?.leftColumn?.length > 0 || blog.keyFeatures?.rightColumn?.length > 0) && (
           <section className="bp-learn">
             <h2 className="bp-learn-title">Key Features & Benefits</h2>
-            
+
             <div className="bp-learn-grid">
               {blog.keyFeatures.leftColumn && (
                 <LearningList items={blog.keyFeatures.leftColumn} />
@@ -371,10 +371,10 @@ const BlogPost = () => {
           <div className="bp-share-wrap">
             <span className="bp-share-label"><strong>Share this post</strong></span>
             <div className="bp-share-btns">
-              <img src={Facebook} alt="Facebook" onClick={() => handleShare('facebook')} style={{cursor: 'pointer'}} />
-              <img src={Instagram} alt="Instagram" style={{cursor: 'pointer'}} />
-              <img src={Twitter} alt="Twitter" onClick={() => handleShare('twitter')} style={{cursor: 'pointer'}} />
-              <img src={Pinterest} alt="Pinterest" onClick={() => handleShare('pinterest')} style={{cursor: 'pointer'}} />
+              <img src={Facebook} alt="Facebook" onClick={() => handleShare('facebook')} style={{ cursor: 'pointer' }} />
+              <img src={Instagram} alt="Instagram" style={{ cursor: 'pointer' }} />
+              <img src={Twitter} alt="Twitter" onClick={() => handleShare('twitter')} style={{ cursor: 'pointer' }} />
+              <img src={Pinterest} alt="Pinterest" onClick={() => handleShare('pinterest')} style={{ cursor: 'pointer' }} />
             </div>
             <div className="bp-share-tags">
               {blog.tags && blog.tags.map((tag, index) => (
@@ -403,7 +403,7 @@ const BlogPost = () => {
         {(blog.navigation?.previous || blog.navigation?.next) && (
           <nav className="bp-nav">
             {blog.navigation.previous && blog.navigation.previous.title && (
-              <NavigationPost 
+              <NavigationPost
                 direction="previous"
                 title={blog.navigation.previous.title}
                 slug={blog.navigation.previous.slug}
@@ -411,7 +411,7 @@ const BlogPost = () => {
               />
             )}
             {blog.navigation.next && blog.navigation.next.title && (
-              <NavigationPost 
+              <NavigationPost
                 direction="next"
                 title={blog.navigation.next.title}
                 slug={blog.navigation.next.slug}
@@ -450,34 +450,34 @@ const BlogPost = () => {
           )}
           <form className="bp-form" onSubmit={handleCommentSubmit}>
             <div className="bp-form-row">
-              <FormInput 
-                label="Name" 
-                placeholder="Your Name" 
+              <FormInput
+                label="Name"
+                placeholder="Your Name"
                 name="author"
                 value={commentForm.author}
                 onChange={handleCommentInputChange}
-                required 
+                required
               />
-              <FormInput 
-                label="Email" 
-                placeholder="Your Email" 
-                type="email" 
+              <FormInput
+                label="Email"
+                placeholder="Your Email"
+                type="email"
                 name="email"
                 value={commentForm.email}
                 onChange={handleCommentInputChange}
-                required 
+                required
               />
             </div>
-            <FormInput 
-              label="Website" 
-              placeholder="Your Website" 
+            <FormInput
+              label="Website"
+              placeholder="Your Website"
               name="website"
               value={commentForm.website}
               onChange={handleCommentInputChange}
             />
-            
+
             <div className="bp-textarea-wrap">
-              <textarea 
+              <textarea
                 className="bp-textarea"
                 name="content"
                 placeholder="Write your comment here..."
@@ -487,10 +487,10 @@ const BlogPost = () => {
               ></textarea>
               <label className="bp-textarea-label">Comment</label>
             </div>
-            
+
             <div className="bp-check-wrap">
-              <input 
-                type="checkbox" 
+              <input
+                type="checkbox"
                 id="save-info"
                 className="bp-checkbox"
               />
@@ -498,14 +498,14 @@ const BlogPost = () => {
                 Save my name, email, and website in this browser for the next time I comment.
               </label>
             </div>
-            
+
             <button type="submit" className="bp-submit" disabled={commentSubmitting}>
               {commentSubmitting ? 'Submitting...' : 'Submit Comment'}
             </button>
           </form>
         </section>
       </div>
-      <Footer/>
+      <Footer />
     </article>
   );
 };

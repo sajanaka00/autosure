@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { tokenManager } from '../../utils/tokenManager';
 import { User, Menu, X, ChevronDown } from 'lucide-react';
 import Logo from '../../assets/images/vectors/logo.png'
-import '../../styles/navbar.css';
+import './Navbar.css';
 
 export default function Navbar({ user, onLogout }) {
   const [dropdownOpen, setDropdownOpen] = useState({});
@@ -34,27 +34,27 @@ export default function Navbar({ user, onLogout }) {
     const handleScroll = () => {
       const footer = document.querySelector('footer, .footer, .site-footer');
       const navbar = document.querySelector('.navbar-group');
-      
+
       if (footer && navbar) {
         const footerRect = footer.getBoundingClientRect();
         const navbarHeight = 130; // Total navbar + curve height
-        
+
         // Check if footer is near the top of the viewport
         const isNearFooter = footerRect.top <= navbarHeight;
-        
+
         setNearFooter(isNearFooter);
-        
+
         // Add/remove class to navbar for styling
         if (isNearFooter) {
           navbar.classList.add('near-footer');
         } else {
           navbar.classList.remove('near-footer');
         }
-        
+
         // Alternative approach: Check footer background color and add class to body
         const footerStyle = window.getComputedStyle(footer);
         const footerBg = footerStyle.backgroundColor;
-        
+
         // If footer has dark background, add class to body
         if (isDarkColor(footerBg) && isNearFooter) {
           document.body.classList.add('has-dark-footer');
@@ -73,7 +73,7 @@ export default function Navbar({ user, onLogout }) {
         return brightness < 128; // Dark if brightness is less than 128
       }
       // Check for common dark color keywords
-      return ['black', 'dark', 'navy', 'darkblue', 'darkgreen', 'darkred'].some(darkColor => 
+      return ['black', 'dark', 'navy', 'darkblue', 'darkgreen', 'darkred'].some(darkColor =>
         color.toLowerCase().includes(darkColor)
       );
     };
@@ -136,7 +136,7 @@ export default function Navbar({ user, onLogout }) {
     if (isHomePage) {
       const element = document.getElementById(sectionId);
       if (element) {
-        element.scrollIntoView({ 
+        element.scrollIntoView({
           behavior: 'smooth',
           block: 'start'
         });
@@ -144,30 +144,30 @@ export default function Navbar({ user, onLogout }) {
     } else {
       navigate(`/#${sectionId}`);
     }
-    
+
     setDropdownOpen({});
     setMobileMenuOpen(false);
   };
 
   const handleNavClick = (itemId, dropdownItem = null) => {
     let route = '/';
-    
+
     if (itemId === 'home' && dropdownItem) {
       const sectionMap = {
         'Browse by Type': 'browse-by-type',
-        'Get Fair Price': 'get-fair-price', 
+        'Get Fair Price': 'get-fair-price',
         'Why Choose Us': 'why-choose-us',
         'Explore All Vehicles': 'explore-vehicles',
         'Testimonials': 'testimonials'
       };
-      
+
       const sectionId = sectionMap[dropdownItem];
       if (sectionId) {
         scrollToSection(sectionId);
         return;
       }
     }
-    
+
     switch (itemId) {
       case 'home':
         route = '/';
@@ -199,12 +199,12 @@ export default function Navbar({ user, onLogout }) {
       default:
         route = '/';
     }
-    
+
     if (dropdownItem && itemId !== 'home') {
       const queryParam = dropdownItem.toLowerCase().replace(/\s+/g, '-');
       route += `?category=${queryParam}`;
     }
-    
+
     navigate(route);
     setDropdownOpen({});
     setMobileMenuOpen(false);
@@ -231,14 +231,14 @@ export default function Navbar({ user, onLogout }) {
 
   const getNavItems = () => {
     const baseNavItems = [
-      { 
-        id: 'home', 
+      {
+        id: 'home',
         label: 'Home',
         hasDropdown: isHomePage,
         dropdownItems: isHomePage ? ['Browse by Type', 'Get Fair Price', 'Why Choose Us', 'Explore All Vehicles', 'Testimonials'] : []
       },
-      { 
-        id: 'listings', 
+      {
+        id: 'listings',
         label: 'Vehicles',
       },
       { id: 'blog', label: 'Blog' },
@@ -249,7 +249,7 @@ export default function Navbar({ user, onLogout }) {
     if (isAdmin) {
       baseNavItems.push({ id: 'admin', label: 'Admin Dashboard' });
     }
-    
+
     if (isDealer) {
       baseNavItems.push({ id: 'dealer-dashboard', label: 'Dealer Portal' });
     }
@@ -266,7 +266,7 @@ export default function Navbar({ user, onLogout }) {
           <div className="white-curved-overlay"></div>
         </div>
       )}
-      
+
       <nav className="navbar-main">
         <div className="navbar-container">
           <div className="navbar-logo-link" onClick={() => handleNavClick('home')}>
@@ -302,7 +302,7 @@ export default function Navbar({ user, onLogout }) {
                     <div className="nav-underline"></div>
                   )}
                 </div>
-                
+
                 {item.hasDropdown && dropdownOpen[item.id] && (
                   <div className="dropdown-menu">
                     {item.dropdownItems && item.dropdownItems.map((dropdownItem, index) => (
@@ -342,9 +342,9 @@ export default function Navbar({ user, onLogout }) {
                 <span className="sign-in-text">Sign in</span>
               </div>
             )}
-            
+
             {!isCustomer && (
-              <button 
+              <button
                 className="submit-listing-button"
                 onClick={() => handleNavClick('submit-listing')}
               >
@@ -353,7 +353,7 @@ export default function Navbar({ user, onLogout }) {
             )}
           </div>
 
-          <button 
+          <button
             className="mobile-menu-toggle"
             onClick={toggleMobileMenu}
             aria-label="Toggle mobile menu"
@@ -381,7 +381,7 @@ export default function Navbar({ user, onLogout }) {
                     <ChevronDown className={`nav-dropdown-icon ${dropdownOpen[item.id] ? 'rotated' : ''}`} style={{ marginLeft: 'auto', width: '16px', height: '16px' }} />
                   )}
                 </button>
-                
+
                 {item.hasDropdown && dropdownOpen[item.id] && (
                   <div style={{ paddingLeft: '20px', backgroundColor: '#f8fafc' }}>
                     {item.dropdownItems && item.dropdownItems.map((dropdownItem, index) => (
@@ -400,14 +400,14 @@ export default function Navbar({ user, onLogout }) {
             ))}
 
             {!isCustomer && (
-              <button 
+              <button
                 className="mobile-submit-listing"
                 onClick={() => handleNavClick('submit-listing')}
               >
                 Submit Listing
               </button>
             )}
-            
+
             <div className="mobile-user-section">
               {user ? (
                 <div className="mobile-user-info">

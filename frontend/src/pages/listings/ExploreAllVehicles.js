@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Bookmark } from 'lucide-react';
-import TransmissionImg from '../../../assets/images/vectors/transmission.png'
-import MileageImg from '../../../assets/images/vectors/mileage.png'
-import FuelImg from '../../../assets/images/vectors/fuel.png'
-import '../../../styles/explore-all-vehicles.css';
+import TransmissionImg from '../../assets/images/vectors/transmission.png'
+import MileageImg from '../../assets/images/vectors/mileage.png'
+import FuelImg from '../../assets/images/vectors/fuel.png'
+import './ExploreAllVehicles.css';
 
 export default function ExploreAllVehicles() {
   const navigate = useNavigate();
@@ -14,13 +14,13 @@ export default function ExploreAllVehicles() {
 
   const navigateToCarDetail = (carId) => {
     console.log('Navigating to car:', carId);
-    
+
     // Scroll to top before navigation
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
-    
+
     // Small delay to ensure smooth scroll completes before navigation
     setTimeout(() => {
       navigate(`/car-listing/${carId}`);
@@ -29,13 +29,13 @@ export default function ExploreAllVehicles() {
 
   const navigateToVehiclesPage = () => {
     console.log('Navigating to all vehicles page');
-    
+
     // Scroll to top before navigation
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
-    
+
     // Small delay to ensure smooth scroll completes before navigation
     setTimeout(() => {
       navigate('/vehicles');
@@ -45,10 +45,10 @@ export default function ExploreAllVehicles() {
   // Alternative approach: Immediate navigation with instant scroll
   const navigateToCarDetailInstant = (carId) => {
     console.log('Navigating to car:', carId);
-    
+
     // Navigate immediately
     navigate(`/car-listing/${carId}`);
-    
+
     // Scroll to top after navigation
     setTimeout(() => {
       window.scrollTo(0, 0);
@@ -195,20 +195,20 @@ export default function ExploreAllVehicles() {
   const currentCars = allCarData[activeTab] || [];
 
   const CarCard = ({ car, index }) => (
-    <div 
+    <div
       className="eav-card"
       onClick={() => navigateToCarDetail(car.id)}
     >
       {/* Image Container */}
       <div className="eav-img-container">
         <div className="eav-img-wrapper">
-          <img 
-            src={car.image} 
+          <img
+            src={car.image}
             alt={car.title}
             className="eav-img"
           />
         </div>
-        
+
         {/* Badge */}
         {car.badge && (
           <div className={`eav-badge ${car.badgeColor === 'green' ? 'eav-badge-green' : 'eav-badge-blue'}`}>
@@ -217,7 +217,7 @@ export default function ExploreAllVehicles() {
             </div>
           </div>
         )}
-        
+
         {/* Bookmark Icon */}
         <div className="eav-bookmark" onClick={(e) => {
           e.stopPropagation();
@@ -228,21 +228,21 @@ export default function ExploreAllVehicles() {
           </div>
         </div>
       </div>
-      
+
       {/* Content */}
       <div className="eav-content">
         {/* Title */}
         <div className="eav-title-container">
           <div className="eav-title">{car.title}</div>
         </div>
-        
+
         {/* Description */}
         <div className="eav-desc-container">
           <div className="eav-desc">
             {car.description}
           </div>
         </div>
-        
+
         {/* Specifications */}
         <div className="eav-specs">
           {/* First Row */}
@@ -256,7 +256,7 @@ export default function ExploreAllVehicles() {
               <div className="eav-spec-text">{car.fuelType}</div>
             </div>
           </div>
-          
+
           {/* Second Row */}
           <div className="eav-spec-row">
             <div className="eav-spec-item">
@@ -269,7 +269,7 @@ export default function ExploreAllVehicles() {
             </div>
           </div>
         </div>
-        
+
         {/* Price and View Details */}
         <div className="eav-footer">
           <div className="eav-price">{car.price}</div>
@@ -293,7 +293,7 @@ export default function ExploreAllVehicles() {
         <div className="eav-view-all-text">View All</div>
         <ArrowRight className="eav-view-all-arrow" />
       </div>
-      
+
       {/* Tabs */}
       <div className="eav-tabs">
         {tabs.map((tab, index) => (
@@ -309,7 +309,7 @@ export default function ExploreAllVehicles() {
           </div>
         ))}
       </div>
-      
+
       {/* Car Cards Grid */}
       <div className="eav-grid">
         {currentCars.map((car, index) => (
