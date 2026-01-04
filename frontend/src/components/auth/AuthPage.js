@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import { tokenManager } from '../../utils/tokenManager';
+import '../../styles/auth.css';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
 import Dashboard from '../pages/dashboard/Dashboard';
@@ -15,7 +16,7 @@ export default function AuthPage() {
     const checkAuth = async () => {
       const token = tokenManager.getToken();
       const storedUser = tokenManager.getUser();
-      
+
       if (token && storedUser) {
         try {
           // Verify token is still valid
@@ -54,17 +55,17 @@ export default function AuthPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="auth-loading-container">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
+          <div className="auth-loading-spinner"></div>
+          <p className="auth-loading-text">Loading...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="auth-page-root">
       {currentView === 'dashboard' ? (
         <Dashboard user={user} onLogout={handleLogout} />
       ) : currentView === 'login' ? (

@@ -1,10 +1,10 @@
 // API Service
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = 'http://localhost:5001/api';
 
 class ApiService {
   async makeRequest(endpoint, options = {}) {
     const url = `${API_BASE_URL}${endpoint}`;
-    
+
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ class ApiService {
   async getVehicles(token, params = {}) {
     const queryString = new URLSearchParams(params).toString();
     const endpoint = queryString ? `/vehicles?${queryString}` : '/vehicles';
-    
+
     return this.makeRequest(endpoint, {
       method: 'GET',
       headers: {
@@ -145,7 +145,7 @@ class ApiService {
   async getUserVehicles(token, params = {}) {
     const queryString = new URLSearchParams(params).toString();
     const endpoint = queryString ? `/vehicles/user/my-vehicles?${queryString}` : '/vehicles/user/my-vehicles';
-    
+
     return this.makeRequest(endpoint, {
       method: 'GET',
       headers: {
@@ -175,7 +175,7 @@ class ApiService {
   // Special method for file uploads (FormData)
   async makeFileRequest(endpoint, formData, token) {
     const url = `${API_BASE_URL}${endpoint}`;
-    
+
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -202,7 +202,7 @@ class ApiService {
   // Method for file requests with other HTTP methods (PUT, PATCH)
   async makeFileRequestWithMethod(endpoint, formData, token, method = 'POST') {
     const url = `${API_BASE_URL}${endpoint}`;
-    
+
     try {
       const response = await fetch(url, {
         method: method,
@@ -239,10 +239,10 @@ class ApiService {
 
   async getVehiclesByCategory(categoryId, token, params = {}) {
     const queryString = new URLSearchParams(params).toString();
-    const endpoint = queryString 
-      ? `/vehicles/category/${categoryId}?${queryString}` 
+    const endpoint = queryString
+      ? `/vehicles/category/${categoryId}?${queryString}`
       : `/vehicles/category/${categoryId}`;
-    
+
     return this.makeRequest(endpoint, {
       method: 'GET',
       headers: {
