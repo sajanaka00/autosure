@@ -260,11 +260,11 @@ export default function Home() {
       </section>
 
       {/* WHY CHOOSE US */}
-      <section className="h-section reveal-on-scroll">
+      {/* <section className="h-section reveal-on-scroll">
         <div className="h-container">
           <WhyChooseUs />
         </div>
-      </section>
+      </section> */}
 
       {/* GET FAIR PRICE */}
       <section className="h-section reveal-on-scroll">
@@ -274,11 +274,11 @@ export default function Home() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="h-section reveal-on-scroll">
+      {/* <section className="h-section reveal-on-scroll">
         <div className="h-container">
           <TestimonialsSection />
         </div>
-      </section>
+      </section> */}
 
       <Footer />
 
