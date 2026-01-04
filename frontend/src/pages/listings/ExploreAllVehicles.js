@@ -4,9 +4,21 @@ import { ArrowRight, Bookmark } from 'lucide-react';
 import TransmissionImg from '../../assets/images/vectors/transmission.png'
 import MileageImg from '../../assets/images/vectors/mileage.png'
 import FuelImg from '../../assets/images/vectors/fuel.png'
+
+import EAV1 from '../../assets/images/cars/eav1.jpg'
+import EAV2 from '../../assets/images/cars/eav2.jpg'
+import EAV3 from '../../assets/images/cars/eav3.jpg'
+import EAV4 from '../../assets/images/cars/eav4.jpg'
+import EAV5 from '../../assets/images/cars/eav5.jpg'
+import EAV6 from '../../assets/images/cars/eav6.jpg'
+import EAV7 from '../../assets/images/cars/eav7.jpg'
+import EAV8 from '../../assets/images/cars/eav8.jpg'
+import EAV9 from '../../assets/images/cars/eav9.jpg'
+import EAV10 from '../../assets/images/cars/eav10.jpg'
+
 import './ExploreAllVehicles.css';
 
-export default function ExploreAllVehicles() {
+export default function ExploreAllVehicles({ theme = 'light' }) {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('Recent Cars');
 
@@ -14,14 +26,10 @@ export default function ExploreAllVehicles() {
 
   const navigateToCarDetail = (carId) => {
     console.log('Navigating to car:', carId);
-
-    // Scroll to top before navigation
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
-
-    // Small delay to ensure smooth scroll completes before navigation
     setTimeout(() => {
       navigate(`/car-listing/${carId}`);
     }, 100);
@@ -29,256 +37,222 @@ export default function ExploreAllVehicles() {
 
   const navigateToVehiclesPage = () => {
     console.log('Navigating to all vehicles page');
-
-    // Scroll to top before navigation
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
-
-    // Small delay to ensure smooth scroll completes before navigation
     setTimeout(() => {
       navigate('/vehicles');
     }, 100);
   };
 
-  // Alternative approach: Immediate navigation with instant scroll
-  const navigateToCarDetailInstant = (carId) => {
-    console.log('Navigating to car:', carId);
-
-    // Navigate immediately
-    navigate(`/car-listing/${carId}`);
-
-    // Scroll to top after navigation
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-    }, 0);
-  };
-
-  // Organized car data by category
   const allCarData = {
     'Recent Cars': [
       {
         id: 1,
-        title: 'Toyota Camry New',
-        description: '3.5 D5 PowerPulse Momentum 5dr AW…\nGeartronic Estate',
-        price: '$40,000',
-        badge: 'Great Price',
-        badgeColor: 'green',
-        mileage: '20 Miles',
-        fuelType: 'Petrol',
-        transmission: 'Automatic',
-        year: '2023',
-        image: 'https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=400&h=300&fit=crop&crop=center'
+        title: 'Toyota Camry XSE',
+        description: 'Sporty and reliable sedan with premium interior and advanced safety features.',
+        price: '$35,800',
+        badge: 'Top Rated',
+        badgeColor: 'blue',
+        mileage: '12 Miles',
+        fuelType: 'Hybrid',
+        transmission: 'CVT',
+        year: '2024',
+        image: EAV1
       },
       {
         id: 2,
-        title: 'T-Cross – 2023',
-        description: '4.0 D5 PowerPulse Momentum 5dr AW…\nGeartronic Estate',
-        price: '$15,000',
-        badge: null,
-        mileage: '15 Miles',
+        title: 'Audi A4 Premium',
+        description: 'Elegant luxury sedan with sophisticated technology and smooth performance.',
+        price: '$41,200',
+        badge: 'New Arrival',
+        badgeColor: 'green',
+        mileage: '8 Miles',
         fuelType: 'Petrol',
-        transmission: 'CVT',
-        year: '2023',
-        image: 'https://images.unsplash.com/photo-1549399090-7e1ad5019a5c?w=400&h=300&fit=crop&crop=center'
+        transmission: 'Automatic',
+        year: '2024',
+        image: EAV2
       },
       {
         id: 3,
-        title: 'C-Class – 2023',
-        description: '4.0 D5 PowerPulse Momentum 5dr AW…\nGeartronic Estate',
-        price: '$150,000',
-        badge: null,
-        mileage: '50 Miles',
+        title: 'BMW 5 Series',
+        description: 'The ultimate driving machine with unmatched handling and luxury finish.',
+        price: '$57,900',
+        badge: 'Editor\'s Choice',
+        badgeColor: 'green',
+        mileage: '15 Miles',
         fuelType: 'Petrol',
         transmission: 'Automatic',
-        year: '2023',
-        image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&h=300&fit=crop&crop=center'
+        year: '2024',
+        image: EAV3
       },
       {
         id: 4,
-        title: 'Ford Transit – 2021',
-        description: '4.0 D5 PowerPulse Momentum 5dr AW…\nGeartronic Estate',
-        price: '$22,000',
-        badge: 'Great Price',
-        badgeColor: 'green',
-        mileage: '2500 Miles',
-        fuelType: 'Diesel',
-        transmission: 'Manual',
-        year: '2021',
-        image: 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=400&h=300&fit=crop&crop=center'
+        title: 'Mercedes-Benz C-Class',
+        description: 'Modern luxury redefined with a digital cockpit and premium comfort.',
+        price: '$46,950',
+        badge: 'Bestseller',
+        badgeColor: 'blue',
+        mileage: '5 Miles',
+        fuelType: 'Petrol',
+        transmission: 'Automatic',
+        year: '2024',
+        image: EAV4
       },
       {
         id: 5,
-        title: 'New GLC – 2023',
-        description: '4.0 D5 PowerPulse Momentum 5dr AW…\nGeartronic Estate',
-        price: '$95,000',
-        badge: 'Low Mileage',
-        badgeColor: 'blue',
-        mileage: '50 Miles',
-        fuelType: 'Petrol',
-        transmission: 'Automatic',
+        title: 'Tesla Model 3',
+        description: 'Fully electric performance with cutting-edge autopilot technology.',
+        price: '$38,990',
+        badge: 'Electric',
+        badgeColor: 'green',
+        mileage: '2,500 Miles',
+        fuelType: 'Electric',
+        transmission: 'Single Speed',
         year: '2023',
-        image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400&h=300&fit=crop&crop=center'
+        image: EAV5
       },
       {
         id: 6,
-        title: 'Audi A6 3.5 – New',
-        description: '3.5 D5 PowerPulse Momentum 5dr AW…\nGeartronic Estate',
-        price: '$58,000',
-        badge: null,
-        mileage: '100 Miles',
+        title: 'Lexus RX 350',
+        description: 'Spacious and reliable luxury SUV with a focus on ride quality and silence.',
+        price: '$49,950',
+        badge: 'Family Pick',
+        badgeColor: 'blue',
+        mileage: '10 Miles',
         fuelType: 'Petrol',
         transmission: 'Automatic',
-        year: '2023',
-        image: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&h=300&fit=crop&crop=center'
+        year: '2024',
+        image: EAV6
       },
       {
         id: 7,
-        title: 'Corolla Altis – 2023',
-        description: '3.5 D5 PowerPulse Momentum 5dr AW…\nGeartronic Estate',
-        price: '$45,000',
-        badge: null,
-        mileage: '15000 Miles',
-        fuelType: 'Petrol',
-        transmission: 'CVT',
-        year: '2023',
-        image: 'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?w=400&h=300&fit=crop&crop=center'
+        title: 'Volvo XC90',
+        description: 'The pinnacle of safety and Scandinavian design in a 7-seater SUV.',
+        price: '$56,000',
+        badge: 'Safe Choice',
+        badgeColor: 'green',
+        mileage: '45 Miles',
+        fuelType: 'Hybrid',
+        transmission: 'Automatic',
+        year: '2024',
+        image: EAV7
       },
       {
         id: 8,
-        title: 'Ford Explorer 2023',
-        description: '3.5 D5 PowerPulse Momentum 5dr AW…\nGeartronic Estate',
-        price: '$35,000',
-        badge: 'Great Price',
+        title: 'Honda CR-V Hybrid',
+        description: 'Versatile and efficient crossover perfect for urban and outdoor adventures.',
+        price: '$34,050',
+        badge: 'Eco Friendly',
         badgeColor: 'green',
-        mileage: '10 Miles',
-        fuelType: 'Diesel',
-        transmission: 'CVT',
-        year: '2023',
-        image: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=400&h=300&fit=crop&crop=center'
+        mileage: '100 Miles',
+        fuelType: 'Hybrid',
+        transmission: 'E-CVT',
+        year: '2024',
+        image: EAV8
       }
     ],
     'Featured Cars': [
       {
         id: 9,
-        title: 'Mercedes C-Class AMG',
-        description: '4.0 V8 BiTurbo AMG Performance…',
-        price: '$85,000',
-        badge: 'Editor\'s Choice',
-        badgeColor: 'green',
+        title: 'Porsche 911 Carrera',
+        description: 'Iconic sports car performance with everyday usability and timeless design.',
+        price: '$114,400',
+        badge: 'High Performance',
+        badgeColor: 'blue',
         mileage: '500 Miles',
         fuelType: 'Petrol',
-        transmission: 'Automatic',
+        transmission: 'PDK',
         year: '2023',
-        image: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&h=300&fit=crop&crop=center'
+        image: EAV9
       }
     ],
     'Popular Cars': [
       {
         id: 10,
-        title: 'Toyota Corolla 2023',
-        description: '1.8 Hybrid Dynamic Force…',
-        price: '$25,000',
-        badge: 'Best Seller',
+        title: 'Ford Mustang GT',
+        description: 'American muscle with modern tech and an unmistakable V8 rumble.',
+        price: '$42,495',
+        badge: 'Iconic',
         badgeColor: 'blue',
-        mileage: '15,000 Miles',
-        fuelType: 'Hybrid',
-        transmission: 'CVT',
+        mileage: '1,200 Miles',
+        fuelType: 'Petrol',
+        transmission: 'Manual',
         year: '2023',
-        image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=300&fit=crop&crop=center'
+        image: EAV10
       }
     ]
   };
 
-  // Get current cars based on active tab
   const currentCars = allCarData[activeTab] || [];
 
-  const CarCard = ({ car, index }) => (
+  const CarCard = ({ car }) => (
     <div
       className="eav-card"
       onClick={() => navigateToCarDetail(car.id)}
     >
-      {/* Image Container */}
-      <div className="eav-img-container">
-        <div className="eav-img-wrapper">
-          <img
-            src={car.image}
-            alt={car.title}
-            className="eav-img"
-          />
-        </div>
+      {/* Card Image */}
+      <img
+        src={car.image}
+        alt={car.title}
+        className="eav-card-bg"
+      />
 
-        {/* Badge */}
-        {car.badge && (
-          <div className={`eav-badge ${car.badgeColor === 'green' ? 'eav-badge-green' : 'eav-badge-blue'}`}>
-            <div className="eav-badge-text">
-              {car.badge}
-            </div>
-          </div>
-        )}
+      {/* Gradient Overlay */}
+      <div className="eav-card-overlay" />
 
-        {/* Bookmark Icon */}
-        <div className="eav-bookmark" onClick={(e) => {
-          e.stopPropagation();
-          console.log(`Bookmarked car: ${car.title}`);
-        }}>
-          <div className="eav-bookmark-bg">
-            <Bookmark className="eav-bookmark-icon" />
-          </div>
-        </div>
+      {/* Top Actions */}
+      <div className="eav-top-actions">
+        {car.badge ? (
+          <span className={`eav-badge ${car.badgeColor === 'green' ? 'eav-badge-green' : 'eav-badge-blue'}`}>
+            {car.badge}
+          </span>
+        ) : <span />}
+
+        <button
+          className="eav-bookmark-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            // Implement bookmark functionality
+          }}
+        >
+          <Bookmark size={18} />
+        </button>
       </div>
 
-      {/* Content */}
-      <div className="eav-content">
-        {/* Title */}
-        <div className="eav-title-container">
-          <div className="eav-title">{car.title}</div>
+      {/* Content Bottom */}
+      <div className="eav-card-content">
+        <div className="eav-main-info">
+          <h3 className="eav-card-title">{car.title}</h3>
+          <p className="eav-card-price">{car.price}</p>
         </div>
 
-        {/* Description */}
-        <div className="eav-desc-container">
-          <div className="eav-desc">
-            {car.description}
-          </div>
-        </div>
-
-        {/* Specifications */}
-        <div className="eav-specs">
-          {/* First Row */}
-          <div className="eav-spec-row">
-            <div className="eav-spec-item">
-              <img className="eav-spec-icon" src={MileageImg} alt="Mileage" />
-              <div className="eav-spec-text">{car.mileage}</div>
+        {/* Revealed on hover */}
+        <div className="eav-specs-reveal">
+          <div className="eav-specs-grid">
+            <div className="eav-spec">
+              <img src={MileageImg} alt="Mileage" className="spec-icon" />
+              <span>{car.mileage}</span>
             </div>
-            <div className="eav-spec-item">
-              <img className="eav-spec-icon" src={FuelImg} alt="Fuel" />
-              <div className="eav-spec-text">{car.fuelType}</div>
+            <div className="eav-spec">
+              <img src={FuelImg} alt="Fuel" className="spec-icon" />
+              <span>{car.fuelType}</span>
             </div>
-          </div>
-
-          {/* Second Row */}
-          <div className="eav-spec-row">
-            <div className="eav-spec-item">
-              <img className="eav-spec-icon" src={TransmissionImg} alt="Transmission" />
-              <div className="eav-spec-text">{car.transmission}</div>
+            <div className="eav-spec">
+              <img src={TransmissionImg} alt="Transmission" className="spec-icon" />
+              <span>{car.transmission}</span>
             </div>
-            <div className="eav-spec-item">
-              <img className="eav-spec-icon" src={MileageImg} alt="Year" />
-              <div className="eav-spec-text">{car.year}</div>
+            <div className="eav-spec">
+              <img src={MileageImg} alt="Year" className="spec-icon" />
+              <span>{car.year}</span>
             </div>
           </div>
-        </div>
 
-        {/* Price and View Details */}
-        <div className="eav-footer">
-          <div className="eav-price">{car.price}</div>
-          <div className="eav-view-details" onClick={(e) => {
-            e.stopPropagation();
-            navigateToCarDetail(car.id);
-          }}>
-            <div className="eav-view-text">View Details</div>
-            <ArrowRight className="eav-view-arrow" />
+          <div className="eav-card-footer">
+            <span className="eav-view-link">
+              View Details <ArrowRight size={16} />
+            </span>
           </div>
         </div>
       </div>
@@ -286,34 +260,32 @@ export default function ExploreAllVehicles() {
   );
 
   return (
-    <div className="eav-section">
-      {/* Header */}
-      <div className="eav-header-title">Explore All Vehicles</div>
-      <div className="eav-view-all" onClick={navigateToVehiclesPage}>
-        <div className="eav-view-all-text">View All</div>
-        <ArrowRight className="eav-view-all-arrow" />
-      </div>
+    <div className={`eav-section ${theme === 'dark' ? 'eav-dark' : ''}`}>
+      <div className="eav-header">
+        <h2 className="eav-header-title">Explore All Vehicles</h2>
 
-      {/* Tabs */}
-      <div className="eav-tabs">
-        {tabs.map((tab, index) => (
-          <div
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`eav-tab eav-tab-${index + 1}`}
-          >
-            <div className="eav-tab-text">
+        {/* Filter Pills */}
+        <div className="eav-filter-pills">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`eav-pill ${activeTab === tab ? 'active' : ''}`}
+            >
               {tab}
-            </div>
-            {activeTab === tab && <div className="eav-tab-line" />}
-          </div>
-        ))}
+            </button>
+          ))}
+        </div>
+
+        <div className="eav-view-all-btn" onClick={navigateToVehiclesPage}>
+          <span>View All</span>
+          <ArrowRight size={16} />
+        </div>
       </div>
 
-      {/* Car Cards Grid */}
       <div className="eav-grid">
-        {currentCars.map((car, index) => (
-          <CarCard key={car.id} car={car} index={index} />
+        {currentCars.map((car, idx) => (
+          <CarCard key={car.id} car={car} />
         ))}
       </div>
     </div>
