@@ -88,7 +88,7 @@ label,
 /* --- Hero Section (Bento Grid) --- */
 .modern-vdp-header-section {
   padding-top: 100px;
-  padding-bottom: 24px;
+  /* padding-bottom: 24px; */
 }
 
 .modern-vdp-hero {
@@ -98,10 +98,10 @@ label,
 
 .vdp-hero-grid {
   display: grid;
-  grid-template-columns: 3fr 1fr;
-  /* 75% Main, 25% Side (Small Portrait Strip) */
-  /* Widened side column for better image visibility */
+  grid-template-columns: 1fr 400px;
+  /* Align with main grid columns */
   gap: 12px;
+  /* Match main layout gap */
   height: 520px;
   max-height: 520px;
   overflow: hidden;
@@ -399,6 +399,8 @@ label,
 /* --- Responsive --- */
 @media (max-width: 1024px) {
   .vdp-hero-grid {
+    grid-template-columns: 1fr 340px;
+    gap: 32px;
     height: 400px;
   }
 
@@ -1245,29 +1247,30 @@ label,
 }
 
 .vdp-spec-card-content {
+  margin-top: 15px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 10px;
 }
 
 .vdp-spec-card-label {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   text-transform: uppercase;
   color: var(--vdp-text-secondary);
 }
 
 .vdp-spec-card-value {
   font-size: 24px;
-  font-weight: 800;
+  font-weight: 600;
   color: var(--vdp-text-primary);
   line-height: 1.1;
 }
 
 .vdp-spec-card-sub {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--vdp-text-secondary);
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .vdp-specs-footer {
@@ -1277,10 +1280,11 @@ label,
 
 .vdp-view-full-specs-btn {
   background: transparent;
-  border: 1px solid var(--vdp-border);
-  padding: 12px 24px;
+  border: 2px solid var(--vdp-border);
+  padding: 15px 25px;
   border-radius: var(--vdp-radius-md);
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   color: var(--vdp-text-primary);
   cursor: pointer;
   transition: all 0.2s;

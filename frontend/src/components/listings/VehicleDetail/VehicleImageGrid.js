@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ImageIcon, X } from 'lucide-react';
-import BMW1 from '../../../assets/images/cars/audi1.jpg';
-import BMW2 from '../../../assets/images/cars/audi2.jpg';
-import BMW3 from '../../../assets/images/cars/audi3.jpg';
-import BMW4 from '../../../assets/images/cars/audi4.jpg';
-import BMW5 from '../../../assets/images/cars/audi5.jpg';
+import BMW1 from '../../../assets/images/cars/vdp1.jpg';
+import BMW2 from '../../../assets/images/cars/vdp2.jpg';
+import BMW3 from '../../../assets/images/cars/vdp3.jpg';
+import BMW4 from '../../../assets/images/cars/vdp4.jpg';
+import BMW5 from '../../../assets/images/cars/vdp5.jpg';
 // import BMW6 from '../../../assets/images/cars/audi6.jpg';
 
 const VehicleImageGrid = () => {
