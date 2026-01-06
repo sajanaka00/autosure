@@ -98,7 +98,6 @@ label,
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
   gap: 12px;
-  /* Match main grid gap for alignment */
   height: 100%;
 }
 
@@ -142,7 +141,6 @@ label,
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
-  /* Constant visible overlay */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -165,7 +163,6 @@ label,
 .modern-vdp-main-grid {
   display: grid;
   grid-template-columns: 1fr 400px;
-  /* Wider sidebar for emphasis */
   gap: 64px;
   align-items: start;
   /* padding-bottom: 80px; */
@@ -184,7 +181,6 @@ label,
 .modern-vdp-sticky {
   position: sticky;
   top: 120px;
-  /* Space for Navbar */
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -559,7 +555,6 @@ label,
 
   .vdp-btn-label {
     display: none;
-    /* Hide labels on mobile to save space */
   }
 
   .modern-vdp-header__icon-btn {
@@ -644,7 +639,6 @@ label,
   background: white;
   border-radius: var(--vdp-radius-lg);
   border: 1px solid var(--vdp-border);
-  /* Keep border on card itself */
   padding: 32px;
   box-shadow: var(--vdp-shadow-lg);
   position: relative;
@@ -710,7 +704,6 @@ label,
 
 .vdp-feature-check {
   color: #10b981;
-  /* Green check */
 }
 
 /* --- Component: Specs --- */
