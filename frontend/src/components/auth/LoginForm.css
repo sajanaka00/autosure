@@ -1,5 +1,4 @@
-/* loginForm.css - Premium Design */
-
+/* --- Authentication Variables --- */
 :root {
   --primary-black: #080808;
   --secondary-black: #121212;
@@ -24,7 +23,7 @@ body {
   padding: 0;
 }
 
-/* Auth Page Root (from AuthPage.js) */
+/* --- Auth Page Layout --- */
 .auth-page-root {
   min-height: 100vh;
   background-color: #FDFDFD;
@@ -67,7 +66,7 @@ body {
   }
 }
 
-/* Animations */
+/* --- Container Animations --- */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -86,26 +85,23 @@ body {
   justify-content: center;
 }
 
+/* --- Main Login Container --- */
 .login-auth-container {
   display: flex;
   width: 100%;
   max-width: 1400px;
-  /* Matched to Signup */
   height: 85vh;
-  /* Matched to Signup (approx 750px+) */
   min-height: 750px;
   background: var(--white);
   border-radius: 24px;
-  /* Matched to Signup */
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   animation: fadeIn 0.6s ease-out;
 }
 
-/* Image Section - Full Color - Widened */
+/* --- Side Image Section --- */
 .login-auth-image-section {
   flex: 1.7;
-  /* Widen photo column significantly */
   position: relative;
   overflow: hidden;
 }
@@ -121,11 +117,10 @@ body {
   transform: scale(1.03);
 }
 
-/* Form Section */
+/* --- Login Form Section --- */
 .login-auth-form {
   flex: 1;
   padding: 3rem 3.5rem;
-  /* Reduced horizontal padding slightly to accommodate wider image */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -152,12 +147,11 @@ body {
   line-height: 1.5;
 }
 
-/* Inputs */
+/* --- Form Input Fields --- */
 .login-auth-form-fields {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  /* Increased gap for better spacing */
 }
 
 .login-auth-field-group {
@@ -219,7 +213,7 @@ body {
   color: var(--primary-black);
 }
 
-/* Password Toggle */
+/* --- Password Visibility Toggle --- */
 .login-auth-password-toggle {
   position: absolute;
   right: 1rem;
@@ -238,7 +232,7 @@ body {
   color: var(--text-primary);
 }
 
-/* Error Messages */
+/* --- Validation Error Messages --- */
 .login-auth-error-alert {
   background-color: #FFF2F0;
   border: 1px solid #FFCCC7;
@@ -270,7 +264,7 @@ body {
   margin-left: 2px;
 }
 
-/* Submit Button */
+/* --- Form Submit Action --- */
 .login-auth-submit-button {
   width: 100%;
   margin-top: 1rem;
@@ -302,7 +296,7 @@ body {
   box-shadow: none;
 }
 
-/* Footer */
+/* --- Form Footer & Navigation --- */
 .login-auth-form-footer {
   margin-top: 2.5rem;
   text-align: center;
@@ -333,7 +327,7 @@ body {
   text-underline-offset: 4px;
 }
 
-/* Responsive */
+/* --- Responsive Adaptations --- */
 @media (max-width: 900px) {
   .login-page-wrapper {
     align-items: flex-start;

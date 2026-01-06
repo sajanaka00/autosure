@@ -1,36 +1,22 @@
-/* Variable & Font Setup */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
-
-/* Modern VDP Redesign 2026 */
-
-/* --- Variables --- */
+/* --- Variables & Core Setup --- */
 :root {
   --vdp-bg: #ffffff;
-  /* Clean White Background */
   --vdp-card-bg: #ffffff;
   --vdp-text-primary: #111827;
-  /* Richer Black */
   --vdp-text-secondary: #4b5563;
-  /* Slightly darker for better readability with Acumin */
   --vdp-accent: #2563eb;
-  /* Vibrant Royal Blue */
   --vdp-accent-hover: #1d4ed8;
   --vdp-border: #f3f4f6;
 
   --vdp-radius-lg: 24px;
-  /* More rounded */
   --vdp-radius-md: 16px;
   --vdp-radius-sm: 8px;
 
-  /* Premium Shadows */
   --vdp-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
   --vdp-shadow-md: 0 12px 24px -6px rgba(0, 0, 0, 0.08);
-  /* Softer, deeper shadow */
   --vdp-shadow-lg: 0 24px 48px -12px rgba(0, 0, 0, 0.12);
   --vdp-shadow-sticky: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
-  /* Font Families */
   --font-display: 'Roboto', sans-serif;
   --font-body: 'Roboto', sans-serif;
 }
@@ -40,11 +26,10 @@
   min-height: 100vh;
   color: var(--vdp-text-primary);
   font-family: var(--font-body);
-  /* Acumin for general text */
   letter-spacing: normal;
 }
 
-/* Headings use Outfit */
+/* --- Base Typography --- */
 h1,
 h2,
 h3,
@@ -59,7 +44,6 @@ h6,
   letter-spacing: -0.02em;
 }
 
-/* Specific Targets for Acumin (Labels/Descriptions) */
 p,
 span,
 label,
@@ -76,36 +60,29 @@ label,
   max-width: 1440px;
   margin: 0 auto;
   padding: 20px 80px;
-  /* Reduced vertical padding */
 }
 
 /* --- Section Spacing Utility --- */
 .vdp-content-section {
   margin-bottom: 20px;
-  /* Reduced from 60px */
 }
 
-/* --- Hero Section (Bento Grid) --- */
+/* --- Hero Section & Bento Grid --- */
 .modern-vdp-header-section {
   padding-top: 100px;
-  /* padding-bottom: 24px; */
 }
 
 .modern-vdp-hero {
   padding-top: 0;
-  /* padding-bottom: 32px; */
 }
 
 .vdp-hero-grid {
   display: grid;
   grid-template-columns: 1fr 400px;
-  /* Align with main grid columns */
   gap: 12px;
-  /* Match main layout gap */
   height: 520px;
   max-height: 520px;
   overflow: hidden;
-  /* Prevent growth if more images added */
 }
 
 .vdp-hero-main {
@@ -594,7 +571,7 @@ label,
 
 /* --- Component: Overview Strip --- */
 .vdp-overview {
-  /* margin-bottom: 10px; */
+  margin-bottom: 20px;
 }
 
 .vdp-section-title {
@@ -828,11 +805,9 @@ label,
 .vdp-description__downloads {
   display: flex;
   flex-direction: row;
-  /* Changed from column/default */
   gap: 24px;
   margin-top: 32px;
   flex-wrap: wrap;
-  /* Safety for mobile */
 }
 
 .vdp-description__download-link {
@@ -845,11 +820,10 @@ label,
   text-decoration: none;
   padding: 16px 24px;
   border-radius: var(--vdp-radius-md);
-  transition: all 0.2s;
+  transition: all 0.2;
   background-color: white;
   border: 1px solid var(--vdp-border);
   flex: 1;
-  /* Distribute space evenly */
   min-width: 200px;
 }
 
@@ -867,12 +841,12 @@ label,
   display: none;
 }
 
-/* --- Component: Description --- */
+/* --- Vehicle Description --- */
 .vdp-description {
   margin-bottom: 0;
 }
 
-/* --- Improved Spacing & Layout Utilities --- */
+/* --- Layout Utilities --- */
 .modern-vdp-full-width-block {
   width: 100%;
   margin-bottom: 0;
@@ -892,7 +866,6 @@ label,
   padding-bottom: 32px;
 }
 
-/* --- Features & Specs Full Width Styles --- */
 .vdp-features-section,
 .vdp-spec-section {
   background: transparent;
@@ -911,7 +884,7 @@ label,
   padding-left: 0;
 }
 
-/* --- Features Redesign: 4-Card Row --- */
+/* --- Vehicle Features Grid --- */
 .vdp-features-row-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -958,7 +931,6 @@ label,
 .vdp-card-title {
   font-size: 18px;
   font-weight: 700;
-  /* Outfit/Roboto Bold */
   color: var(--vdp-text-primary);
   margin: 0;
 }
@@ -978,12 +950,10 @@ label,
   gap: 10px;
   font-size: 14px;
   color: var(--vdp-text-secondary);
-  /* Acumin/Roboto */
 }
 
 .vdp-item-check {
   color: #10b981;
-  /* Green check */
   flex-shrink: 0;
 }
 
@@ -1114,10 +1084,10 @@ label,
   }
 }
 
+/* --- Bento Features Layout --- */
 .vdp-features-bento {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  /* 2x2 Grid for Bento Feel */
   gap: 24px;
 }
 
@@ -1129,7 +1099,6 @@ label,
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
-  /* Subtle gradient background */
   background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
 }
 
@@ -1137,7 +1106,6 @@ label,
   transform: translateY(-4px);
   box-shadow: var(--vdp-shadow-md);
   border-color: rgba(37, 99, 235, 0.2);
-  /* Accent color hint */
 }
 
 /* Card Header */
@@ -1152,7 +1120,6 @@ label,
   width: 48px;
   height: 48px;
   background: #eff6ff;
-  /* Light Accent Blue */
   color: var(--vdp-accent);
   border-radius: 12px;
   display: flex;
@@ -1181,7 +1148,6 @@ label,
   background: white;
   padding: 8px 16px;
   border-radius: 100px;
-  /* Full pill shape */
   border: 1px solid #e2e8f0;
   font-weight: 500;
   transition: all 0.2s;
@@ -1202,7 +1168,7 @@ label,
   }
 }
 
-/* --- Specs Redesign: Visual Grid --- */
+/* --- Visual Specs Grid --- */
 .vdp-visual-specs-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -1308,7 +1274,7 @@ label,
   }
 }
 
-/* --- Specs Redesign: Modern Data Table --- */
+/* --- Data Specs Table --- */
 .vdp-spec-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1330,7 +1296,6 @@ label,
   gap: 0;
   border-radius: var(--vdp-radius-lg);
   overflow: hidden;
-  /* For zebra styling corners */
   border: 1px solid var(--vdp-border);
 }
 
@@ -1374,7 +1339,6 @@ label,
   .vdp-spec-columns {
     gap: 40px;
     grid-template-columns: 1fr;
-    /* Stack specs on tablet for room */
   }
 }
 
@@ -1394,7 +1358,7 @@ label,
   }
 }
 
-/* --- Component: Reviews - Redesigned (Split Layout) --- */
+/* --- Vehicle Reviews --- */
 .modern-reviews-intro {
   text-align: center;
   margin-bottom: 60px;
@@ -1430,7 +1394,6 @@ label,
 
 .modern-rating-circle__number {
   font-size: 56px;
-  /* Larger and Bolder */
   font-weight: 800;
   color: var(--vdp-text-primary);
   line-height: 1;
@@ -1559,7 +1522,6 @@ textarea.modern-input-field {
   font-size: 16px;
   transition: all 0.2s;
   width: 100%;
-  /* Full width button */
   display: flex;
   justify-content: center;
   align-items: center;

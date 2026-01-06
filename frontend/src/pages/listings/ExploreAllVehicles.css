@@ -1,7 +1,7 @@
 /* Font Import */
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
-/* Explore All Vehicles Section */
+/* --- Base Exploration Section --- */
 .eav-section,
 .eav-section * {
   box-sizing: border-box;
@@ -16,7 +16,7 @@
   font-family: 'DM Sans', sans-serif;
 }
 
-/* Header & Filters */
+/* --- Header & Filters --- */
 .eav-header {
   display: flex;
   flex-direction: column;
@@ -67,7 +67,6 @@
   align-items: center;
   gap: 8px;
   margin-left: auto;
-  /* Push to right if in flex row, or adjust layout */
   cursor: pointer;
   font-weight: 600;
   color: #050b20;
@@ -89,14 +88,14 @@
   }
 }
 
-/* GRID */
+/* --- Vehicles Grid --- */
 .eav-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
 }
 
-/* CARD STYLES (Immersive) */
+/* --- Vehicle Card --- */
 .eav-card {
   position: relative;
   height: 400px;
@@ -104,10 +103,8 @@
   overflow: hidden;
   cursor: pointer;
   background: #f3f4f6;
-  /* Placeholder */
 }
 
-/* Card Image */
 .eav-card-bg {
   position: absolute;
   inset: 0;
@@ -121,7 +118,6 @@
   transform: scale(1.1);
 }
 
-/* Overlay */
 .eav-card-overlay {
   position: absolute;
   inset: 0;
@@ -133,7 +129,7 @@
   background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 60%, rgba(0, 0, 0, 0.1) 100%);
 }
 
-/* Top Actions */
+/* --- Card Actions (Top) --- */
 .eav-top-actions {
   position: absolute;
   top: 20px;
@@ -182,7 +178,7 @@
   color: black;
 }
 
-/* Content Bottom */
+/* --- Card Content (Bottom) --- */
 .eav-card-content {
   position: absolute;
   bottom: 0;
@@ -213,11 +209,10 @@
   font-size: 1.25rem;
   font-weight: 600;
   color: #60a5fa;
-  /* Blue accent */
   margin: 0;
 }
 
-/* Reveal Section */
+/* --- Specification Reveal --- */
 .eav-specs-reveal {
   max-height: 0;
   opacity: 0;
@@ -262,18 +257,13 @@
   color: white;
 }
 
-/* === DARK THEME OVERRIDES (for Home Page) === */
-.eav-dark {
-  /* Inherits transparent background */
-}
-
+/* --- Dark Theme Overrides --- */
 .eav-dark .eav-header-title {
   color: white;
 }
 
 .eav-dark .eav-pill {
   background: rgba(255, 255, 255, 0.05);
-  /* Glassy pill */
   border-color: rgba(255, 255, 255, 0.1);
   color: #9ca3af;
 }
@@ -293,7 +283,7 @@
   color: white;
 }
 
-/* Responsive */
+/* --- Responsive Layouts --- */
 @media (max-width: 1200px) {
   .eav-grid {
     grid-template-columns: repeat(3, 1fr);

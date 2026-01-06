@@ -1,5 +1,4 @@
-/* auth.css - Shared Auth Styles */
-
+/* --- Base Authentication Page Layout --- */
 :root {
     --primary-black: #080808;
     --secondary-black: #121212;
@@ -25,6 +24,7 @@
     font-family: var(--font-body);
 }
 
+/* --- Loading States --- */
 .auth-loading-container {
     min-height: 100vh;
     display: flex;
@@ -57,6 +57,7 @@
     }
 }
 
+/* --- Page Transitions --- */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -68,5 +69,3 @@
         transform: translateY(0);
     }
 }
-
-/* Common overrides for both forms if needed */

@@ -1,8 +1,10 @@
+/* --- Browse Cars Layout --- */
 .browse-cars-container {
   padding: 2rem;
   animation: fadeIn 0.6s ease-out;
 }
 
+/* --- Page Title --- */
 .page-title {
   font-size: 2.5rem;
   font-weight: 800;
@@ -15,12 +17,14 @@
   background-clip: text;
 }
 
+/* --- Vehicles Grid --- */
 .car-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 2rem;
 }
 
+/* --- Vehicle Card --- */
 .car-card {
   background: #fff;
   border-radius: 12px;
@@ -31,11 +35,13 @@
   flex-direction: column;
 }
 
+/* --- Vehicle Card Hover State --- */
 .car-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
+/* --- Vehicle Image Placeholder --- */
 .car-image-placeholder {
   height: 200px;
   background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
@@ -46,16 +52,19 @@
   overflow: hidden;
 }
 
+/* --- Vehicle Image --- */
 .car-image-placeholder img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
+/* --- Vehicle Details --- */
 .car-details {
   padding: 1.25rem;
 }
 
+/* --- Vehicle Title --- */
 .car-title {
   font-size: 1.2rem;
   font-weight: 700;
@@ -63,12 +72,14 @@
   margin-bottom: 0.5rem;
 }
 
+/* --- Vehicle Specs --- */
 .car-specs {
   color: #4a5568;
   font-size: 0.9rem;
   margin-bottom: 0.75rem;
 }
 
+/* --- Vehicle Price --- */
 .car-price {
   font-size: 1.5rem;
   font-weight: 800;
@@ -79,6 +90,7 @@
   margin-bottom: 1rem;
 }
 
+/* --- Actions --- */
 .btn-primary {
   width: 100%;
   background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
@@ -95,7 +107,7 @@
   background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
 }
 
-/* Responsive Adjustments */
+/* --- Responsive Layouts --- */
 @media (max-width: 768px) {
   .car-grid {
     grid-template-columns: 1fr;
@@ -107,6 +119,7 @@
   }
 }
 
+/* --- Animations --- */
 @keyframes fadeIn {
   from {
     opacity: 0;

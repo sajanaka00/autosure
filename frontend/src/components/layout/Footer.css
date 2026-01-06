@@ -1,18 +1,15 @@
-/* Footer.css - Dense & Textured */
-
+/* --- Base Footer Layout --- */
 .boxcar-footer {
   background: #000000;
   color: #ffffff;
   font-family: "DmSans-Regular", sans-serif;
   width: 100%;
   padding-top: 60px;
-  /* Reduced from 80px */
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   position: relative;
   overflow: hidden;
 }
 
-/* Subtle background glow to remove "empty void" feel */
 .boxcar-footer::before {
   content: '';
   position: absolute;
@@ -32,15 +29,13 @@
   z-index: 1;
 }
 
-/* Newsletter Section - Tighter */
+/* --- Newsletter Section --- */
 .footer-newsletter-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 50px;
-  /* Reduced from 60px */
   padding-bottom: 30px;
-  /* Reduced from 40px */
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -53,7 +48,6 @@
 
 .footer-newsletter-desc {
   color: #d4d4d8;
-  /* Brighter grey */
   font-size: 14px;
 }
 
@@ -93,13 +87,11 @@
   transform: translateY(-1px);
 }
 
-/* Main Grid - Tighter & More Columns Possible */
+/* --- Main Footer Grid --- */
 .footer-grid {
   display: grid;
   grid-template-columns: 1.5fr 1fr 1fr 1fr 1.2fr;
-  /* Added column for Apps */
   gap: 30px;
-  /* Reduced from 60px */
   padding-bottom: 50px;
 }
 
@@ -136,12 +128,10 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  /* Link spacing reduced */
 }
 
 .footer-link {
   color: #d4d4d8;
-  /* Brighter for "fuller" look */
   text-decoration: none;
   font-size: 14px;
   transition: all 0.2s;
@@ -155,7 +145,7 @@
   transform: translateX(4px);
 }
 
-/* App Buttons */
+/* --- App Links --- */
 .footer-app-btn {
   display: flex;
   align-items: center;
@@ -193,7 +183,7 @@
   line-height: 1.2;
 }
 
-/* Bottom Bar */
+/* --- Bottom Bar --- */
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding: 24px 0;
@@ -216,7 +206,6 @@
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  /* Squared off slightly */
   background: rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
@@ -230,7 +219,7 @@
   transform: translateY(-2px);
 }
 
-/* Responsive */
+/* --- Responsive Layouts --- */
 @media (max-width: 1024px) {
   .footer-grid {
     grid-template-columns: repeat(3, 1fr);
