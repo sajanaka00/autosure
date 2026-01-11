@@ -3,12 +3,24 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Upload, X, Star, Image as ImageIcon, Plus, Info, CheckCircle, ChevronRight, ChevronLeft, Camera, LayoutGrid, Settings, Gauge, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../services/api';
+import { tokenManager } from '../../utils/tokenManager';
 import './AddVehiclePage.css';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
 
-export default function AddVehiclePage({ user }) {
+// Sub-components
+import SidebarStepper from '../../components/listings/add-vehicle/SidebarStepper';
+import FormNavigation from '../../components/listings/add-vehicle/FormNavigation';
+import BasicInfoStep from '../../components/listings/add-vehicle/BasicInfoStep';
+import EngineTransStep from '../../components/listings/add-vehicle/EngineTransStep';
+import PerfDimensionsStep from '../../components/listings/add-vehicle/PerfDimensionsStep';
+import DetailsPriceStep from '../../components/listings/add-vehicle/DetailsPriceStep';
+import ImageUploadStep from '../../components/listings/add-vehicle/ImageUploadStep';
+import ReviewStep from '../../components/listings/add-vehicle/ReviewStep';
+
+export default function AddVehiclePage({ user: propUser }) {
   const navigate = useNavigate();
+  const [user, setUser] = useState(propUser || tokenManager.getUser());
 
   const [formData, setFormData] = useState({
     // Basic Information
@@ -67,6 +79,11 @@ export default function AddVehiclePage({ user }) {
     dealerAddress: '',
     dealerPhone: '',
 
+    // Technical Specs (added mileage here)
+    mileage: '',
+    numberOfOwners: '1',
+    vehicleNumber: '',
+
     // Description & Features
     title: '',
     description: '',
@@ -118,6 +135,10 @@ export default function AddVehiclePage({ user }) {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    console.log('Current Image Previews:', imagePreviews);
+  }, [imagePreviews]);
+
   const fetchCategories = async () => {
     try {
       const data = await api.getCategories(user?.token);
@@ -136,6 +157,25 @@ export default function AddVehiclePage({ user }) {
     }
   };
 
+  const stepNames = ['Basic Info', 'Engine & Trans', 'Perf & Dimensions', 'Details & Price', 'Images', 'Review'];
+
+  const validateStep = (step) => {
+    switch (step) {
+      case 1:
+        return formData.make && formData.model && formData.year && formData.condition && formData.bodyType && formData.vehicleNumber && formData.category;
+      case 2:
+        return formData.engineSize && formData.transmission && formData.fuelType && formData.mileage && formData.seatingCapacity;
+      case 3:
+        return true;
+      case 4:
+        return formData.price && formData.title && formData.description && formData.downPayment;
+      case 5:
+        return imageFiles.length > 0;
+      default:
+        return true;
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -150,25 +190,6 @@ export default function AddVehiclePage({ user }) {
       features: prev.features.includes(feature)
         ? prev.features.filter(f => f !== feature)
         : [...prev.features, feature]
-    }));
-  };
-
-  const addCustomFeature = () => {
-    const customFeatureInput = document.getElementById('customFeature');
-    const customFeature = customFeatureInput?.value.trim();
-    if (customFeature && !formData.features.includes(customFeature)) {
-      setFormData(prev => ({
-        ...prev,
-        features: [...prev.features, customFeature]
-      }));
-      customFeatureInput.value = '';
-    }
-  };
-
-  const removeFeature = (feature) => {
-    setFormData(prev => ({
-      ...prev,
-      features: prev.features.filter(f => f !== feature)
     }));
   };
 
@@ -209,16 +230,15 @@ export default function AddVehiclePage({ user }) {
       caption: ''
     }));
 
+    console.log('Files to add:', filesToAdd);
     setImagePreviews(prev => [...prev, ...newPreviews]);
     setError('');
   };
 
   const removeImage = (index) => {
     URL.revokeObjectURL(imagePreviews[index].url);
-
     setImageFiles(prev => prev.filter((_, i) => i !== index));
     setImagePreviews(prev => prev.filter((_, i) => i !== index));
-
     if (featuredImageIndex >= index && featuredImageIndex > 0) {
       setFeaturedImageIndex(prev => prev - 1);
     }
@@ -228,34 +248,10 @@ export default function AddVehiclePage({ user }) {
     setFeaturedImageIndex(index);
   };
 
-  const updateImageCaption = (index, caption) => {
-    setImagePreviews(prev => prev.map((img, i) =>
-      i === index ? { ...img, caption } : img
-    ));
-  };
-
-  const validateStep = (step) => {
-    switch (step) {
-      case 1:
-        return formData.make && formData.model && formData.year && formData.condition && formData.bodyType;
-      case 2:
-        return formData.engineSize && formData.transmission && formData.fuelType && formData.mileage;
-      case 3:
-        return true; // Optional fields for performance
-      case 4:
-        return formData.price && formData.title && formData.description;
-      case 5:
-        return imageFiles.length > 0;
-      case 6:
-        return true;
-      default:
-        return true;
-    }
-  };
-
   const nextStep = () => {
     if (validateStep(activeStep)) {
       setActiveStep(prev => Math.min(prev + 1, 6));
+      window.scrollTo(0, 0);
       setError('');
     } else {
       setError('Please fill in all required fields before proceeding');
@@ -264,6 +260,7 @@ export default function AddVehiclePage({ user }) {
 
   const prevStep = () => {
     setActiveStep(prev => Math.max(prev - 1, 1));
+    window.scrollTo(0, 0);
     setError('');
   };
 
@@ -276,13 +273,31 @@ export default function AddVehiclePage({ user }) {
     try {
       const submitFormData = new FormData();
 
-      // Map form data to match expected fields
+      const getTransmission = (val) => {
+        if (val === 'Manual') return 'manual';
+        return 'automatic'; // Handles Automatic, CVT
+      };
+
+      const getFuelType = (val) => {
+        if (val === 'Gasoline') return 'petrol';
+        if (val === 'Diesel') return 'diesel';
+        if (val === 'Electric') return 'electric';
+        return 'hybrid'; // Handles Hybrid, Plug-in Hybrid
+      };
+
       const vehicleData = {
         ...formData,
+        transmission: getTransmission(formData.transmission),
+        fuelType: getFuelType(formData.fuelType),
         mileageRange: formData.mileage,
+        engineCapacity: formData.engineSize, // Map engineSize to engineCapacity
         totalValue: formData.price,
         features: formData.features.join(', '),
-        yearOfRegistration: formData.year
+        yearOfRegistration: parseInt(formData.year),
+        year: parseInt(formData.year),
+        numberOfOwners: parseInt(formData.numberOfOwners || 1),
+        seatingCapacity: parseInt(formData.seatingCapacity || 5),
+        downPayment: parseFloat(formData.downPayment || 0)
       };
 
       Object.keys(vehicleData).forEach(key => {
@@ -307,35 +322,6 @@ export default function AddVehiclePage({ user }) {
 
       if (data.success) {
         setSuccess('Vehicle added successfully!');
-
-        // Reset form
-        setFormData({
-          // Basic Info
-          make: '', model: '', year: '', condition: '', bodyType: '',
-          // Engine & Transmission
-          engineSize: '', engineType: '', transmission: '', driveType: '', fuelType: '', cylinders: '',
-          // Performance
-          horsepower: '', torque: '', topSpeed: '', acceleration060: '',
-          // Dimensions
-          length: '', width: '', height: '', wheelbase: '', curbWeight: '', cargoCapacity: '',
-          // Capacities & Fuel
-          fuelTankCapacity: '', cityMPG: '', highwayMPG: '', doors: '', seatingCapacity: '',
-          // Warranty
-          warrantyBasic: '', warrantyDrivetrain: '', warrantyRoadside: '', warrantyRust: '',
-          // Pricing & Misc
-          mileage: '', avgFuelConsumption: '', numberOfOwners: '', vehicleNumber: '', vin: '',
-          color: '', interiorColor: '', price: '', originalPrice: '', downPayment: '',
-          dealerName: '', dealerAddress: '', dealerPhone: '',
-          title: '', description: '', features: [], category: '', badge: '', badgeColor: 'blue'
-        });
-
-        setImageFiles([]);
-        imagePreviews.forEach(preview => URL.revokeObjectURL(preview.url));
-        setImagePreviews([]);
-        setFeaturedImageIndex(0);
-        setActiveStep(1);
-
-        // Redirect after success
         setTimeout(() => {
           navigate('/vehicles-for-sale');
         }, 2000);
@@ -350,732 +336,116 @@ export default function AddVehiclePage({ user }) {
     }
   };
 
-  const currentYear = new Date().getFullYear();
-
-  const renderStepIndicator = () => {
-    const stepNames = ['Basic Info', 'Engine & Trans', 'Perf & Dimensions', 'Details & Price', 'Images', 'Review'];
-    const progress = (activeStep / 6) * 100;
-
-    return (
-      <div className="add-car-step-indicator">
-        <div className="add-car-progress-header">
-          <div className="add-car-current-step">
-            {stepNames[activeStep - 1]}
-          </div>
-          <div className="add-car-step-counter">
-            Step {activeStep} of 6
-          </div>
-        </div>
-
-        <div className="add-car-progress-container">
-          <div
-            className="add-car-progress-bar"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-
-        <ul className="add-car-steps-list">
-          {stepNames.map((name, index) => (
-            <li
-              key={index}
-              className={`add-car-step-item ${index + 1 < activeStep ? 'completed' :
-                index + 1 === activeStep ? 'active' : ''
-                }`}
-            >
-              {name}
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  };
-
-  const renderStep = () => {
-    const stepVariants = {
-      initial: { opacity: 0, x: 20 },
-      animate: { opacity: 1, x: 0 },
-      exit: { opacity: 0, x: -20 }
-    };
-
-    const containerVariants = {
-      animate: {
-        transition: {
-          staggerChildren: 0.1
-        }
-      }
-    };
-
-    const itemVariants = {
-      initial: { opacity: 0, y: 10 },
-      animate: { opacity: 1, y: 0 }
-    };
-
-    switch (activeStep) {
-      case 1:
-        return (
-          <motion.div
-            key="step1"
-            className="add-car-form-step"
-            variants={stepVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={{ duration: 0.4, ease: "easeOut" }}
-          >
-            <div className="add-car-step-header">
-              <div className="add-car-step-icon-wrapper">
-                <Info size={24} className="add-car-step-icon" />
-              </div>
-              <div>
-                <h3 className="add-car-step-title">Basic Information</h3>
-                <p className="add-car-step-desc">Establish the core identity of the vehicle</p>
-              </div>
-            </div>
-
-            <motion.div className="add-car-form-grid" variants={containerVariants} animate="animate">
-              <motion.div className="add-car-form-group" variants={itemVariants}>
-                <label className="add-car-form-label">Make *</label>
-                <div className="add-car-input-wrapper">
-                  <select
-                    name="make"
-                    className="add-car-form-input"
-                    value={formData.make}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">Select Make</option>
-                    {makeOptions.map(make => (
-                      <option key={make} value={make}>{make}</option>
-                    ))}
-                  </select>
-                </div>
-              </motion.div>
-
-              <motion.div className="add-car-form-group" variants={itemVariants}>
-                <label className="add-car-form-label">Model *</label>
-                <div className="add-car-input-wrapper">
-                  <input
-                    type="text"
-                    name="model"
-                    className="add-car-form-input"
-                    value={formData.model}
-                    onChange={handleInputChange}
-                    placeholder="e.g., M235i xDrive Gran Coupé"
-                    required
-                  />
-                </div>
-              </motion.div>
-
-              <motion.div className="add-car-form-group" variants={itemVariants}>
-                <label className="add-car-form-label">Year *</label>
-                <input
-                  type="number"
-                  name="year"
-                  className="add-car-form-input"
-                  min="1900"
-                  max={currentYear + 1}
-                  value={formData.year}
-                  onChange={handleInputChange}
-                  required
-                />
-              </motion.div>
-
-              <motion.div className="add-car-form-group" variants={itemVariants}>
-                <label className="add-car-form-label">Condition *</label>
-                <select
-                  name="condition"
-                  className="add-car-form-input"
-                  value={formData.condition}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Select Condition</option>
-                  {conditionOptions.map(condition => (
-                    <option key={condition} value={condition}>{condition}</option>
-                  ))}
-                </select>
-              </motion.div>
-
-              <motion.div className="add-car-form-group" variants={itemVariants}>
-                <label className="add-car-form-label">Body Type *</label>
-                <select
-                  name="bodyType"
-                  className="add-car-form-input"
-                  value={formData.bodyType}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Select Body Type</option>
-                  {bodyTypeOptions.map(type => (
-                    <option key={type} value={type}>{type}</option>
-                  ))}
-                </select>
-              </motion.div>
-
-              <motion.div className="add-car-form-group" variants={itemVariants}>
-                <label className="add-car-form-label">Category</label>
-                <select
-                  name="category"
-                  className="add-car-form-input"
-                  value={formData.category}
-                  onChange={handleInputChange}
-                >
-                  <option value="">Select Category</option>
-                  {categories.map(category => (
-                    <option key={category._id} value={category._id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
-              </motion.div>
-            </motion.div>
-          </motion.div>
-        );
-
-      case 2:
-        return (
-          <motion.div
-            key="step2"
-            className="add-car-form-step"
-            variants={stepVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <div className="add-car-step-header">
-              <div className="add-car-step-icon-wrapper">
-                <Settings size={24} className="add-car-step-icon" />
-              </div>
-              <div>
-                <h3 className="add-car-step-title">Engine & Transmission</h3>
-                <p className="add-car-step-desc">Technical specifications and drivetrain details</p>
-              </div>
-            </div>
-
-            <div className="add-car-form-grid">
-              <div className="add-car-form-group">
-                <label className="add-car-form-label">Engine Size *</label>
-                <input
-                  type="text"
-                  name="engineSize"
-                  className="add-car-form-input"
-                  value={formData.engineSize}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 2.0L Turbo I4"
-                  required
-                />
-              </div>
-
-              <div className="add-car-form-group">
-                <label className="add-car-form-label">Transmission *</label>
-                <select
-                  name="transmission"
-                  className="add-car-form-input"
-                  value={formData.transmission}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Select Transmission</option>
-                  {transmissionOptions.map(trans => (
-                    <option key={trans} value={trans}>{trans}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="add-car-form-group">
-                <label className="add-car-form-label">Fuel Type *</label>
-                <select
-                  name="fuelType"
-                  className="add-car-form-input"
-                  value={formData.fuelType}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Select Fuel Type</option>
-                  {fuelTypeOptions.map(fuel => (
-                    <option key={fuel} value={fuel}>{fuel}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="add-car-form-group">
-                <label className="add-car-form-label">Drive Type</label>
-                <select
-                  name="driveType"
-                  className="add-car-form-input"
-                  value={formData.driveType}
-                  onChange={handleInputChange}
-                >
-                  <option value="">Select Drive Type</option>
-                  {driveTypeOptions.map(drive => (
-                    <option key={drive} value={drive}>{drive}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="add-car-form-group">
-                <label className="add-car-form-label">Mileage *</label>
-                <input
-                  type="text"
-                  name="mileage"
-                  className="add-car-form-input"
-                  value={formData.mileage}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 8,500 mi"
-                  required
-                />
-              </div>
-
-              <div className="add-car-form-group">
-                <label className="add-car-form-label">Seating Capacity</label>
-                <input
-                  type="number"
-                  name="seatingCapacity"
-                  className="add-car-form-input"
-                  value={formData.seatingCapacity}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 5"
-                />
-              </div>
-            </div>
-          </motion.div>
-        );
-
-      case 3:
-        return (
-          <motion.div
-            key="step3"
-            className="add-car-form-step"
-            variants={stepVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <div className="add-car-step-header">
-              <div className="add-car-step-icon-wrapper">
-                <Gauge size={24} className="add-car-step-icon" />
-              </div>
-              <div>
-                <h3 className="add-car-step-title">Performance & Warranty</h3>
-                <p className="add-car-step-desc">Advanced technical data and coverage</p>
-              </div>
-            </div>
-
-            <div className="add-car-form-section-title">Performance Metrics</div>
-            <div className="add-car-form-grid">
-              <div className="add-car-form-group">
-                <label className="add-car-form-label">Horsepower (HP)</label>
-                <input
-                  type="text"
-                  name="horsepower"
-                  className="add-car-form-input"
-                  value={formData.horsepower}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 301"
-                />
-              </div>
-              <div className="add-car-form-group">
-                <label className="add-car-form-label">Torque (lb-ft)</label>
-                <input
-                  type="text"
-                  name="torque"
-                  className="add-car-form-input"
-                  value={formData.torque}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 331"
-                />
-              </div>
-              <div className="add-car-form-group">
-                <label className="add-car-form-label">0-60 mph (sec)</label>
-                <input
-                  type="text"
-                  name="acceleration060"
-                  className="add-car-form-input"
-                  value={formData.acceleration060}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 4.7"
-                />
-              </div>
-              <div className="add-car-form-group">
-                <label className="add-car-form-label">Top Speed (mph)</label>
-                <input
-                  type="text"
-                  name="topSpeed"
-                  className="add-car-form-input"
-                  value={formData.topSpeed}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 155"
-                />
-              </div>
-            </div>
-
-            <div className="add-car-form-section-title">Warranty Coverage</div>
-            <div className="add-car-form-grid">
-              <div className="add-car-form-group">
-                <label className="add-car-form-label">Basic Warranty</label>
-                <input
-                  type="text"
-                  name="warrantyBasic"
-                  className="add-car-form-input"
-                  value={formData.warrantyBasic}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 4 Years / 50,000 Miles"
-                />
-              </div>
-              <div className="add-car-form-group">
-                <label className="add-car-form-label">Drivetrain Warranty</label>
-                <input
-                  type="text"
-                  name="warrantyDrivetrain"
-                  className="add-car-form-input"
-                  value={formData.warrantyDrivetrain}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 4 Years / 50,000 Miles"
-                />
-              </div>
-            </div>
-          </motion.div>
-        );
-
-      case 4:
-        return (
-          <motion.div
-            key="step4"
-            className="add-car-form-step"
-            variants={stepVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <div className="add-car-step-header">
-              <div className="add-car-step-icon-wrapper">
-                <LayoutGrid size={24} className="add-car-step-icon" />
-              </div>
-              <div>
-                <h3 className="add-car-step-title">Details & Pricing</h3>
-                <p className="add-car-step-desc">Dimensions, visibility, and market value</p>
-              </div>
-            </div>
-
-            <div className="add-car-form-group">
-              <label className="add-car-form-label">Vehicle Listing Title *</label>
-              <input
-                type="text"
-                name="title"
-                className="add-car-form-input"
-                value={formData.title}
-                onChange={handleInputChange}
-                placeholder="e.g., 2024 BMW M235i xDrive Gran Coupé"
-                required
-              />
-            </div>
-
-            <div className="add-car-form-grid">
-              <div className="add-car-form-group">
-                <label className="add-car-form-label">Price ($) *</label>
-                <input
-                  type="number"
-                  name="price"
-                  className="add-car-form-input"
-                  value={formData.price}
-                  onChange={handleInputChange}
-                  placeholder="45900"
-                  required
-                />
-              </div>
-              <div className="add-car-form-group">
-                <label className="add-car-form-label">Exterior Color</label>
-                <input
-                  type="text"
-                  name="color"
-                  className="add-car-form-input"
-                  value={formData.color}
-                  onChange={handleInputChange}
-                  placeholder="e.g., Brooklyn Grey"
-                />
-              </div>
-              <div className="add-car-form-group">
-                <label className="add-car-form-label">Interior Color</label>
-                <input
-                  type="text"
-                  name="interiorColor"
-                  className="add-car-form-input"
-                  value={formData.interiorColor}
-                  onChange={handleInputChange}
-                  placeholder="e.g., Magma Red"
-                />
-              </div>
-              <div className="add-car-form-group">
-                <label className="add-car-form-label">Badge</label>
-                <select
-                  name="badge"
-                  className="add-car-form-input"
-                  value={formData.badge}
-                  onChange={(e) => {
-                    const selectedBadge = badgeOptions.find(b => b.value === e.target.value);
-                    setFormData(prev => ({
-                      ...prev,
-                      badge: e.target.value,
-                      badgeColor: selectedBadge ? selectedBadge.color : 'blue'
-                    }));
-                  }}
-                >
-                  <option value="">No Badge</option>
-                  {badgeOptions.map(badge => (
-                    <option key={badge.value} value={badge.value}>{badge.value}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="add-car-form-group">
-              <label className="add-car-form-label">Description *</label>
-              <textarea
-                name="description"
-                className="add-car-form-textarea"
-                rows="4"
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="Describe your vehicle's standout features and condition..."
-                required
-              />
-            </div>
-          </motion.div>
-        );
-
-      case 5:
-        return (
-          <motion.div
-            key="step5"
-            className="add-car-form-step"
-            variants={stepVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <div className="add-car-step-header">
-              <div className="add-car-step-icon-wrapper">
-                <Camera size={24} className="add-car-step-icon" />
-              </div>
-              <div>
-                <h3 className="add-car-step-title">Images & Features</h3>
-                <p className="add-car-step-desc">Visual presentation and equipment list</p>
-              </div>
-            </div>
-
-            <div className="add-car-upload-section">
-              <div className="add-car-upload-area">
-                <input
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="add-car-upload-input"
-                  id="image-upload"
-                />
-                <label htmlFor="image-upload" className="add-car-upload-label">
-                  <div className="add-car-upload-icon-circle">
-                    <Upload className="add-car-upload-icon" />
-                  </div>
-                  <span className="add-car-upload-text">Upload Vehicle Photos</span>
-                  <span className="add-car-upload-subtext">Max 5 photos, up to 5MB each</span>
-                </label>
-              </div>
-            </div>
-
-            {imagePreviews.length > 0 && (
-              <div className="add-car-image-previews">
-                <div className="add-car-preview-grid">
-                  {imagePreviews.map((preview, index) => (
-                    <motion.div
-                      key={index}
-                      className="add-car-preview-item"
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                    >
-                      <div className="add-car-preview-container">
-                        <img src={preview.url} alt={`Preview ${index + 1}`} className="add-car-preview-image" />
-                        <button type="button" onClick={() => removeImage(index)} className="add-car-remove-btn">
-                          <X size={14} />
-                        </button>
-                        {featuredImageIndex === index && <div className="add-car-featured-tag">Main Photo</div>}
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setFeaturedImage(index)}
-                        className={`add-car-set-main-btn ${featuredImageIndex === index ? 'active' : ''}`}
-                      >
-                        {featuredImageIndex === index ? 'Main Photo' : 'Set as Main'}
-                      </button>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="add-car-features-section">
-              <h4 className="add-car-section-subtitle">Key Features</h4>
-              <div className="add-car-features-grid">
-                {commonFeatures.map(feature => (
-                  <label key={feature} className={`add-car-feature-chip ${formData.features.includes(feature) ? 'active' : ''}`}>
-                    <input
-                      type="checkbox"
-                      checked={formData.features.includes(feature)}
-                      onChange={() => handleFeatureToggle(feature)}
-                      hidden
-                    />
-                    {formData.features.includes(feature) && <CheckCircle size={14} />}
-                    {feature}
-                  </label>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        );
-
-      case 6:
-        return (
-          <motion.div
-            key="step6"
-            className="add-car-form-step"
-            variants={stepVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <div className="add-car-step-header">
-              <div className="add-car-step-icon-wrapper">
-                <Sparkles size={24} className="add-car-step-icon" />
-              </div>
-              <div>
-                <h3 className="add-car-step-title">Review & Submit</h3>
-                <p className="add-car-step-desc">Confirm your vehicle details before listing</p>
-              </div>
-            </div>
-
-            <div className="add-car-review-summary">
-              <div className="add-car-review-main">
-                <div className="add-car-review-images-mini">
-                  {imagePreviews.map((img, i) => (
-                    <img key={i} src={img.url} alt="Review" className={i === featuredImageIndex ? 'featured' : ''} />
-                  ))}
-                </div>
-                <div className="add-car-review-info">
-                  <h4>{formData.title}</h4>
-                  <div className="add-car-review-stats">
-                    <span>{formData.year} {formData.make} {formData.model}</span>
-                    <span>•</span>
-                    <span>${parseFloat(formData.price || 0).toLocaleString()}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="add-car-review-grid-detailed">
-                <div className="review-group">
-                  <h6>Mechanical</h6>
-                  <p>{formData.engineSize} • {formData.horsepower} HP • {formData.transmission}</p>
-                </div>
-                <div className="review-group">
-                  <h6>Condition</h6>
-                  <p>{formData.condition} • {formData.mileage} miles</p>
-                </div>
-                <div className="review-group">
-                  <h6>Dimensions</h6>
-                  <p>{formData.length}" L x {formData.width}" W</p>
-                </div>
-                <div className="review-group">
-                  <h6>Aesthetics</h6>
-                  <p>Ext: {formData.color} • Int: {formData.interiorColor}</p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        );
-
-    }
-  };
-
   return (
-    <div>
-      <Navbar />
+    <div className="titanium-layout">
+      <Navbar user={user} onLogout={() => navigate('/login')} />
 
-      <div className="add-car-page">
-        <div className="add-car-container">
-          {/* Header */}
-          <div className="add-car-header">
-            <button
-              onClick={() => navigate('/vehicles-for-sale')}
-              className="add-car-back-btn"
-            >
-              <ArrowLeft className="add-car-back-icon" />
-              Back to Listings
-            </button>
+      <div className="titanium-content">
+        <SidebarStepper steps={stepNames} activeStep={activeStep} />
 
-            <h1 className="add-car-title">Add New Vehicle</h1>
-            <p className="add-car-subtitle">Fill in the details to list your vehicle</p>
-          </div>
+        <main className="titanium-main">
+          <div className="titanium-form-container">
+            {/* Messages */}
+            <AnimatePresence>
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="titanium-alert error"
+                >
+                  <Info size={18} />
+                  <span>{error}</span>
+                </motion.div>
+              )}
+              {success && (
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="titanium-alert success"
+                >
+                  <CheckCircle size={18} />
+                  <span>{success}</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-          {/* Step Indicator */}
-          {renderStepIndicator()}
-
-          {/* Error/Success Messages */}
-          {error && (
-            <div className="add-car-message add-car-message--error">
-              {error}
-            </div>
-          )}
-
-          {success && (
-            <div className="add-car-message add-car-message--success">
-              {success}
-            </div>
-          )}
-
-          {/* Form */}
-          <div className="add-car-form-container">
-            <form onSubmit={handleSubmit} className="add-car-form">
+            <form onSubmit={handleSubmit} className="titanium-form">
               <AnimatePresence mode="wait">
-                {renderStep()}
+                <motion.div
+                  key={activeStep}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {activeStep === 1 && (
+                    <BasicInfoStep
+                      formData={formData}
+                      handleInputChange={handleInputChange}
+                      makeOptions={makeOptions}
+                      conditionOptions={conditionOptions}
+                      bodyTypeOptions={bodyTypeOptions}
+                      categories={categories}
+                    />
+                  )}
+                  {activeStep === 2 && (
+                    <EngineTransStep
+                      formData={formData}
+                      handleInputChange={handleInputChange}
+                      transmissionOptions={transmissionOptions}
+                      fuelTypeOptions={fuelTypeOptions}
+                      driveTypeOptions={driveTypeOptions}
+                    />
+                  )}
+                  {activeStep === 3 && (
+                    <PerfDimensionsStep
+                      formData={formData}
+                      handleInputChange={handleInputChange}
+                    />
+                  )}
+                  {activeStep === 4 && (
+                    <DetailsPriceStep
+                      formData={formData}
+                      handleInputChange={handleInputChange}
+                      badgeOptions={badgeOptions}
+                      setFormData={setFormData}
+                    />
+                  )}
+                  {activeStep === 5 && (
+                    <ImageUploadStep
+                      handleImageUpload={handleImageUpload}
+                      imagePreviews={imagePreviews}
+                      removeImage={removeImage}
+                      featuredImageIndex={featuredImageIndex}
+                      setFeaturedImage={setFeaturedImage}
+                      commonFeatures={commonFeatures}
+                      formData={formData}
+                      handleFeatureToggle={handleFeatureToggle}
+                    />
+                  )}
+                  {activeStep === 6 && (
+                    <ReviewStep
+                      formData={formData}
+                      imagePreviews={imagePreviews}
+                      featuredImageIndex={featuredImageIndex}
+                    />
+                  )}
+                </motion.div>
               </AnimatePresence>
 
-              {/* Navigation Buttons */}
-              <div className="add-car-form-navigation">
-                {activeStep > 1 && (
-                  <button
-                    type="button"
-                    onClick={prevStep}
-                    className="add-car-nav-btn add-car-nav-btn--secondary"
-                  >
-                    <ArrowLeft className="add-car-nav-icon" />
-                    Previous
-                  </button>
-                )}
-
-                <div className="add-car-nav-spacer" />
-
-                {activeStep < 6 ? (
-                  <button
-                    type="button"
-                    onClick={nextStep}
-                    className="add-car-nav-btn add-car-nav-btn--primary"
-                    disabled={!validateStep(activeStep)}
-                  >
-                    Next
-                    <ChevronRight className="add-car-nav-icon--right" size={20} />
-                  </button>
-                ) : (
-                  <button
-                    type="submit"
-                    className="add-car-submit-btn"
-                    disabled={loading || !imageFiles.length}
-                  >
-                    {loading ? 'Adding Vehicle...' : 'Add Vehicle'}
-                  </button>
-                )}
-              </div>
+              <FormNavigation
+                activeStep={activeStep}
+                totalSteps={6}
+                prevStep={prevStep}
+                nextStep={nextStep}
+                loading={loading}
+                isValid={validateStep(activeStep)}
+              />
             </form>
           </div>
-        </div>
+        </main>
       </div>
 
       <Footer />
