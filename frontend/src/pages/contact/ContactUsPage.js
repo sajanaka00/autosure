@@ -1,361 +1,321 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
-  Facebook, Twitter, Instagram, Linkedin,
-  Phone, Mail, MapPin, ExternalLink
+  Facebook, Instagram, Linkedin, Youtube,
+  Phone, Mail, MapPin, ArrowUpRight, Clock
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import './ContactUsPage.css';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
-import { api } from '../../services/api';
+import { tokenManager } from '../../utils/tokenManager';
 
-// Form field configuration - moved outside component to prevent re-creation on each render
-const FORM_FIELDS = {
-  firstName: { label: 'First Name*', placeholder: 'John', required: true },
-  lastName: { label: 'Last Name*', placeholder: 'Smith', required: true },
-  email: { label: 'Email*', placeholder: 'john.smith@email.com', required: true, type: 'email' },
-  phone: { label: 'Phone', placeholder: '+1 (555) 123-4567', type: 'tel' },
-  message: { label: 'Message', placeholder: 'Tell us about the vehicle you\'re interested in or any questions you have...', type: 'textarea' }
-};
-
-// Contact information displayed in the sidebar
-const CONTACT_INFO = [
-  {
-    icon: MapPin,
-    title: 'Main Dealership',
-    content: '2456 Grand Avenue, Downtown Metro City, CA 90210, United States'
-  },
-  {
-    icon: Mail,
-    title: 'Email',
-    content: 'sales@premiumautodealer.com'
-  },
-  {
-    icon: Phone,
-    title: 'Sales Hotline',
-    content: '+1 (555) CAR-SALE'
-  }
-];
-
-// Social media links for the dealership
-const SOCIAL_LINKS = [
-  { icon: Facebook, href: 'https://facebook.com/premiumautodealer', label: 'Facebook' },
-  { icon: Twitter, href: 'https://twitter.com/premiumautodealer', label: 'Twitter' },
-  { icon: Instagram, href: 'https://instagram.com/premiumautodealer', label: 'Instagram' },
-  { icon: Linkedin, href: 'https://linkedin.com/company/premiumautodealer', label: 'LinkedIn' }
-];
-
-// Office locations with their respective map embed URLs
+// Enhanced Office Data
 const OFFICES = [
   {
-    id: 'downtown',
-    name: 'Downtown Showroom',
-    address: '2456 Grand Avenue, Downtown Metro City, CA 90210',
-    email: 'downtown@premiumautodealer.com',
-    phone: '+1 (555) 123-4567',
-    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3304.5362!2d-118.2436849!3d34.052234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c75ddc27da13%3A0xe22fdf6f254608f4!2sDowntown%20Los%20Angeles%2C%20CA!5e0!3m2!1sen!2sus!4v1640995200000!5m2!1sen!2sus"
+    id: 'flagship',
+    name: 'Colombo Flagship',
+    type: 'Headquarters',
+    address: '123 Galle Road, Colombo 03',
+    email: 'flagship@autosure.lk',
+    phone: '+94 11 234 5678',
+    hours: 'Mon - Sun: 9AM - 8PM',
+    image: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?q=80&w=2673&auto=format&fit=crop',
+    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15843.0610301484!2d79.8450143!3d6.9186641!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae25941913840eb%3A0xe54f67b57b49cf52!2sGalle%20Face%20Green!5e0!3m2!1sen!2slk!4v1704876000000!5m2!1sen!2slk"
   },
   {
-    id: 'westside',
-    name: 'Westside Location',
-    address: '789 Pacific Boulevard, Westside District, CA 90211',
-    email: 'westside@premiumautodealer.com',
-    phone: '+1 (555) 234-5678',
-    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3305.2!2d-118.4912!3d34.0194!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2a4cec3ed2bd7%3A0x7b3c9c5e4a8d6f2a!2sSanta%20Monica%2C%20CA!5e0!3m2!1sen!2sus!4v1640995300000!5m2!1sen!2sus"
+    id: 'kandy',
+    name: 'Kandy Premium',
+    type: 'Sales Center',
+    address: '45 Peradeniya Road, Kandy',
+    email: 'kandy@autosure.lk',
+    phone: '+94 81 222 3344',
+    hours: 'Mon - Sat: 9AM - 6PM',
+    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2670&auto=format&fit=crop',
+    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31611.5878416801!2d80.6200!3d7.2906!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae366266498acd3%3A0x411a3818a1e03c35!2sKandy!5e0!3m2!1sen!2slk!4v1704877000000!5m2!1sen!2slk"
   },
   {
-    id: 'northgate',
-    name: 'Northgate Service Center',
-    address: '1024 Industrial Drive, Northgate Business Park, CA 90212',
-    email: 'service@premiumautodealer.com',
-    phone: '+1 (555) 345-6789',
-    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3302.1!2d-118.2687!3d34.1422!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c632a8765431%3A0x9e4f7d8c2b1a5e6f!2sGlendale%2C%20CA!5e0!3m2!1sen!2sus!4v1640995400000!5m2!1sen!2sus"
+    id: 'galle',
+    name: 'Galle Coastal',
+    type: 'Experience Center',
+    address: '88 Matara Road, Galle',
+    email: 'galle@autosure.lk',
+    phone: '+94 91 223 4455',
+    hours: 'Tue - Sun: 10AM - 7PM',
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2669&auto=format&fit=crop',
+    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63457.02645672044!2d80.190!3d6.032!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae173bb6932fce3%3A0x4a35b903f9c64c03!2sGalle!5e0!3m2!1sen!2slk!4v1704878000000!5m2!1sen!2slk"
   }
 ];
 
-// Reusable component for displaying contact information items
-const ContactItem = React.memo(({ icon: Icon, title, content }) => (
-  <div className="contact-item">
-    <div className="contact-icon">
-      <Icon size={20} />
-    </div>
-    <div className="contact-text">
-      <h4>{title}</h4>
-      <p>{content}</p>
-    </div>
-  </div>
-));
+const SOCIAL_LINKS = [
+  { icon: Facebook, href: '#', label: 'Facebook' },
+  { icon: Instagram, href: '#', label: 'Instagram' },
+  { icon: Linkedin, href: '#', label: 'LinkedIn' },
+  { icon: Youtube, href: '#', label: 'YouTube' }
+];
 
-// Reusable component for social media links
-const SocialLink = React.memo(({ icon: Icon, href, label }) => (
-  <a href={href} className="social-link" aria-label={label}>
-    <Icon size={20} />
-  </a>
-));
-
-// Office location card component with interactive map functionality
-const OfficeCard = React.memo(({ office, onLocationSelect }) => (
-  <div className="office-card">
-    <h3>{office.name}</h3>
-    <p className="office-address">{office.address}</p>
-    <div className="office-actions">
-      {/* Button to select location and update map */}
-      <button
-        onClick={() => onLocationSelect(office)}
-        className="office-link"
-        aria-label={`See ${office.name} on map`}
-      >
-        <ExternalLink size={16} /> See on Map
-      </button>
-      <a href={`mailto:${office.email}`} className="office-link">
-        <Mail size={16} /> {office.email}
-      </a>
-      <a href={`tel:${office.phone.replace(/\s/g, '')}`} className="office-link">
-        <Phone size={16} /> {office.phone}
-      </a>
+const OfficeGridItem = ({ office, onSelect, isSelected }) => (
+  <motion.div
+    className={`office-grid-item-v2 ${isSelected ? 'active' : ''}`}
+    onClick={() => onSelect(office)}
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    whileHover={{ y: -6 }}
+  >
+    <div className="v2-office-image">
+      <img src={office.image} alt={office.name} />
+      <div className="v2-office-badge">{office.type}</div>
     </div>
-  </div>
-));
-
-// Dynamic form field component that renders different input types
-const FormField = React.memo(({ field, value, onChange, name }) => {
-  if (field.type === 'textarea') {
-    return (
-      <div className="form-group">
-        <label htmlFor={name}>{field.label}</label>
-        <textarea
-          id={name}
-          name={name}
-          placeholder={field.placeholder}
-          value={value}
-          onChange={onChange}
-          required={field.required}
-        />
+    <div className="v2-office-content">
+      <div className="v2-office-header">
+        <h3>{office.name}</h3>
+        <ArrowUpRight className="arrow-icon" size={20} />
       </div>
-    );
-  }
+      <p className="v2-address">{office.address}</p>
 
-  return (
-    <div className="form-group">
-      <label htmlFor={name}>{field.label}</label>
-      <input
-        id={name}
-        type={field.type || 'text'}
-        name={name}
-        placeholder={field.placeholder}
-        value={value}
-        onChange={onChange}
-        required={field.required}
-      />
+      <div className="v2-meta-row">
+        <div className="v2-meta">
+          <Clock size={14} /> <span>{office.hours}</span>
+        </div>
+        <div className="v2-meta">
+          <Phone size={14} /> <span>{office.phone}</span>
+        </div>
+      </div>
     </div>
-  );
-});
+  </motion.div>
+);
 
 const ContactUsPage = () => {
-  // Form state management
+  const navigate = useNavigate();
+  const [user, setUser] = useState(tokenManager.getUser());
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
+    subject: 'General Inquiry',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Track currently selected location for map display - defaults to first office
   const [selectedLocation, setSelectedLocation] = useState(OFFICES[0]);
 
-  // Form validation check
-  const isFormValid = formData.firstName &&
-    formData.lastName &&
-    formData.email &&
-    formData.message;
-
-  // Handle location selection and smooth scroll to map
-  const handleLocationSelect = useCallback((office) => {
-    console.log('Location selected:', office.name);
-    setSelectedLocation(office);
-
-    // Smooth scroll to map section when location is selected
-    const mapContainer = document.querySelector('.contact-hero');
-    if (mapContainer) {
-      mapContainer.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      });
-    }
-  }, []);
-
-  // Handle form input changes with useCallback for performance optimization
-  const handleInputChange = useCallback((e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  }, []);
-
-  // Handle form submission with error handling and fallbacks
-  const handleSubmit = async () => {
-    // Client-side validation
-    if (!formData.firstName || !formData.lastName || !formData.email || !formData.message) {
-      alert('Please fill in all required fields');
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const response = await api.submitContact(formData);
-
-      if (response.success) {
-        alert('Thank you for your inquiry! One of our sales representatives will contact you within 24 hours.');
-        // Reset form on successful submission
-        setFormData({
-          firstName: '',
-          lastName: '',
-          email: '',
-          phone: '',
-          message: ''
-        });
-      } else {
-        alert('Failed to send message. Please try again or call us directly.');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-
-      // Fallback for development when API endpoint is not available
-      if (error.message.includes('404') || error.message.includes('Not Found')) {
-        console.log('Contact form data (backend endpoint not available):', formData);
-        alert('Thank you for your inquiry! One of our sales representatives will contact you within 24 hours.');
-        // Reset form even on fallback
-        setFormData({
-          firstName: '',
-          lastName: '',
-          email: '',
-          phone: '',
-          message: ''
-        });
-      } else {
-        alert('Failed to send message. Please try again or call us directly at +1 (555) CAR-SALE.');
-      }
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleLogout = () => {
+    tokenManager.clearAll();
+    setUser(null);
+    navigate('/');
   };
 
-  // Memoized form fields to prevent unnecessary re-renders
-  const formFields = useMemo(() =>
-    Object.entries(FORM_FIELDS).map(([name, field]) => (
-      <FormField
-        key={name}
-        field={field}
-        value={formData[name]}
-        onChange={handleInputChange}
-        name={name}
-      />
-    )), [formData, handleInputChange]
-  );
+  const handleLocationSelect = useCallback((office) => {
+    setSelectedLocation(office);
+    const mapSection = document.getElementById('map-view');
+    if (mapSection) mapSection.scrollIntoView({ behavior: 'smooth' });
+  }, []);
 
-  // Split form fields into rows for responsive layout
-  const [firstRow, secondRow, ...remainingFields] = formFields;
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    alert('Message sent successfully!');
+    setIsSubmitting(false);
+    setFormData({
+      firstName: '', lastName: '', email: '', phone: '',
+      subject: 'General Inquiry', message: ''
+    });
+  };
 
   return (
-    <div className="contact-page">
-      <Navbar />
+    <div className="contact-page-v2">
+      <Navbar user={user} onLogout={handleLogout} />
 
-      {/* Hero Section with Interactive Map */}
-      <section className="contact-hero">
-        <h1 className="contact-title">Contact Us</h1>
-        <div className="map-container" style={{ height: '400px', width: '100%' }}>
-          {/* Dynamic map that updates based on selected location */}
-          <iframe
-            src={selectedLocation.mapSrc}
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen=""
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            title={`${selectedLocation.name} Location Map`}
-          />
+      {/* 1. V2 Hero Section */}
+      <section className="contact-hero-v2">
+        <div className="container">
+          <motion.div
+            className="hero-v2-content"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <span className="hero-v2-pill">24/7 Assistance</span>
+            <h1>Let's Start a <br /><span className="highlight-text">Conversation</span></h1>
+            <p>From vehicle inquiries to service requests, our global team is ready to assist you on your automotive journey.</p>
+          </motion.div>
         </div>
       </section>
 
-      {/* Main Content Section */}
-      <section className="contact-content">
-        {/* Contact Form */}
-        <div className="contact-form-section">
-          <h2>Ready to Find Your Perfect Vehicle?</h2>
-          <p className="form-description">
-            Whether you're looking for a new car, need financing information, or want to schedule a test drive,
-            our experienced team is here to help. Fill out the form below and we'll get back to you promptly.
-          </p>
+      {/* 2. Unified Split Card Section */}
+      <section className="contact-unified-section">
+        <div className="container">
+          <motion.div
+            className="unified-contact-card"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+          >
 
-          <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
-            {/* First row: First Name and Last Name */}
-            <div className="form-row">
-              {firstRow}
-              {secondRow}
-            </div>
-            {/* Second row: Email and Phone */}
-            <div className="form-row">
-              {remainingFields.slice(0, 2)}
-            </div>
-            {/* Message field (full width) */}
-            {remainingFields.slice(2)}
+            {/* Left Panel: Contact Info (Dark) */}
+            <div className="unified-card-left">
+              <div className="left-content-stack">
+                <div>
+                  <h3>Contact Information</h3>
+                  <p className="left-subtitle">Fill up the form and our Team will get back to you within 24 hours.</p>
+                </div>
 
-            <button
-              type="button"
-              onClick={handleSubmit}
-              className="send-btn"
-              disabled={isSubmitting}
-              aria-describedby="submit-status"
-            >
-              {isSubmitting ? 'Sending...' : 'Send Message'}
-            </button>
-          </form>
+                <div className="contact-info-rows">
+                  <div className="info-row">
+                    <Phone className="icon" size={20} />
+                    <span>+94 11 234 5678</span>
+                  </div>
+                  <div className="info-row">
+                    <Mail className="icon" size={20} />
+                    <span>hello@autosure.lk</span>
+                  </div>
+                  <div className="info-row">
+                    <MapPin className="icon" size={20} />
+                    <span>123 Galle Road, Colombo 03</span>
+                  </div>
+                </div>
+
+                <div className="social-links-row">
+                  {SOCIAL_LINKS.map((sl, i) => (
+                    <a key={i} href={sl.href} className="social-circle">
+                      <sl.icon size={18} />
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              {/* Decorative circle overlay */}
+              <div className="decorative-circle-1" />
+              <div className="decorative-circle-2" />
+            </div>
+
+            {/* Right Panel: Form (Light) */}
+            <div className="unified-card-right">
+              <form onSubmit={handleSubmit}>
+                <div className="form-grid-v2">
+                  <div className="form-field-v2">
+                    <label>First Name</label>
+                    <input
+                      type="text" name="firstName" placeholder="John"
+                      value={formData.firstName} onChange={handleInputChange} required
+                    />
+                  </div>
+                  <div className="form-field-v2">
+                    <label>Last Name</label>
+                    <input
+                      type="text" name="lastName" placeholder="Doe"
+                      value={formData.lastName} onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-grid-v2">
+                  <div className="form-field-v2">
+                    <label>Email</label>
+                    <input
+                      type="email" name="email" placeholder="john@domain.com"
+                      value={formData.email} onChange={handleInputChange} required
+                    />
+                  </div>
+                  <div className="form-field-v2">
+                    <label>Phone</label>
+                    <input
+                      type="tel" name="phone" placeholder="+94 77 123 4567"
+                      value={formData.phone} onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-field-v2 full-width">
+                  <label>Subject</label>
+                  <div className="select-wrapper">
+                    <select
+                      name="subject"
+                      value={formData.subject} onChange={handleInputChange}
+                    >
+                      <option>General Inquiry</option>
+                      <option>Sales Department</option>
+                      <option>Service Center</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="form-field-v2 full-width">
+                  <label>Message</label>
+                  <textarea
+                    name="message" placeholder="Write your message.." rows="4"
+                    value={formData.message} onChange={handleInputChange} required
+                  />
+                </div>
+
+                <div className="form-actions">
+                  <button type="submit" className="submit-btn-v2" disabled={isSubmitting}>
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                  </button>
+                </div>
+              </form>
+            </div>
+
+          </motion.div>
         </div>
+      </section>
 
-        {/* Contact Information Sidebar */}
-        <aside className="contact-details">
-          <h3>Visit Our Showroom</h3>
-          <p className="contact-details-description">
-            Stop by our state-of-the-art showroom to browse our extensive inventory,
-            speak with our knowledgeable sales team, and take a test drive. We're open
-            7 days a week to serve you better.
-          </p>
+      {/* 3. Locations Grid */}
+      <section className="locations-v2-section">
+        <div className="container">
+          <div className="section-header-v2">
+            <h2>Our Global Presence</h2>
+            <p>Visit our showrooms for an exclusive experience.</p>
+          </div>
 
-          {/* Contact Information Items */}
-          <div className="contact-info">
-            {CONTACT_INFO.map((item, index) => (
-              <ContactItem key={index} {...item} />
+          <div className="locations-grid-v2">
+            {OFFICES.map(office => (
+              <OfficeGridItem
+                key={office.id}
+                office={office}
+                isSelected={selectedLocation.id === office.id}
+                onSelect={handleLocationSelect}
+              />
             ))}
           </div>
-
-          {/* Social Media Links */}
-          <div className="social-section">
-            <h4>Follow us for the latest deals</h4>
-            <div className="social-links">
-              {SOCIAL_LINKS.map((social, index) => (
-                <SocialLink key={index} {...social} />
-              ))}
-            </div>
-          </div>
-        </aside>
+        </div>
       </section>
 
-      {/* Office Locations Section */}
-      <section className="offices-section">
-        <h2 className="offices-title">Our Locations</h2>
-        <div className="offices-grid">
-          {/* Render office cards with interactive map functionality */}
-          {OFFICES.map(office => (
-            <OfficeCard
-              key={office.id}
-              office={office}
-              onLocationSelect={handleLocationSelect}
+      {/* 4. Map View (Full Width / Container) */}
+      <section id="map-view" className="map-v2-section">
+        <div className="container">
+          <motion.div
+            className="map-v2-container"
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+          >
+            <iframe
+              key={selectedLocation.id}
+              src={selectedLocation.mapSrc}
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              title="Location Map"
             />
-          ))}
+            <div className="map-overlay-card">
+              <span className="live-dot"></span>
+              <div>
+                <strong>Viewing: {selectedLocation.name}</strong>
+                <p>{selectedLocation.address}</p>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 

@@ -180,7 +180,8 @@ label,
 
 .modern-vdp-sticky {
   position: sticky;
-  top: 120px;
+  top: 96px;
+  /* 80px navbar + 16px gap */
   display: flex;
   flex-direction: column;
   gap: 24px;
