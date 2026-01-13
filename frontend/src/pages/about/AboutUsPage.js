@@ -1,403 +1,249 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { ArrowRight, Star, Shield, Zap, Heart, Linkedin, Twitter, Mail } from 'lucide-react';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
-import AboutGrid1 from '../../assets/images/cars/car-about1.jpeg'
-import AboutGrid2 from '../../assets/images/cars/car-about2.jpg'
-import AboutGrid3 from '../../assets/images/cars/car-about3.jpg'
-import AboutGrid4 from '../../assets/images/cars/car-about4.jpeg'
-import AboutGrid5 from '../../assets/images/cars/car-about5.jpeg'
-import ChooseUs1 from '../../assets/images/vectors/choose-us1.png'
-import ChooseUs2 from '../../assets/images/vectors/choose-us2.png'
-import ChooseUs3 from '../../assets/images/vectors/choose-us3.png'
-import ChooseUs4 from '../../assets/images/vectors/choose-us4.png'
-import FairPrice from '../../assets/images/about/fair-price.jpg'
-import PlayBtn from '../../assets/images/vectors/play-btn.png'
-import Team1 from '../../assets/images/about/team1.png'
-import Team2 from '../../assets/images/about/team2.png'
-import Team3 from '../../assets/images/about/team3.png'
-import Team4 from '../../assets/images/about/team4.png'
-import Customer1 from '../../assets/images/avatars/avatar1.jpg'
-import Customer2 from '../../assets/images/avatars/avatar2.jpg'
-import Customer3 from '../../assets/images/avatars/avatar3.jpg'
-import Customer4 from '../../assets/images/avatars/avatar4.jpg'
-import Customer5 from '../../assets/images/avatars/avatar5.jpg'
-import BrandsSection from './BrandsSection'
+import { tokenManager } from '../../utils/tokenManager';
+
+// Images
+import ShowroomImg from '../../assets/images/cars/car-about2.jpg';
+import DetailImg from '../../assets/images/cars/car-about1.jpeg';
+import Team1 from '../../assets/images/about/team1.png';
+import Team2 from '../../assets/images/about/team2.png';
+import Team3 from '../../assets/images/about/team3.png';
+import Team4 from '../../assets/images/about/team4.png';
+
 import './AboutUsPage.css';
 
 const AboutUsPage = () => {
-  const [openFaq, setOpenFaq] = useState(null);
+  const navigate = useNavigate();
+  const [user, setUser] = useState(tokenManager.getUser());
 
-  const toggleFaq = (index) => {
-    setOpenFaq(openFaq === index ? null : index);
+  const handleLogout = () => {
+    tokenManager.clearAll();
+    setUser(null);
+    navigate('/');
   };
 
-  const faqData = [
-    {
-      question: "Does BoxCar own the cars I see online or are they owned by others?",
-      answer: "Our cars on our site have been hand-picked by dealers nationwide based in up to wide taste of shopper. Wherever respective retailers list on our store. Together, all managed and sold."
-    },
-    {
-      question: "How do you choose the cars that you sell?",
-      answer: "We carefully select vehicles based on quality, reliability, and customer demand to ensure the best options for our customers."
-    },
-    {
-      question: "Can I see my favorite cars a lot list I can view now?",
-      answer: "Yes, you can save your favorite vehicles to your wishlist and view them anytime from your account dashboard."
-    },
-    {
-      question: "Can I be notified when you take a new car shipment or inventory?",
-      answer: "Absolutely! You can subscribe to our notifications to get alerts about new inventory and special offers."
-    },
-    {
-      question: "What stock do you have in the lot and can I put my car on budget?",
-      answer: "Our inventory changes regularly. You can browse our current stock online and we offer flexible financing options to fit your budget."
-    }
+  const team = [
+    { name: "Courtney Henry", role: "CEO & Founder", img: Team1 },
+    { name: "Jerome Bell", role: "Head of Sales", img: Team2 },
+    { name: "Arlene McCoy", role: "Lead Curator", img: Team3 },
+    { name: "Jenny Wilson", role: "Client Success", img: Team4 }
+  ];
+
+  const brands = [
+    { name: "Audi", logo: "https://logos-world.net/wp-content/uploads/2021/03/Audi-Logo.png" },
+    { name: "BMW", logo: "https://logos-world.net/wp-content/uploads/2020/04/BMW-Logo.png" },
+    { name: "Mercedes", logo: "https://logos-world.net/wp-content/uploads/2020/05/Mercedes-Benz-Logo.png" },
+    { name: "Porsche", logo: "https://logos-world.net/wp-content/uploads/2021/06/Porsche-Logo.png" },
+    { name: "Tesla", logo: "https://logos-world.net/wp-content/uploads/2020/10/Tesla-Logo.png" },
+    { name: "Lexus", logo: "https://logos-world.net/wp-content/uploads/2021/10/Lexus-Logo.png" },
+    { name: "Jaguar", logo: "https://logos-world.net/wp-content/uploads/2021/04/Jaguar-Logo.png" },
+    { name: "Land Rover", logo: "https://logos-world.net/wp-content/uploads/2021/04/Land-Rover-Logo.png" }
+  ];
+
+  const timeline = [
+    { year: "1985", title: "The Beginning", desc: "Founded in a small garage with just 5 premium vehicles and a vision." },
+    { year: "1998", title: "Regional Expansion", desc: "Opened our flagship showroom and became the region's top luxury dealer." },
+    { year: "2010", title: "Digital Pioneer", desc: "Launched one of the first fully verified online car buying platforms." },
+    { year: "2024", title: "Global Reach", desc: "Serving clients in over 30 countries with our verified export program." }
   ];
 
   return (
-    <div className="about-page-container">
-      <Navbar />
+    <div className="about-bento-page">
+      <Navbar user={user} onLogout={handleLogout} />
 
-      {/* About Us Section */}
-      <section className="about-us-hero-section">
-        <div className="about-page-container-inner">
-          <h1 className="about-page-main-title">About Us</h1>
-
-          <div className="about-us-content-wrapper">
-            <div className="about-us-text-content">
-              <h2>We value our clients and want them to have a nice experience</h2>
-              <p>
-                At our dealership, we understand that buying a car is one of life's most important decisions.
-                That's why we're committed to making your vehicle shopping experience as smooth and enjoyable as
-                possible. Our knowledgeable team takes the time to listen to your needs, whether you're looking
-                for a reliable family sedan, an efficient commuter car, or a powerful truck for work. We believe
-                every customer deserves honest advice and transparent pricing from the moment you step onto our lot.
-              </p>
-              <p>
-                With over two decades of experience in the automotive industry, we've built our reputation on
-                trust and quality service. Every vehicle in our inventory undergoes a comprehensive inspection
-                to ensure it meets our high standards before we offer it to our customers. We work with trusted
-                financing partners to help you secure competitive rates, and our service department is staffed
-                with certified technicians who use genuine parts. From your first visit through years of ownership,
-                we're here to support you with maintenance, repairs, and any questions you might have.
-              </p>
-              <p>
-                Our goal is simple: to help you find the perfect vehicle that fits your lifestyle and budget while
-                providing exceptional service that keeps you coming back. We're proud to be your neighborhood dealership.
-              </p>
-            </div>
-
-            <div className="about-us-images-section">
-              <div className="about-us-images-grid">
-                {/* Column 1: years badge + one image below */}
-                <div className="about-us-grid-column-1">
-                  <div className="about-us-years-badge">
-                    <span className="about-us-years-number">45</span>
-                    <span className="about-us-years-text">Years in Business</span>
-                  </div>
-                  <img
-                    src={AboutGrid1}
-                    alt="Luxury car interior"
-                    className="about-us-grid-image-2"
-                  />
-                </div>
-
-                {/* Column 2 */}
-                <div className="about-us-grid-column-2">
-                  <img
-                    src={AboutGrid2}
-                    alt="Professional car salesman"
-                    className="about-us-grid-image-3"
-                  />
-                </div>
-
-                {/* Column 3 */}
-                <div className="about-us-grid-column-3">
-                  <img
-                    src={AboutGrid3}
-                    alt="Car showroom interior"
-                    className="about-us-grid-image-4"
-                  />
-                  <div className="about-us-bottom-images">
-                    <img
-                      src={AboutGrid4}
-                      alt="Car details"
-                      className="about-us-grid-image-5"
-                    />
-                    <img
-                      src={AboutGrid5}
-                      alt="Car handover"
-                      className="about-us-grid-image-6"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why Choose Us Section */}
-      <section className="about-page-features-section">
-        <div className="about-page-container-inner">
-          <h2 className="about-page-section-title">Why Choose Us?</h2>
-
-          <div className="about-page-features-grid">
-            <div className="about-page-feature-item">
-              <div className="about-page-feature-icon">
-                <img src={ChooseUs1} alt="Special Financing Offers" />
-              </div>
-              <h3>Special Financing Offers</h3>
-              <p>Flexible financing options with competitive rates & customized payment plans to fit your budget and needs.</p>
-            </div>
-
-            <div className="about-page-feature-item">
-              <div className="about-page-feature-icon">
-                <img src={ChooseUs2} alt="Trusted Car Dealership" />
-              </div>
-              <h3>Trusted Car Dealership</h3>
-              <p>Years of experience & thousands of satisfied customers who trust us for honest dealings and reliable service.</p>
-            </div>
-
-            <div className="about-page-feature-item">
-              <div className="about-page-feature-icon">
-                <img src={ChooseUs3} alt="Transparent Pricing" />
-              </div>
-              <h3>Transparent Pricing</h3>
-              <p>No hidden fees or surprise charges. Clear, upfront pricing with detailed breakdowns so you know exactly what you're paying.</p>
-            </div>
-
-            <div className="about-page-feature-item">
-              <div className="about-page-feature-icon">
-                <img src={ChooseUs4} alt="Expert Car Service" />
-              </div>
-              <h3>Expert Car Service</h3>
-              <p>Certified technicians providing comprehensive maintenance and repair services to keep your vehicle running smoothly.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Get Fair Price Section */}
-      <section className="about-page-pricing-section">
-        <div className="about-page-container-inner">
-          <div className="about-page-pricing-content">
-            <div className="about-page-pricing-image">
-              <img
-                src={FairPrice}
-                alt="Luxury car on mountain road"
-              />
-              <div className="about-page-play-button">
-                <img src={PlayBtn} alt="Play Button" />
-              </div>
-            </div>
-
-            <div className="about-page-pricing-text">
-              <h2>Get A Fair Price For Your Car Sell To Us Today</h2>
-              <p>
-                We are committed to providing our customers with exceptional service, competitive pricing, and a wide range of vehicles to choose from.
-              </p>
-
-              <ul className="about-page-benefits-list">
-                <li>We are the UK's largest provider, with more patrols in more places</li>
-                <li>You get 24/7 roadside assistance</li>
-                <li>We fix 4 out of 5 cars at the roadside</li>
-              </ul>
-
-              <button className="about-page-cta-button">Get Started</button>
-            </div>
-          </div>
-
-          <div className="about-page-stats-section">
-            <div className="about-page-stat-item">
-              <h3>89M</h3>
-              <p>Cars for Sale</p>
-            </div>
-            <div className="about-page-stat-item">
-              <h3>740M</h3>
-              <p>Dealer Reviews</p>
-            </div>
-            <div className="about-page-stat-item">
-              <h3>95M</h3>
-              <p>Visitors Per Day</p>
-            </div>
-            <div className="about-page-stat-item">
-              <h3>225M</h3>
-              <p>Verified Dealers</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Improved Premium Brands Section */}
-      <BrandsSection />
-
-      {/* Our Team Section */}
-      <section className="about-page-team-section">
-        <div className="about-page-container-inner">
-          <div className="about-page-team-header">
-            <h2>Our Team</h2>
-            <a href="#" className="about-page-view-all-link">View All</a>
-          </div>
-
-          <div className="about-page-team-grid">
-            <div className="about-page-team-member">
-              <img
-                src={Team1}
-                alt="Courtney Henry"
-              />
-              <div className="about-page-team-member-info">
-                <h3>Courtney Henry</h3>
-                <p>Development Manager</p>
-              </div>
-            </div>
-
-            <div className="about-page-team-member">
-              <img
-                src={Team2}
-                alt="Jerome Bell"
-              />
-              <div className="about-page-team-member-info">
-                <h3>Jerome Bell</h3>
-                <p>Software Tester</p>
-              </div>
-            </div>
-
-            <div className="about-page-team-member">
-              <img
-                src={Team3}
-                alt="Arlene McCoy"
-              />
-              <div className="about-page-team-member-info">
-                <h3>Arlene McCoy</h3>
-                <p>Software Developer</p>
-              </div>
-            </div>
-
-            <div className="about-page-team-member">
-              <img
-                src={Team4}
-                alt="Jenny Wilson"
-              />
-              <div className="about-page-team-member-info">
-                <h3>Jenny Wilson</h3>
-                <p>UI/UX Designer</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Customer Testimonials */}
-      <section className="about-page-testimonials-section">
-        <div className="about-page-container-inner">
-          <div className="about-page-testimonials-heading">
-            <h2>What our customers say</h2>
-            <p className="about-page-testimonials-subtitle">
-              Rated 4.8 / 5 based on 3,247 reviews Showing our 4 & 5 star reviews
+      {/* 1. Hero */}
+      <section className="bento-hero">
+        <div className="bento-container">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1>We Don't Just Sell Cars.<br /><span>We Sell Dreams.</span></h1>
+            <p>
+              AutoSure is redefining the luxury automotive landscape.
+              Meticulously curated, expertly verified, and delivered with passion.
             </p>
-          </div>
+          </motion.div>
+        </div>
+      </section>
 
-          <div className="about-page-testimonials-grid">
-            <div className="about-page-testimonial-item">
-              <h4>Outstanding Service</h4>
-              <p>"The team here made buying my first car such an easy experience. They were patient, answered all my questions, and helped me find the perfect vehicle within my budget. No pressure tactics, just genuine care for their customers."</p>
-              <div className="about-page-testimonial-author">
-                <img
-                  src={Customer1}
-                  alt="Ralph Edwards"
-                />
-                <div>
-                  <strong>Ralph Edwards</strong>
-                  <span>Honda Civic Owner</span>
-                </div>
+      {/* 2. Brands Marquee */}
+      <section className="brands-marquee-section">
+        <div className="marquee-wrapper">
+          <div className="marquee-content">
+            {brands.map((brand, i) => (
+              <div key={i} className="brand-logo-item">
+                <img src={brand.logo} alt={brand.name} />
               </div>
-            </div>
-
-            <div className="about-page-testimonial-item">
-              <h4>Trustworthy Dealership</h4>
-              <p>"After visiting several dealerships, this place stood out for their honesty and transparency. They showed me the full vehicle history, explained every detail, and their financing options were the best I found anywhere."</p>
-              <div className="about-page-testimonial-author">
-                <img
-                  src={Customer2}
-                  alt="Jenna Watson"
-                />
-                <div>
-                  <strong>Jenna Watson</strong>
-                  <span>Toyota Camry Owner</span>
-                </div>
+            ))}
+            {/* Duplicated for smooth infinite scroll */}
+            {brands.map((brand, i) => (
+              <div key={`d-${i}`} className="brand-logo-item">
+                <img src={brand.logo} alt={brand.name} />
               </div>
-            </div>
-
-            <div className="about-page-testimonial-item">
-              <h4>Excellent Experience</h4>
-              <p>"From test drive to paperwork, everything was handled professionally. The car was in perfect condition as promised, and they even threw in some extras. I'll definitely be coming back for my next purchase."</p>
-              <div className="about-page-testimonial-author">
-                <img
-                  src={Customer3}
-                  alt="Michael Johnson"
-                />
-                <div>
-                  <strong>Michael Johnson</strong>
-                  <span>Ford F-150 Owner</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="about-page-testimonial-item">
-              <h4>Top-Notch Service</h4>
-              <p>"Their service department is amazing! Quick, efficient, and they always explain what needs to be done. Fair pricing and they never try to sell you services you don't need. Highly recommend this dealership."</p>
-              <div className="about-page-testimonial-author">
-                <img
-                  src={Customer4}
-                  alt="Sarah Wilson"
-                />
-                <div>
-                  <strong>Sarah Wilson</strong>
-                  <span>Subaru Outback Owner</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="about-page-testimonial-item">
-              <h4>Perfect Experience</h4>
-              <p>"Bought my dream car here and couldn't be happier! The sales team was knowledgeable, the process was smooth, and they made sure I understood all the features. Great selection and competitive prices too."</p>
-              <div className="about-page-testimonial-author">
-                <img
-                  src={Customer5}
-                  alt="Courtney Henry"
-                />
-                <div>
-                  <strong>Courtney Henry</strong>
-                  <span>Mazda CX-5 Owner</span>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="about-page-faq-section">
-        <div className="about-page-container-inner">
-          <h2>Frequently Asked Questions</h2>
+      {/* 3. Main Bento Grid */}
+      <section className="bento-grid-wrapper">
+        <div className="bento-container">
+          <div className="bento-grid">
 
-          <div className="about-page-faq-list">
-            {faqData.map((faq, index) => (
-              <div key={index} className={`about-page-faq-item ${openFaq === index ? 'active' : ''}`}>
-                <button
-                  className="about-page-faq-question"
-                  onClick={() => toggleFaq(index)}
-                >
-                  <span>{faq.question}</span>
-                  <span className="about-page-faq-toggle">{openFaq === index ? '−' : '+'}</span>
-                </button>
-                {openFaq === index && (
-                  <div className="about-page-faq-answer">
-                    <p>{faq.answer}</p>
-                  </div>
-                )}
+            {/* Mission */}
+            <motion.div
+              className="bento-card card-vision"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+            >
+              <h2>The New Standard.</h2>
+              <p>
+                Gone are the days of uncertainty. We built AutoSure on a foundation of radical transparency
+                and obsessive quality control. Every vehicle in our inventory isn't just "stock"—it's a
+                masterpiece waiting for its next driver.
+              </p>
+            </motion.div>
+
+            {/* Stats */}
+            <motion.div
+              className="bento-card card-stats"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+            >
+              <div>
+                <div className="stat-number">45+</div>
+                <div className="stat-label">Years of Legacy</div>
               </div>
+              <div style={{ marginTop: '24px' }}>
+                <div className="stat-number">15K</div>
+                <div className="stat-label">Verified Sales</div>
+              </div>
+            </motion.div>
+
+            {/* Images */}
+            <motion.div className="bento-card card-image-small" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
+              <img src={DetailImg} alt="Car Detail" />
+            </motion.div>
+
+            <motion.div className="bento-card card-image-tall" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
+              <img src={ShowroomImg} alt="AutoSure Showroom" />
+            </motion.div>
+
+            {/* Values */}
+            <motion.div
+              className="bento-card card-values"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+            >
+              <h2>Our Core Promises</h2>
+              <div className="values-grid">
+                <div className="value-item">
+                  <Shield size={24} color="#2563eb" className="mb-2" />
+                  <h3>100% Verified</h3>
+                  <p>Every bolt checked. Verified history.</p>
+                </div>
+                <div className="value-item">
+                  <Zap size={24} color="#2563eb" className="mb-2" />
+                  <h3>Instant Process</h3>
+                  <p>No paperwork headaches. Digital-first.</p>
+                </div>
+                <div className="value-item">
+                  <Star size={24} color="#2563eb" className="mb-2" />
+                  <h3>Premium Only</h3>
+                  <p>Top 1% of vehicles we find.</p>
+                </div>
+                <div className="value-item">
+                  <Heart size={24} color="#2563eb" className="mb-2" />
+                  <h3>Satisfaction</h3>
+                  <p>7-day money-back guarantee.</p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* CTA */}
+            <motion.div
+              className="bento-card card-cta"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+            >
+              <h3>Found your dream car?</h3>
+              <a href="/listings" className="bento-btn">
+                Browse Inventory <ArrowRight size={18} />
+              </a>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 4. The Journey (Timeline) */}
+      <section className="history-section">
+        <div className="bento-container">
+          <div className="history-header">
+            <h2>Our Journey</h2>
+            <p>From humble beginnings to a global leader.</p>
+          </div>
+          <div className="timeline">
+            {timeline.map((item, i) => (
+              <motion.div
+                key={i}
+                className="timeline-item"
+                initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <div className="timeline-dot"></div>
+                <div className="timeline-content">
+                  <span className="timeline-year">{item.year}</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. The Curators (Premium Grid) */}
+      <section className="curators-section">
+        <div className="bento-container">
+          <div className="history-header">
+            <h2>The Curators</h2>
+            <p>Meet the visionaries behind our standard of excellence.</p>
+          </div>
+
+          <div className="curator-magazine-grid">
+            {team.map((member, i) => (
+              <motion.div
+                key={i}
+                className="curator-card"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <img src={member.img} alt={member.name} />
+                <div className="curator-overlay">
+                  <div className="curator-info">
+                    <h3>{member.name}</h3>
+                    <span>{member.role}</span>
+                  </div>
+                  <div className="curator-socials">
+                    <div className="c-social-icon"><Linkedin size={18} /></div>
+                    <div className="c-social-icon"><Twitter size={18} /></div>
+                    <div className="c-social-icon"><Mail size={18} /></div>
+                  </div>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
