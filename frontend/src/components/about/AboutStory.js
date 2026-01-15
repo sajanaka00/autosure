@@ -2,8 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 // Images
-import StoryImg1 from '../../assets/images/cars/car-about2.jpg';
-import StoryImg2 from '../../assets/images/cars/car-about3.jpg';
+import StoryImg1 from '../../assets/images/about/team1.jpg';
+import StoryImg2 from '../../assets/images/cars/car-about.jpg';
 
 const AboutStory = () => {
     return (

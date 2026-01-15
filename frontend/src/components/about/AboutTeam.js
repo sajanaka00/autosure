@@ -2,10 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 // Images
-import Team1 from '../../assets/images/about/team1.png';
-import Team2 from '../../assets/images/about/team2.png';
-import Team3 from '../../assets/images/about/team3.png';
-import Team4 from '../../assets/images/about/team4.png';
+import Team1 from '../../assets/images/about/team1.jpg';
+import Team2 from '../../assets/images/about/team2.jpg';
+import Team3 from '../../assets/images/about/team3.jpg';
+import Team4 from '../../assets/images/about/team4.jpg';
 
 const AboutTeam = () => {
     const team = [
