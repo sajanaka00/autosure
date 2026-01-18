@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
 import BlogHero from '../../components/blog/BlogHero';
@@ -16,6 +17,10 @@ import car4Image from '../../assets/images/cars/blog4.jpg';
 import car5Image from '../../assets/images/cars/blog5.jpg';
 import car6Image from '../../assets/images/cars/blog6.jpg';
 
+import { fallbackBlogPosts } from '../../data/blogData';
+
+import { tokenManager } from '../../utils/tokenManager';
+
 const BlogListPage = () => {
   const [blogPosts, setBlogPosts] = useState([]);
   const [allPosts, setAllPosts] = useState([]);
@@ -23,6 +28,16 @@ const BlogListPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [featuredPost, setFeaturedPost] = useState(null);
+  const [user, setUser] = useState(tokenManager.getUser());
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    tokenManager.removeToken();
+    tokenManager.removeUser();
+    setUser(null);
+    navigate('/login');
+  };
 
   const defaultImages = [car1Image, car2Image, car3Image, car4Image, car5Image, car6Image];
   const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
@@ -56,17 +71,9 @@ const BlogListPage = () => {
       }
     } catch (err) {
       console.log('Using fallback data due to:', err.message);
-      const fallbackData = [
-        { _id: '1', category: "Technology", title: "The Future of Electric Architecture", excerpt: "Exploring how EV platforms are revolutionizing vehicle design and interior space.", author: "Alex Morgan", createdAt: "2024-03-15", image: car1Image, readTime: "5 min read" },
-        { _id: '2', category: "Reviews", title: "2024 BMW X5: A Masterclass in Luxury", excerpt: "Detailed breakdown of the new X5's performance, comfort, and tech features.", author: "Sarah Jenkins", createdAt: "2024-03-12", image: car2Image, readTime: "8 min read" },
-        { _id: '3', category: "Industry News", title: "Global Automotive Trends Report 2024", excerpt: "Key insights into where the automotive industry is heading in the next decade.", author: "David Chen", createdAt: "2024-03-10", image: car3Image, readTime: "12 min read" },
-        { _id: '4', category: "Maintenance", title: "Essential Spring Car Care Guide", excerpt: "Get your vehicle ready for the warmer months with this comprehensive checklist.", author: "Mike Ross", createdAt: "2024-03-08", image: car4Image, readTime: "4 min read" },
-        { _id: '5', category: "Lifestyle", title: "Best Road Trip Routes for Summer", excerpt: "Discover hidden gems and scenic routes across the country for your next adventure.", author: "Emma Wilson", createdAt: "2024-03-05", image: car5Image, readTime: "6 min read" },
-        { _id: '6', category: "Technology", title: "AI in Automotive Safety Systems", excerpt: "How artificial intelligence is making our roads safer than ever before.", author: "James Lee", createdAt: "2024-03-01", image: car6Image, readTime: "7 min read" },
-      ];
-      setFeaturedPost(fallbackData[0]);
-      setAllPosts(fallbackData);
-      setBlogPosts(fallbackData);
+      setFeaturedPost(fallbackBlogPosts[0]);
+      setAllPosts(fallbackBlogPosts);
+      setBlogPosts(fallbackBlogPosts);
     } finally {
       setLoading(false);
     }
@@ -101,7 +108,7 @@ const BlogListPage = () => {
 
   return (
     <div className="modern-blog-page">
-      <Navbar />
+      <Navbar user={user} onLogout={handleLogout} />
 
       <main className="blog-main-content">
         <BlogHero />
