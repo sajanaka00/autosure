@@ -29,8 +29,41 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 
 // CORS configuration
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:3002',
+  'http://localhost:3003',
+  'http://localhost:3004',
+  'http://localhost:3005'
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, or server-to-server)
+    if (!origin) return callback(null, true);
+    
+    // Parse FRONTEND_URL if it exists (supporting comma-separated list of origins)
+    if (process.env.FRONTEND_URL) {
+      const envOrigins = process.env.FRONTEND_URL.split(',').map(o => o.trim());
+      if (envOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+    }
+    
+    // Check if origin is in the allowed local list
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    // Allow any localhost origin for easier local development
+    if (/^http:\/\/localhost:\d+$/.test(origin) || /^http:\/\/127\.0\.0\.1:\d+$/.test(origin)) {
+      return callback(null, true);
+    }
+
+    const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+    return callback(new Error(msg), false);
+  },
   credentials: true
 }));
 
