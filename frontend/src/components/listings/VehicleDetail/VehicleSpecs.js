@@ -1,6 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Gauge, Fuel, Zap, Settings, Timer, Ruler } from 'lucide-react';
+import { 
+    LightningLine, Dashboard2Line, ChipLine, 
+    GasStationLine, CompassLine, RulerLine 
+} from '@mingcute/react';
 
 const SpecCard = ({ label, value, subtext, icon: Icon, index }) => (
     <motion.div
@@ -11,7 +14,7 @@ const SpecCard = ({ label, value, subtext, icon: Icon, index }) => (
         transition={{ delay: index * 0.1 }}
     >
         <div className="vdp-spec-card-icon">
-            <Icon size={20} />
+            <Icon size={28} />
         </div>
         <div className="vdp-spec-card-content">
             <span className="vdp-spec-card-label">{label}</span>
@@ -26,12 +29,12 @@ const VehicleSpecs = () => {
 
     // Key highlights showcased visually
     const highlights = [
-        { label: "Horsepower", value: "301", subtext: "HP @ 5000", icon: Zap },
-        { label: "0-60 mph", value: "4.7s", subtext: "Acceleration", icon: Timer },
-        { label: "Engine", value: "2.0L", subtext: "Turbo I-4", icon: Settings },
-        { label: "MPG", value: "24/33", subtext: "City/Hwy", icon: Fuel },
-        { label: "Drive", value: "AWD", subtext: "System", icon: Gauge },
-        { label: "Length", value: "178.5\"", subtext: "Compact", icon: Ruler },
+        { label: "Horsepower", value: "301", subtext: "HP @ 5000", icon: LightningLine },
+        { label: "0-60 mph", value: "4.7s", subtext: "Acceleration", icon: Dashboard2Line },
+        { label: "Engine", value: "2.0L", subtext: "Turbo I-4", icon: ChipLine },
+        { label: "MPG", value: "24/33", subtext: "City/Hwy", icon: GasStationLine },
+        { label: "Drive", value: "AWD", subtext: "System", icon: CompassLine },
+        { label: "Length", value: "178.5\"", subtext: "Compact", icon: RulerLine },
     ];
 
     const detailedSpecs = {

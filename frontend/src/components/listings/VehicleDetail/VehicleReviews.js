@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star } from 'lucide-react';
 
@@ -119,14 +119,6 @@ const VehicleReviews = () => {
             </section>
 
             <div className="modern-reviews-grid">
-                <div className="modern-reviews-history">
-                    <AnimatePresence>
-                        {reviews.map((rev, idx) => (
-                            <ReviewItem key={rev.id} {...rev} index={idx} />
-                        ))}
-                    </AnimatePresence>
-                </div>
-
                 <div className="modern-review-submission">
                     <div className="modern-review-submission-wrapper">
                         {/* Sidebar: Purpose Statement */}
@@ -172,6 +164,14 @@ const VehicleReviews = () => {
                             </form>
                         </div>
                     </div>
+                </div>
+
+                <div className="modern-reviews-history">
+                    <AnimatePresence>
+                        {reviews.map((rev, idx) => (
+                            <ReviewItem key={rev.id} {...rev} index={idx} />
+                        ))}
+                    </AnimatePresence>
                 </div>
             </div>
         </div>

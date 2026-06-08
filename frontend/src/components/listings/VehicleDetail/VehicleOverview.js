@@ -1,6 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Car, Fuel, Gauge, Calendar, Settings, Zap, DoorOpen, Palette, Info } from 'lucide-react';
+import { 
+    Car3Line, Dashboard2Line, GasStationLine, CalendarLine, 
+    Settings6Line, LightningLine, CarDoorLine, PaletteLine 
+} from '@mingcute/react';
 
 const InfoItem = ({ icon: Icon, label, value, index }) => (
     <motion.div
@@ -11,7 +14,7 @@ const InfoItem = ({ icon: Icon, label, value, index }) => (
         transition={{ delay: index * 0.05 }}
     >
         <div className="vdp-info-icon-wrapper">
-            <Icon size={20} strokeWidth={1.5} />
+            <Icon size={24} />
         </div>
         <div className="vdp-info-content">
             <span className="vdp-info-label">{label}</span>
@@ -22,14 +25,14 @@ const InfoItem = ({ icon: Icon, label, value, index }) => (
 
 const VehicleOverview = () => {
     const stats = [
-        { icon: Car, label: "Body Type", value: "Sedan" },
-        { icon: Gauge, label: "Mileage", value: "850 mi" },
-        { icon: Fuel, label: "Fuel Type", value: "Premium" },
-        { icon: Calendar, label: "Year", value: "2024" },
-        { icon: Settings, label: "Transmission", value: "Automatic" },
-        { icon: Zap, label: "Engine", value: "2.0L Turbo" },
-        { icon: DoorOpen, label: "Doors", value: "4 Doors" },
-        { icon: Palette, label: "Ext. Color", value: "Brooklyn Grey" },
+        { icon: Car3Line, label: "Body Type", value: "Sedan" },
+        { icon: Dashboard2Line, label: "Mileage", value: "850 mi" },
+        { icon: GasStationLine, label: "Fuel Type", value: "Premium" },
+        { icon: CalendarLine, label: "Year", value: "2024" },
+        { icon: Settings6Line, label: "Transmission", value: "Automatic" },
+        { icon: LightningLine, label: "Engine", value: "2.0L Turbo" },
+        { icon: CarDoorLine, label: "Doors", value: "4 Doors" },
+        { icon: PaletteLine, label: "Ext. Color", value: "Brooklyn Grey" },
     ];
 
     return (

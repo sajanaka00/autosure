@@ -64,7 +64,6 @@ const VehicleDetailPage = () => {
             <aside className="modern-vdp-sidebar-col">
               <div className="modern-vdp-sticky">
                 <VehicleDealerCard />
-                {/* Could add a 'Schedule Test Drive' widget here too */}
               </div>
             </aside>
 

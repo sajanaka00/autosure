@@ -1,41 +1,51 @@
-/* --- Variables & Core Setup --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ============================================================
+   VARIABLES & CORE SETUP
+   ============================================================ */
 :root {
-  --vdp-bg: #ffffff;
+  --vdp-bg: #f8fafc;
   --vdp-card-bg: #ffffff;
-  --vdp-text-primary: #111827;
-  --vdp-text-secondary: #4b5563;
-  --vdp-accent: #2563eb;
-  --vdp-accent-hover: #1d4ed8;
-  --vdp-border: #f3f4f6;
+  --vdp-text-primary: #0f172a;
+  --vdp-text-secondary: #475569;
+  --vdp-accent: #3b82f6;
+  --vdp-accent-hover: #2563eb;
+  --vdp-border: #e2e8f0;
 
   --vdp-radius-lg: 24px;
   --vdp-radius-md: 16px;
   --vdp-radius-sm: 8px;
 
-  --vdp-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-  --vdp-shadow-md: 0 12px 24px -6px rgba(0, 0, 0, 0.08);
-  --vdp-shadow-lg: 0 24px 48px -12px rgba(0, 0, 0, 0.12);
-  --vdp-shadow-sticky: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --vdp-shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.03);
+  --vdp-shadow-md: 0 10px 30px -10px rgba(15, 23, 42, 0.06);
+  --vdp-shadow-lg: 0 20px 40px -15px rgba(15, 23, 42, 0.08);
+  --vdp-shadow-sticky: 0 20px 25px -5px rgba(15, 23, 42, 0.05), 0 10px 10px -5px rgba(15, 23, 42, 0.02);
 
-  --font-display: 'Roboto', sans-serif;
-  --font-body: 'Roboto', sans-serif;
+  --font-display: 'Poppins', sans-serif;
+  --font-body: 'Poppins', sans-serif;
 }
 
+/* ============================================================
+   ROOT SHELL
+   ============================================================ */
 .modern-vdp {
   background-color: var(--vdp-bg);
   min-height: 100vh;
   color: var(--vdp-text-primary);
   font-family: var(--font-body);
-  letter-spacing: normal;
+  letter-spacing: -0.01em;
+  overflow-x: hidden; /* prevent horizontal scroll */
 }
 
-/* --- Base Typography --- */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
+.modern-vdp-main {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+h1, h2, h3, h4, h5, h6,
 .vdp-section-title,
 .vdp-price-amount,
 .vdp-feature-card-title,
@@ -44,9 +54,7 @@ h6,
   letter-spacing: -0.02em;
 }
 
-p,
-span,
-label,
+p, span, label,
 .vdp-text-secondary,
 .vdp-feature-pill,
 .vdp-spec-label,
@@ -56,18 +64,77 @@ label,
   font-family: var(--font-body);
 }
 
+/* ============================================================
+   WRAPPER
+   ============================================================ */
 .modern-vdp-wrapper {
+  width: 100%;
   max-width: 1440px;
   margin: 0 auto;
   padding: 20px 80px;
+  box-sizing: border-box;
 }
 
-/* --- Section Spacing Utility --- */
+/* ============================================================
+   SECTION UTILITIES
+   ============================================================ */
 .vdp-content-section {
-  margin-bottom: 20px;
+  margin-bottom: 0; /* gap controlled by flex gap on .modern-vdp-left-col */
 }
 
-/* --- Hero Section & Bento Grid --- */
+.modern-vdp-full-width-block {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.py-12 {
+  padding-top: 56px;
+  padding-bottom: 48px;
+}
+
+.vdp-features-section,
+.vdp-spec-section,
+.vdp-location-section,
+.cl-reviews-section {
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+  margin-bottom: 0;
+}
+
+/* ============================================================
+   SECTION TITLE
+   ============================================================ */
+.vdp-section-title {
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--vdp-text-primary);
+  margin-bottom: 32px; /* underline at -8px, visual gap = 24px */
+  letter-spacing: -0.03em;
+  position: relative;
+  display: inline-block;
+  margin-top: 0;
+}
+
+.vdp-section-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 48px;
+  height: 4px;
+  background: var(--vdp-accent);
+  border-radius: 2px;
+}
+
+/* ============================================================
+   PAGE SECTIONS: HEADER & HERO
+   ============================================================ */
 .modern-vdp-header-section {
   padding-top: 100px;
 }
@@ -76,6 +143,9 @@ label,
   padding-top: 0;
 }
 
+/* ============================================================
+   HERO IMAGE GRID (Bento)
+   ============================================================ */
 .vdp-hero-grid {
   display: grid;
   grid-template-columns: 1fr 400px;
@@ -83,6 +153,8 @@ label,
   height: 520px;
   max-height: 520px;
   overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .vdp-hero-main {
@@ -91,6 +163,7 @@ label,
   border-radius: var(--vdp-radius-lg);
   overflow: hidden;
   box-shadow: var(--vdp-shadow-md);
+  min-width: 0; /* prevent overflow */
 }
 
 .vdp-hero-side {
@@ -99,6 +172,7 @@ label,
   grid-template-rows: repeat(2, 1fr);
   gap: 12px;
   height: 100%;
+  min-width: 0;
 }
 
 .vdp-hero-item {
@@ -107,12 +181,14 @@ label,
   overflow: hidden;
   height: 100%;
   cursor: pointer;
+  min-width: 0;
 }
 
 .vdp-img-cover {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
   transition: transform 0.4s ease;
 }
 
@@ -130,7 +206,7 @@ label,
   padding: 6px 12px;
   border-radius: 6px;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -159,46 +235,292 @@ label,
   letter-spacing: -0.02em;
 }
 
-/* --- Layout Structure --- */
+/* ============================================================
+   BODY LAYOUT: 2-COLUMN SPLIT
+   ============================================================ */
 .modern-vdp-main-grid {
   display: grid;
   grid-template-columns: 1fr 400px;
   gap: 64px;
   align-items: start;
-  /* padding-bottom: 80px; */
+  box-sizing: border-box;
 }
 
 .modern-vdp-left-col {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 56px;
+  min-width: 0;
 }
 
 .modern-vdp-sidebar-col {
   position: relative;
+  min-width: 0;
 }
 
 .modern-vdp-sticky {
   position: sticky;
-  top: 96px;
-  /* 80px navbar + 16px gap */
+  top: 96px; /* 80px navbar + 16px gap */
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-.vdp-section-divider {
-  display: none;
+/* ============================================================
+   COMPONENT: PAGE HEADER
+   ============================================================ */
+.modern-vdp-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
-/* --- Components: Dealer Card --- */
-.vdp-dealer-card {
-  background: var(--vdp-card-bg);
-  border-radius: var(--vdp-radius-lg);
-  padding: 32px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+.modern-vdp-header__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modern-vdp-header__tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.vdp-tag {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: 100px;
+  letter-spacing: 0.05em;
+}
+
+.vdp-tag--primary {
+  background: #10b981;
+  color: white;
+  border: 1px solid #10b981;
+}
+
+.vdp-tag--outline {
+  background: transparent;
+  color: var(--vdp-text-secondary);
   border: 1px solid var(--vdp-border);
+}
+
+.modern-vdp-header__title {
+  font-size: 42px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  margin: 0;
+  color: var(--vdp-text-primary);
+}
+
+.modern-vdp-header__sub-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+  font-size: 16px;
+  color: var(--vdp-text-secondary);
+}
+
+.vdp-sub-text {
+  font-weight: 500;
+}
+
+.vdp-dot-divider {
+  color: #cbd5e1;
+  font-size: 8px;
+}
+
+.modern-vdp-header__actions-block {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.modern-vdp-header__cta-group {
+  display: flex;
+  gap: 12px;
+}
+
+.modern-vdp-header__icon-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 100px;
+  border: 1px solid var(--vdp-border);
+  background: white;
+  color: var(--vdp-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.modern-vdp-header__icon-btn:hover {
+  background: #f8fafc;
+  color: var(--vdp-text-primary);
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+.vdp-btn-label {
+  display: inline-block;
+}
+
+.modern-vdp-header__price-mobile {
+  display: none;
+  margin-top: 16px;
+}
+
+.modern-vdp-header__price-mobile h2 {
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--vdp-text-primary);
+}
+
+/* ============================================================
+   COMPONENT: CAR OVERVIEW GRID
+   ============================================================ */
+.vdp-overview {
+  margin-bottom: 20px;
+}
+
+.vdp-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  row-gap: 32px;
+}
+
+.vdp-info-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  background: transparent;
+  border: none;
+  padding: 0;
+  min-width: 0;
+}
+
+.vdp-info-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--vdp-text-primary);
+  flex-shrink: 0;
+}
+
+.vdp-info-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.vdp-info-label {
+  font-size: 14px;
+  color: var(--vdp-text-secondary);
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.vdp-info-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--vdp-text-primary);
+}
+
+/* ============================================================
+   COMPONENT: DESCRIPTION
+   ============================================================ */
+.vdp-description {
+  margin-bottom: 0;
+}
+
+.vdp-description__content {
+  margin-bottom: 24px;
+}
+
+.vdp-description__paragraph {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--vdp-text-secondary);
+  margin-bottom: 16px;
+}
+
+.vdp-description__downloads {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+.vdp-description__download-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--vdp-accent);
+  text-decoration: none;
+  padding: 16px 24px;
+  border-radius: var(--vdp-radius-md);
+  transition: all 0.2s;
+  background-color: white;
+  border: 1px solid var(--vdp-border);
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.vdp-description__download-link:hover {
+  color: var(--vdp-accent-hover);
+  border-color: #cbd5e1;
+}
+
+.vdp-description__download-icon {
+  opacity: 0.7;
+  color: var(--vdp-text-secondary);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   COMPONENT: DEALER CARD
+   ============================================================ */
+.vdp-dealer-card {
+  background: white;
+  border-radius: var(--vdp-radius-lg);
+  border: 1px solid var(--vdp-border);
+  padding: 32px;
+  box-shadow: var(--vdp-shadow-lg);
   position: relative;
+  overflow: hidden;
+}
+
+.vdp-card-highlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--vdp-accent);
+}
+
+.vdp-dealer-header {
+  margin-bottom: 24px;
 }
 
 .vdp-dealer-price-header {
@@ -217,7 +539,7 @@ label,
 
 .vdp-price-amount {
   font-size: 40px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--vdp-text-primary);
   line-height: 1;
   letter-spacing: -0.03em;
@@ -237,37 +559,11 @@ label,
   color: #16a34a;
 }
 
-.vdp-divider {
-  display: none;
-}
-
-.vdp-dealer-info {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-bottom: 28px;
-}
-
 .vdp-dealer-avatar-row {
   display: flex;
   align-items: center;
   gap: 16px;
   margin-bottom: 25px;
-}
-
-.relative {
-  position: relative;
-}
-
-.vdp-dealer-online-badge {
-  position: absolute;
-  bottom: 2px;
-  right: 2px;
-  width: 12px;
-  height: 12px;
-  background-color: #10b981;
-  border: 2px solid white;
-  border-radius: 50%;
 }
 
 .vdp-dealer-avatar {
@@ -276,6 +572,7 @@ label,
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid var(--vdp-border);
+  flex-shrink: 0;
 }
 
 .vdp-dealer-name {
@@ -309,12 +606,15 @@ label,
   line-height: 1.4;
 }
 
-/* --- Buttons --- */
+/* ============================================================
+   COMPONENT: DEALER CARD BUTTONS
+   ============================================================ */
 .vdp-dealer-actions {
   display: flex;
   flex-direction: column;
   gap: 12px;
   margin-bottom: 24px;
+  margin-top: 24px;
 }
 
 .vdp-btn-row {
@@ -334,6 +634,7 @@ label,
   cursor: pointer;
   transition: all 0.2s ease;
   width: 100%;
+  font-family: var(--font-body);
 }
 
 .vdp-btn-primary {
@@ -370,561 +671,55 @@ label,
   border: 1px solid var(--vdp-border);
 }
 
-/* --- Responsive --- */
-@media (max-width: 1024px) {
-  .vdp-hero-grid {
-    grid-template-columns: 1fr 340px;
-    gap: 32px;
-    height: 400px;
-  }
-
-  .modern-vdp-main-grid {
-    grid-template-columns: 1fr 340px;
-    gap: 32px;
-  }
-}
-
-@media (max-width: 768px) {
-  .modern-vdp-wrapper {
-    padding: 0 20px;
-  }
-
-  .vdp-hero-grid {
-    grid-template-columns: 1fr;
-    height: auto;
-    gap: 12px;
-  }
-
-  .vdp-hero-main {
-    height: 300px;
-  }
-
-  .vdp-hero-side {
-    display: none;
-  }
-
-  .modern-vdp-main-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-
-  .modern-vdp-sticky {
-    position: static;
-  }
-
-  .mobile-reverse {
-    display: flex;
-    flex-direction: column-reverse;
-  }
-}
-
-/* --- Component: Header --- */
-.modern-vdp-header {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.modern-vdp-header__top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modern-vdp-header__tags {
-  display: flex;
-  gap: 8px;
-}
-
-.vdp-tag {
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  padding: 6px 12px;
-  border-radius: 100px;
-  letter-spacing: 0.05em;
-}
-
-.vdp-tag--primary {
-  background: #10b981;
-  color: white;
-  border: 1px solid #10b981;
-}
-
-.vdp-tag--outline {
-  background: transparent;
-  color: var(--vdp-text-secondary);
-  border: 1px solid var(--vdp-border);
-}
-
-.modern-vdp-header__title {
-  font-size: 42px;
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.04em;
-  margin: 0;
-  color: var(--vdp-text-primary);
-}
-
-.modern-vdp-header__sub-row {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 8px;
-  font-size: 16px;
-  color: var(--vdp-text-secondary);
-}
-
-.vdp-sub-text {
-  font-weight: 500;
-}
-
-.vdp-dot-divider {
-  color: #cbd5e1;
-  font-size: 8px;
-}
-
-.modern-vdp-header__actions-block {
-  display: flex;
-  align-items: center;
-}
-
-.modern-vdp-header__cta-group {
-  display: flex;
-  gap: 12px;
-}
-
-.modern-vdp-header__icon-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 100px;
-  border: 1px solid var(--vdp-border);
-  background: white;
-  color: var(--vdp-text-secondary);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.modern-vdp-header__icon-btn:hover {
-  background: #f8fafc;
-  color: var(--vdp-text-primary);
-  border-color: #cbd5e1;
-  transform: translateY(-1px);
-}
-
-.vdp-btn-label {
-  display: inline-block;
-}
-
-.modern-vdp-header__price-mobile {
-  display: none;
-  margin-top: 16px;
-}
-
-.modern-vdp-header__price-mobile h2 {
-  font-size: 32px;
-  font-weight: 800;
-  color: var(--vdp-text-primary);
-}
-
-@media (max-width: 768px) {
-  .modern-vdp-header__top {
-    flex-direction: column-reverse;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .modern-vdp-header__actions-block {
-    width: 100%;
-    justify-content: flex-end;
-  }
-
-  .modern-vdp-header__title {
-    font-size: 28px;
-  }
-
-  .modern-vdp-header__price-mobile {
-    display: block;
-  }
-
-  .vdp-btn-label {
-    display: none;
-  }
-
-  .modern-vdp-header__icon-btn {
-    padding: 0;
-    width: 40px;
-    justify-content: center;
-  }
-}
-
-/* --- Component: Overview Strip --- */
-.vdp-overview {
-  margin-bottom: 20px;
-}
-
-.vdp-section-title {
-  font-size: 24px;
-  font-weight: 700;
-  margin: 20px 0;
-  color: var(--vdp-text-primary);
-}
-
-.vdp-overview-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  grid-row-gap: 32px;
-}
-
-.vdp-info-item {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  background: transparent;
-  border: none;
-  padding: 0;
-}
-
-.vdp-info-item:hover {
-  border-color: transparent;
-  box-shadow: none;
-}
-
-.vdp-info-icon-wrapper {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #f1f5f9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--vdp-text-primary);
-  flex-shrink: 0;
-}
-
-.vdp-info-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.vdp-info-label {
-  font-size: 14px;
-  color: var(--vdp-text-secondary);
-  font-weight: 500;
-  margin-bottom: 2px;
-}
-
-.vdp-info-value {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--vdp-text-primary);
-}
-
-@media (max-width: 768px) {
-  .vdp-overview-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-}
-
-/* --- Components: Dealer Card --- */
-.vdp-dealer-card {
-  background: white;
-  border-radius: var(--vdp-radius-lg);
-  border: 1px solid var(--vdp-border);
-  padding: 32px;
-  box-shadow: var(--vdp-shadow-lg);
-  position: relative;
-  overflow: hidden;
-}
-
-.vdp-card-highlight {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: var(--vdp-accent);
-}
-
-.vdp-dealer-header {
-  margin-bottom: 24px;
-}
-
-/* --- Component: Features --- */
-.vdp-features-section {
-  background: white;
-  border-radius: var(--vdp-radius-lg);
-  padding: 24px;
-  border: 1px solid var(--vdp-border);
-  margin-bottom: 24px;
-}
-
-.vdp-features-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-}
-
-.vdp-feature-category {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.vdp-feature-category-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--vdp-text-primary);
-  margin: 0;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--vdp-border);
-}
-
-.vdp-feature-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.vdp-feature-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: var(--vdp-text-secondary);
-}
-
-.vdp-feature-check {
-  color: #10b981;
-}
-
-/* --- Component: Specs --- */
-.vdp-spec-section {
-  background: white;
-  border-radius: var(--vdp-radius-lg);
-  padding: 24px;
-  border: 1px solid var(--vdp-border);
-}
-
-.vdp-spec-columns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
-}
-
-.vdp-spec-category-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--vdp-text-primary);
-  margin-bottom: 16px;
-}
-
-.vdp-spec-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.vdp-spec-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid #f1f5f9;
-  font-size: 14px;
-}
-
-.vdp-spec-item:last-child {
-  border-bottom: none;
-}
-
-.vdp-spec-label {
-  color: var(--vdp-text-secondary);
-}
-
-.vdp-spec-value {
-  color: var(--vdp-text-primary);
-  font-weight: 600;
-}
-
-@media (max-width: 768px) {
-  .modern-vdp-header {
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .modern-vdp-header__title {
-    font-size: 24px;
-  }
-
-  .vdp-overview-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .vdp-info-item {
-    min-width: auto;
-  }
-
-  .vdp-features-grid,
-  .vdp-spec-columns {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-}
-
-/* --- Component: Description --- */
-.vdp-description {
-  margin-bottom: 40px;
-}
-
-.vdp-description__content {
-  margin-bottom: 24px;
-}
-
-.vdp-description__paragraph {
-  font-size: 16px;
-  line-height: 1.7;
-  color: var(--vdp-text-secondary);
-  margin-bottom: 16px;
-}
-
-.vdp-description__downloads {
-  display: flex;
-  flex-direction: row;
-  gap: 24px;
-  margin-top: 32px;
-  flex-wrap: wrap;
-}
-
-.vdp-description__download-link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--vdp-accent);
-  text-decoration: none;
-  padding: 16px 24px;
-  border-radius: var(--vdp-radius-md);
-  transition: all 0.2;
-  background-color: white;
-  border: 1px solid var(--vdp-border);
-  flex: 1;
-  min-width: 200px;
-}
-
-.vdp-description__download-link:hover {
-  color: var(--vdp-accent-hover);
-  border-color: #cbd5e1;
-}
-
-.vdp-description__download-icon {
-  opacity: 0.7;
-  color: var(--vdp-text-secondary);
-}
-
-.vdp-section-divider-large {
-  display: none;
-}
-
-/* --- Vehicle Description --- */
-.vdp-description {
-  margin-bottom: 0;
-}
-
-/* --- Layout Utilities --- */
-.modern-vdp-full-width-block {
-  width: 100%;
-  margin-bottom: 0;
-}
-
-.bg-white {
-  background-color: white;
-}
-
-.border-y {
-  border-top: 1px solid var(--vdp-border);
-  border-bottom: 1px solid var(--vdp-border);
-}
-
-.py-12 {
-  padding-top: 32px;
-  padding-bottom: 32px;
-}
-
-.vdp-features-section,
-.vdp-spec-section {
-  background: transparent;
-  border: none;
-  padding: 0;
-  box-shadow: none;
-  margin-bottom: 0;
-}
-
-.vdp-section-title {
-  font-size: 32px;
-  font-weight: 600;
-  color: var(--vdp-text-primary);
-  margin-bottom: 30px;
-  position: relative;
-  padding-left: 0;
-}
-
-/* --- Vehicle Features Grid --- */
+/* ============================================================
+   COMPONENT: VEHICLE HIGHLIGHTS GRID
+   ============================================================ */
 .vdp-features-row-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  gap: 28px;
   margin-bottom: 20px;
 }
 
 .vdp-feature-card-col {
   background: white;
-  border: 1px solid var(--vdp-border);
-  border-radius: var(--vdp-radius-lg);
-  padding: 24px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 20px;
+  padding: 28px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  transition: all 0.3s ease;
+  gap: 24px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.02);
 }
 
 .vdp-feature-card-col:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--vdp-shadow-md);
-  border-color: var(--vdp-accent);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.05);
 }
 
 .vdp-card-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--vdp-border);
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .vdp-card-icon {
-  width: 40px;
-  height: 40px;
-  background: #eff6ff;
-  color: var(--vdp-accent);
-  border-radius: 10px;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
 .vdp-card-title {
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--vdp-text-primary);
   margin: 0;
 }
@@ -932,7 +727,7 @@ label,
 .vdp-card-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -941,296 +736,139 @@ label,
 .vdp-card-list-item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   font-size: 14px;
+  font-weight: 500;
   color: var(--vdp-text-secondary);
+  transition: transform 0.2s ease;
+}
+
+.vdp-card-list-item:hover {
+  transform: translateX(4px);
+  color: var(--vdp-text-primary);
 }
 
 .vdp-item-check {
-  color: #10b981;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  padding: 4px;
   flex-shrink: 0;
 }
 
-@media (max-width: 1024px) {
-  .vdp-features-row-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
+/* Category-specific colours */
+.vdp-feature-cat-interior  { border-top: 4px solid #f59e0b; }
+.vdp-feature-cat-interior .vdp-card-icon  { background: rgba(245,158,11,.08); color:#d97706; }
+.vdp-feature-cat-interior .vdp-item-check { background: rgba(245,158,11,.08); color:#d97706; }
+.vdp-feature-cat-interior:hover { border-color:rgba(245,158,11,.5); box-shadow:0 20px 35px -8px rgba(245,158,11,.08); }
 
-@media (max-width: 640px) {
-  .vdp-features-row-grid {
-    grid-template-columns: 1fr;
-  }
-}
+.vdp-feature-cat-safety  { border-top: 4px solid #10b981; }
+.vdp-feature-cat-safety .vdp-card-icon  { background: rgba(16,185,129,.08); color:#059669; }
+.vdp-feature-cat-safety .vdp-item-check { background: rgba(16,185,129,.08); color:#059669; }
+.vdp-feature-cat-safety:hover { border-color:rgba(16,185,129,.5); box-shadow:0 20px 35px -8px rgba(16,185,129,.08); }
 
+.vdp-feature-cat-exterior  { border-top: 4px solid #3b82f6; }
+.vdp-feature-cat-exterior .vdp-card-icon  { background: rgba(59,130,246,.08); color:#2563eb; }
+.vdp-feature-cat-exterior .vdp-item-check { background: rgba(59,130,246,.08); color:#2563eb; }
+.vdp-feature-cat-exterior:hover { border-color:rgba(59,130,246,.5); box-shadow:0 20px 35px -8px rgba(59,130,246,.08); }
 
-/* --- Specs Modal --- */
-.vdp-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
+.vdp-feature-cat-tech  { border-top: 4px solid #8b5cf6; }
+.vdp-feature-cat-tech .vdp-card-icon  { background: rgba(139,92,246,.08); color:#7c3aed; }
+.vdp-feature-cat-tech .vdp-item-check { background: rgba(139,92,246,.08); color:#7c3aed; }
+.vdp-feature-cat-tech:hover { border-color:rgba(139,92,246,.5); box-shadow:0 20px 35px -8px rgba(139,92,246,.08); }
 
-.vdp-modal-content {
-  background: white;
-  width: 100%;
-  max-width: 800px;
-  max-height: 90vh;
-  border-radius: var(--vdp-radius-lg);
-  box-shadow: var(--vdp-shadow-xl);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.vdp-modal-header {
-  padding: 24px 32px;
-  border-bottom: 1px solid var(--vdp-border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: white;
-  position: sticky;
-  top: 0;
-}
-
-.vdp-modal-header h3 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--vdp-text-primary);
-}
-
-.vdp-modal-close {
-  background: none;
-  border: none;
-  font-size: 28px;
-  line-height: 1;
-  color: var(--vdp-text-secondary);
-  cursor: pointer;
-  padding: 4px;
-  transition: color 0.2s;
-}
-
-.vdp-modal-close:hover {
-  color: var(--vdp-text-primary);
-}
-
-.vdp-modal-body {
-  padding: 32px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-
-.vdp-spec-category h4 {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--vdp-text-primary);
-  margin: 0 0 16px 0;
-  padding-bottom: 8px;
-  border-bottom: 2px solid #f1f5f9;
-}
-
-.vdp-spec-table {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  column-gap: 48px;
-  row-gap: 12px;
-}
-
-.vdp-spec-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px dashed var(--vdp-border);
-}
-
-.vdp-spec-label {
-  color: var(--vdp-text-secondary);
-  font-size: 14px;
-}
-
-.vdp-spec-value {
-  color: var(--vdp-text-primary);
-  font-weight: 500;
-  font-size: 14px;
-  text-align: right;
-}
-
-@media (max-width: 640px) {
-  .vdp-spec-table {
-    grid-template-columns: 1fr;
-  }
-
-  .vdp-modal-body {
-    padding: 20px;
-  }
-}
-
-/* --- Bento Features Layout --- */
-.vdp-features-bento {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-}
-
-.vdp-feature-card {
-  background: white;
-  padding: 32px;
-  border-radius: var(--vdp-radius-lg);
-  border: 1px solid var(--vdp-border);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-}
-
-.vdp-feature-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--vdp-shadow-md);
-  border-color: rgba(37, 99, 235, 0.2);
-}
-
-/* Card Header */
-.vdp-feature-card-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.vdp-feature-icon-wrapper {
-  width: 48px;
-  height: 48px;
-  background: #eff6ff;
-  color: var(--vdp-accent);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.vdp-feature-card-title {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--vdp-text-primary);
-  margin: 0;
-}
-
-/* Pills Container */
-.vdp-feature-pills-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-/* Feature Pill */
-.vdp-feature-pill {
-  font-size: 14px;
-  color: var(--vdp-text-primary);
-  background: white;
-  padding: 8px 16px;
-  border-radius: 100px;
-  border: 1px solid #e2e8f0;
-  font-weight: 500;
-  transition: all 0.2s;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-}
-
-.vdp-feature-card:hover .vdp-feature-pill:hover {
-  background: var(--vdp-accent);
-  color: white;
-  border-color: var(--vdp-accent);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
-}
-
-@media (max-width: 768px) {
-  .vdp-features-bento {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* --- Visual Specs Grid --- */
+/* ============================================================
+   COMPONENT: TECHNICAL SPECS VISUAL GRID
+   ============================================================ */
 .vdp-visual-specs-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 16px;
-  margin-bottom: 32px;
+  gap: 20px;
+  margin-bottom: 40px;
 }
 
 .vdp-visual-spec-card {
   background: white;
-  padding: 24px 16px;
-  border-radius: var(--vdp-radius-lg);
-  border: 1px solid var(--vdp-border);
+  padding: 28px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 12px;
-  transition: all 0.3s ease;
+  gap: 14px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.01);
+  position: relative;
+  overflow: hidden;
 }
 
+.vdp-visual-spec-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: transparent;
+  transition: background 0.3s ease;
+}
+
+.vdp-visual-spec-card:hover::before { background: var(--vdp-accent); }
+
 .vdp-visual-spec-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--vdp-shadow-md);
-  border-color: var(--vdp-accent);
+  transform: translateY(-5px);
+  border-color: rgba(59, 130, 246, 0.25);
+  box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.08);
 }
 
 .vdp-spec-card-icon {
-  width: 40px;
-  height: 40px;
-  background: #f1f5f9;
-  color: var(--vdp-text-secondary);
+  width: 52px;
+  height: 52px;
+  background: #f8fafc;
+  color: #64748b;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
 }
 
 .vdp-visual-spec-card:hover .vdp-spec-card-icon {
   background: var(--vdp-accent);
   color: white;
+  transform: scale(1.05);
 }
 
 .vdp-spec-card-content {
-  margin-top: 15px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  gap: 6px;
 }
 
 .vdp-spec-card-label {
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: 600;
   text-transform: uppercase;
-  color: var(--vdp-text-secondary);
+  color: #64748b;
+  letter-spacing: 0.05em;
 }
 
 .vdp-spec-card-value {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 600;
   color: var(--vdp-text-primary);
-  line-height: 1.1;
+  line-height: 1.2;
 }
 
 .vdp-spec-card-sub {
-  font-size: 13px;
-  color: var(--vdp-text-secondary);
-  font-weight: 400;
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 500;
 }
 
 .vdp-specs-footer {
@@ -1240,131 +878,219 @@ label,
 
 .vdp-view-full-specs-btn {
   background: transparent;
-  border: 2px solid var(--vdp-border);
-  padding: 15px 25px;
-  border-radius: var(--vdp-radius-md);
+  border: 1px solid #cbd5e1;
+  padding: 16px 32px;
+  border-radius: 30px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--vdp-text-primary);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  font-family: var(--font-body);
 }
 
 .vdp-view-full-specs-btn:hover {
   background: var(--vdp-text-primary);
   color: white;
+  border-color: var(--vdp-text-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.1);
 }
 
-@media (max-width: 1024px) {
-  .vdp-visual-specs-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-  }
+/* ============================================================
+   COMPONENT: SPECS MODAL
+   ============================================================ */
+.vdp-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(12px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-@media (max-width: 640px) {
-  .vdp-visual-specs-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* --- Data Specs Table --- */
-.vdp-spec-columns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-}
-
-.vdp-spec-category-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--vdp-text-primary);
-  margin-bottom: 24px;
-  padding-bottom: 16px;
-  border-bottom: 2px solid var(--vdp-border);
-}
-
-.vdp-spec-list {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0;
-  border-radius: var(--vdp-radius-lg);
+.vdp-modal-content {
+  background: white;
+  width: 100%;
+  max-width: 850px;
+  max-height: 85vh;
+  border-radius: 28px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   overflow: hidden;
-  border: 1px solid var(--vdp-border);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e2e8f0;
 }
 
-.vdp-spec-item {
+.vdp-modal-header {
+  padding: 28px 40px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+}
+
+.vdp-modal-header h3 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--vdp-text-primary);
+}
+
+.vdp-modal-close {
+  background: #f1f5f9;
+  border: none;
+  font-size: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.vdp-modal-close:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.vdp-modal-body {
+  padding: 40px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.vdp-spec-category h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--vdp-text-primary);
+  margin: 0 0 20px 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.vdp-spec-table {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 56px;
+  row-gap: 14px;
+}
+
+.vdp-spec-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 18px 24px;
-  background: white;
-  border-bottom: 1px solid var(--vdp-border);
-  transition: background 0.2s;
-}
-
-.vdp-spec-item:last-child {
-  border-bottom: none;
-}
-
-.vdp-spec-item:hover {
-  background: #f8fafc;
+  padding: 10px 0;
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .vdp-spec-label {
-  font-size: 15px;
-  color: var(--vdp-text-secondary);
+  color: #64748b;
+  font-size: 14px;
   font-weight: 500;
 }
 
 .vdp-spec-value {
-  font-size: 16px;
   color: var(--vdp-text-primary);
   font-weight: 600;
+  font-size: 14px;
   text-align: right;
 }
 
-@media (max-width: 1024px) {
-  .vdp-features-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 32px;
-  }
-
-  .vdp-spec-columns {
-    gap: 40px;
-    grid-template-columns: 1fr;
-  }
+/* ============================================================
+   COMPONENT: LOCATION / MAP
+   ============================================================ */
+.vdp-address-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
-@media (max-width: 768px) {
-  .vdp-features-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .vdp-section-title {
-    font-size: 20px;
-    margin-bottom: 24px;
-  }
-
-  .py-12 {
-    padding-top: 40px;
-    padding-bottom: 40px;
-  }
+.vdp-address-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #334155;
 }
 
-/* --- Vehicle Reviews --- */
+.vdp-directions-link {
+  display: flex;
+  align-items: center;
+  padding: 12px 24px;
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 30px;
+  cursor: pointer;
+  color: var(--vdp-text-primary);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.vdp-directions-link:hover {
+  background: #f8fafc;
+  border-color: var(--vdp-accent);
+  color: var(--vdp-accent);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.05);
+}
+
+.vdp-map-container {
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.08);
+  transition: border-color 0.3s;
+}
+
+.vdp-map-container:hover {
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+/* ============================================================
+   COMPONENT: REVIEWS SECTION
+   ============================================================ */
 .modern-reviews-intro {
   text-align: center;
-  margin-bottom: 60px;
-  padding-top: 60px;
-  border-top: 1px solid var(--vdp-border);
+  margin-bottom: 48px;
+  padding-top: 56px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.cl-reviews-section .vdp-section-title,
+.cl-section-title {
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--vdp-text-primary);
+  margin-bottom: 32px;
+  letter-spacing: -0.03em;
+  position: relative;
+  display: inline-block;
 }
 
 .modern-rating-summary {
+  background: white;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 24px;
+  padding: 32px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 16px;
+  justify-content: center;
+  gap: 36px;
+  max-width: 500px;
+  margin: 0 auto;
+  box-shadow: 0 10px 25px -12px rgba(15, 23, 42, 0.04);
 }
 
 .modern-rating-circle {
@@ -1372,6 +1098,7 @@ label,
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .modern-rating-circle__content {
@@ -1387,46 +1114,159 @@ label,
 }
 
 .modern-rating-circle__number {
-  font-size: 56px;
-  font-weight: 800;
+  font-size: 44px;
+  font-weight: 600;
   color: var(--vdp-text-primary);
   line-height: 1;
-  letter-spacing: -0.02em;
 }
 
-/* Remove old label style if present, we removed the span from JS */
-.modern-rating-circle__label {
-  display: none;
+.modern-rating-summary__text {
+  text-align: left;
+}
+
+.modern-rating-summary__text span {
+  display: block;
+  font-weight: 600;
+  color: var(--vdp-text-primary);
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.modern-rating-summary__text p {
+  color: #64748b;
+  font-size: 14px;
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Reviews two-col grid */
+.modern-reviews-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 56px;
+  align-items: start;
+  margin-top: 48px;
+}
+
+.modern-reviews-history {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ============================================================
+   COMPONENT: REVIEW CARDS
+   ============================================================ */
+.modern-review-card {
+  background: white;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 4px 15px -2px rgba(15, 23, 42, 0.01);
+  transition: all 0.3s ease;
+}
+
+.modern-review-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 10px 25px -10px rgba(15, 23, 42, 0.04);
+}
+
+.modern-review-card__header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.modern-review-card__avatar {
+  width: 46px;
+  height: 46px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 16px;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  flex-shrink: 0;
+}
+
+.modern-review-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.modern-review-card__info h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--vdp-text-primary);
+}
+
+.modern-review-card__info span {
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.modern-review-card__rating {
+  margin-left: auto;
+}
+
+.modern-review-card__text {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--vdp-text-secondary);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ============================================================
+   COMPONENT: REVIEW SUBMISSION FORM
+   ============================================================ */
+.modern-review-submission {
+  background: white;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.05);
+}
+
+.modern-review-submission-wrapper {
+  display: flex;
+  flex-direction: column;
 }
 
 .modern-submission-sidebar {
-  background: #f8fafc;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-right: 1px solid var(--vdp-border);
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  padding: 36px 40px;
+  color: white;
 }
 
 .modern-submission-sidebar h3 {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  color: var(--vdp-text-primary);
-  line-height: 1.2;
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: white;
+  letter-spacing: -0.02em;
 }
 
 .modern-submission-sidebar p {
-  font-size: 15px;
-  color: var(--vdp-text-secondary);
+  font-size: 14px;
+  color: #94a3b8;
   line-height: 1.6;
+  margin: 0;
+  font-weight: 400;
 }
 
 .modern-submission-content {
-  padding: 40px 40px 0;
+  padding: 40px;
 }
 
-/* New Form Styles */
 .modern-submission-form {
   display: flex;
   flex-direction: column;
@@ -1440,11 +1280,11 @@ label,
 }
 
 .modern-input-label {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
-  color: var(--vdp-text-secondary);
-  letter-spacing: 0.02em;
+  color: #64748b;
+  letter-spacing: 0.05em;
 }
 
 .modern-input-row {
@@ -1455,261 +1295,688 @@ label,
 
 .modern-input-field {
   width: 100%;
-  padding: 16px;
+  padding: 14px 18px;
   background: #f8fafc;
-  border: 1px solid transparent;
-  border-radius: var(--vdp-radius-md);
-  font-size: 16px;
-  font-family: inherit;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  font-size: 14px;
   color: var(--vdp-text-primary);
-  transition: all 0.2s ease;
-  margin-bottom: 15px;
+  font-family: var(--font-body);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
 }
 
 .modern-input-field:focus {
   background: white;
   border-color: var(--vdp-accent);
-  box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
   outline: none;
 }
 
 textarea.modern-input-field {
-  min-height: 140px;
+  min-height: 120px;
   resize: vertical;
 }
 
-/* Rating Selectors - Clean Row */
 .modern-rating-group {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  padding: 10px 24px;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 16px;
+  padding: 24px;
   background: #f8fafc;
-  border-radius: var(--vdp-radius-md);
-  margin-bottom: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
 }
 
 .modern-rating-item {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  text-align: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 .modern-rating-label {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  text-transform: uppercase;
-  color: var(--vdp-text-secondary);
+  color: #475569;
 }
 
 .modern-submit-btn {
   background: var(--vdp-accent);
   color: white;
   font-weight: 600;
-  padding: 18px 36px;
-  border-radius: var(--vdp-radius-md);
+  padding: 16px 32px;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
-  align-self: flex-start;
-  font-size: 16px;
-  transition: all 0.2s;
-  width: 100%;
+  font-size: 15px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  font-family: var(--font-body);
+  width: 100%;
 }
 
 .modern-submit-btn:hover {
   background: var(--vdp-accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.15);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
 }
 
-@media (max-width: 768px) {
-  .modern-review-submission-wrapper {
+/* ============================================================
+   RESPONSIVE BREAKPOINTS
+   
+   Hierarchy (mobile-first approach, max-width):
+   > 1200px  : Full desktop
+   1200px    : Wide tablet / small desktop
+   992px     : Tablet landscape
+   768px     : Tablet portrait
+   576px     : Large mobile
+   480px     : Mobile
+   360px     : Small mobile
+   ============================================================ */
+
+/* ---- 1200px: Wide tablet / small desktop ---- */
+@media (max-width: 1200px) {
+  .modern-vdp-wrapper {
+    padding: 20px 40px;
+  }
+
+  .vdp-hero-grid {
+    grid-template-columns: 1fr 300px;
+    gap: 12px;
+    height: 440px;
+  }
+
+  .modern-vdp-main-grid {
+    grid-template-columns: 1fr 300px;
+    gap: 32px;
+  }
+
+  .modern-vdp-header__title {
+    font-size: 36px;
+  }
+
+  .vdp-overview-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .vdp-features-row-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .vdp-visual-specs-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .vdp-spec-card-value {
+    font-size: 22px;
+  }
+
+  .modern-reviews-grid {
     grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+/* ---- 992px: Tablet landscape — single-column layout ---- */
+@media (max-width: 992px) {
+  .modern-vdp-wrapper {
+    padding: 20px 24px;
+  }
+
+  /* Hero image: collapse to single image */
+  .vdp-hero-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+    gap: 0;
+  }
+
+  .vdp-hero-main {
+    height: 420px;
+    border-radius: var(--vdp-radius-md);
+  }
+
+  .vdp-hero-side {
+    display: none;
+  }
+
+  /* Body: single column, sidebar above content on mobile */
+  .modern-vdp-main-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  /* Show dealer card above the overview on mobile */
+  .modern-vdp-sidebar-col {
+    order: -1;
+  }
+
+  .modern-vdp-left-col {
+    order: 1;
+  }
+
+  /* Unstick the dealer card */
+  .modern-vdp-sticky {
+    position: static;
+  }
+
+  /* Dealer card: horizontal layout on tablet */
+  .vdp-dealer-card {
+    padding: 24px;
+  }
+
+  /* Overview grid: 4 columns still fits at 992 */
+  .vdp-overview-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  /* Features: 2 cols */
+  .vdp-features-row-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  /* Specs: 3 cols */
+  .vdp-visual-specs-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  /* Reviews: single column */
+  .modern-reviews-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+/* ---- 768px: Tablet portrait ---- */
+@media (max-width: 768px) {
+  .modern-vdp-wrapper {
+    padding: 16px 20px;
+  }
+
+  /* Uniform section padding — before full-width headers */
+  .py-12 {
+    padding-top: 44px;
+    padding-bottom: 40px;
+  }
+
+  /* Left-col gap on tablet */
+  .modern-vdp-left-col {
+    gap: 44px;
+  }
+
+  /* Header adjustments */
+  .modern-vdp-header-section {
+    padding-top: 92px;
+  }
+
+  .modern-vdp-header__top {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .modern-vdp-header__actions-block {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .modern-vdp-header__title {
+    font-size: 26px;
+  }
+
+  .modern-vdp-header__price-mobile {
+    display: none; /* Price is shown in dealer card which appears first on mobile */
+  }
+
+  .vdp-btn-label {
+    display: none;
+  }
+
+  .modern-vdp-header__icon-btn {
+    padding: 0;
+    width: 40px;
+    justify-content: center;
+  }
+
+  /* Hero image */
+  .vdp-hero-main {
+    height: 280px;
+    border-radius: 16px;
+  }
+
+  /* Overview: 2 col */
+  .vdp-overview-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    row-gap: 24px;
+  }
+
+  /* Section title size */
+  .vdp-section-title {
+    font-size: 26px;
+    margin-bottom: 28px;
+  }
+
+  /* Features: 2 col stays */
+  .vdp-features-row-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .vdp-feature-card-col {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .vdp-card-title {
+    font-size: 16px;
+  }
+
+  /* Specs: 2 cols on tablet */
+  .vdp-visual-specs-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .vdp-spec-card-value {
+    font-size: 20px;
+  }
+
+  /* Modal */
+  .vdp-modal-body {
+    padding: 24px;
+  }
+
+  .vdp-modal-header {
+    padding: 20px 24px;
+  }
+
+  .vdp-spec-table {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+  }
+
+  /* Dealer card */
+  .vdp-dealer-card {
+    padding: 20px;
+  }
+
+  .vdp-price-amount {
+    font-size: 32px;
+  }
+
+  /* Description downloads: stack vertically */
+  .vdp-description__downloads {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .vdp-description__download-link {
+    min-width: unset;
+    flex: none;
+    width: 100%;
+  }
+
+  /* Reviews */
+  .modern-reviews-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 32px;
+  }
+
+  .modern-review-submission {
+    border-radius: 16px;
   }
 
   .modern-submission-sidebar {
-    border-right: none;
-    border-bottom: 1px solid var(--vdp-border);
-    padding: 32px;
+    padding: 28px 24px;
   }
 
   .modern-submission-content {
-    padding: 32px;
+    padding: 28px 24px;
   }
 
-  .modern-rating-group {
+  .modern-input-row {
     grid-template-columns: 1fr;
     gap: 16px;
   }
 
-  .modern-rating-item {
-    flex-direction: row;
-    justify-content: space-between;
+  .modern-rating-summary {
+    flex-direction: column;
+    padding: 24px;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .modern-rating-summary__text {
+    text-align: center;
+  }
+
+  .modern-reviews-intro {
+    padding-top: 40px;
+    margin-bottom: 32px;
+  }
+
+  /* Map */
+  .vdp-address-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .vdp-directions-link {
+    align-self: flex-start;
   }
 }
 
-.modern-rating-circle__number {
-  font-size: 32px;
-  font-weight: 800;
-  color: var(--vdp-text-primary);
-  line-height: 1;
+/* ---- 576px: Large mobile ---- */
+@media (max-width: 576px) {
+  .modern-vdp-wrapper {
+    padding: 12px 16px;
+  }
+
+  .py-12 {
+    padding-top: 40px;
+    padding-bottom: 36px;
+  }
+
+  .modern-vdp-left-col {
+    gap: 40px;
+  }
+
+  .vdp-hero-main {
+    height: 240px;
+  }
+
+  /* Overview: still 2 col */
+  .vdp-overview-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    row-gap: 20px;
+  }
+
+  .vdp-info-icon-wrapper {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Features: 1 col on small phones */
+  .vdp-features-row-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .vdp-feature-card-col {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  /* Specs: 2 col */
+  .vdp-visual-specs-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .vdp-visual-spec-card {
+    padding: 20px 12px;
+    border-radius: 16px;
+    gap: 10px;
+  }
+
+  .vdp-spec-card-value {
+    font-size: 18px;
+  }
+
+  .vdp-spec-card-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Section title */
+  .vdp-section-title {
+    font-size: 22px;
+    margin-bottom: 24px;
+  }
+
+  /* Header */
+  .modern-vdp-header__title {
+    font-size: 22px;
+  }
+
+  .modern-vdp-header-section {
+    padding-top: 88px;
+  }
+
+  /* Dealer card */
+  .vdp-dealer-card {
+    padding: 16px;
+  }
+
+  .vdp-price-amount {
+    font-size: 28px;
+  }
+
+  .vdp-btn {
+    height: 48px;
+    font-size: 14px;
+  }
+
+  /* Reviews */
+  .modern-review-card {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .modern-rating-circle__number {
+    font-size: 36px;
+  }
+
+  .modern-submission-sidebar {
+    padding: 20px;
+  }
+
+  .modern-submission-content {
+    padding: 20px;
+  }
+
+  .modern-submission-sidebar h3 {
+    font-size: 18px;
+  }
+
+  .vdp-view-full-specs-btn {
+    width: 100%;
+    text-align: center;
+    padding: 14px 20px;
+  }
+
+  .modern-reviews-intro {
+    padding-top: 32px;
+  }
+
+  /* Map */
+  .vdp-map-container {
+    /* map iframe container — adjust height in component inline style */
+  }
 }
 
-.modern-rating-circle__label {
-  font-size: 12px;
-  text-transform: uppercase;
-  color: var(--vdp-text-secondary);
-  letter-spacing: 0.05em;
-  margin-top: 4px;
+/* ---- 480px: Mobile ---- */
+@media (max-width: 480px) {
+  .modern-vdp-wrapper {
+    padding: 10px 14px;
+  }
+
+  .py-12 {
+    padding-top: 36px;
+    padding-bottom: 32px;
+  }
+
+  .modern-vdp-left-col {
+    gap: 36px;
+  }
+
+  .vdp-hero-main {
+    height: 210px;
+    border-radius: 14px;
+  }
+
+  .modern-vdp-header__title {
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  .modern-vdp-header__price-mobile h2 {
+    font-size: 26px;
+  }
+
+  .vdp-overview-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    row-gap: 16px;
+  }
+
+  .vdp-info-label {
+    font-size: 12px;
+  }
+
+  .vdp-info-value {
+    font-size: 14px;
+  }
+
+  /* Specs: 2 col small */
+  .vdp-visual-specs-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .vdp-visual-spec-card {
+    padding: 16px 10px;
+    gap: 8px;
+  }
+
+  .vdp-spec-card-value {
+    font-size: 16px;
+  }
+
+  .vdp-spec-card-label {
+    font-size: 10px;
+  }
+
+  .vdp-spec-card-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .vdp-feature-card-col {
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .vdp-card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+  }
+
+  .vdp-card-list {
+    gap: 10px;
+  }
+
+  .vdp-card-list-item {
+    font-size: 13px;
+  }
+
+  .vdp-section-title {
+    font-size: 20px;
+    margin-bottom: 22px;
+  }
+
+  .vdp-description__paragraph {
+    font-size: 14px;
+  }
+
+  .modern-review-card {
+    padding: 16px;
+  }
+
+  .modern-rating-group {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .vdp-dealer-card {
+    padding: 16px;
+  }
+
+  .vdp-price-amount {
+    font-size: 26px;
+  }
+
+  .vdp-dealer-name {
+    font-size: 15px;
+  }
+
+  .vdp-btn {
+    height: 46px;
+    font-size: 13px;
+    gap: 8px;
+  }
 }
 
-.modern-rating-summary__text {
-  text-align: center;
-}
+/* ---- 360px: Small mobile ---- */
+@media (max-width: 360px) {
+  .modern-vdp-wrapper {
+    padding: 8px 12px;
+  }
 
-.modern-rating-summary__text span {
-  display: block;
-  font-weight: 700;
-  color: var(--vdp-text-primary);
-  font-size: 18px;
-}
+  .vdp-hero-main {
+    height: 180px;
+    border-radius: 12px;
+  }
 
-.modern-rating-summary__text p {
-  color: var(--vdp-text-secondary);
-  font-size: 14px;
-}
+  .modern-vdp-header__title {
+    font-size: 18px;
+  }
 
-.modern-review-card {
-  background: white;
-  border: 1px solid var(--vdp-border);
-  border-radius: var(--vdp-radius-lg);
-  padding: 24px;
-  margin-bottom: 16px;
-}
+  .vdp-overview-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
 
-.modern-review-card__header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 16px;
-}
+  .vdp-visual-specs-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
 
-.modern-review-card__avatar {
-  width: 40px;
-  height: 40px;
-  background: var(--vdp-accent);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-}
+  .vdp-features-row-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
 
-.modern-review-card__info h3 {
-  font-size: 16px;
-  font-weight: 700;
-  margin: 0;
-  color: var(--vdp-text-primary);
-}
+  .vdp-section-title {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
 
-.modern-review-card__info span {
-  font-size: 13px;
-  color: var(--vdp-text-secondary);
-}
+  .modern-vdp-header__icon-btn {
+    width: 36px;
+    height: 36px;
+  }
 
-.modern-review-card__rating {
-  margin-left: auto;
-}
+  .modern-vdp-header__cta-group {
+    gap: 8px;
+  }
 
-.modern-review-card__text {
-  font-size: 15px;
-  line-height: 1.6;
-  color: var(--vdp-text-secondary);
-}
-
-/* --- Reviews Section Updates --- */
-.modern-review-submission {
-  background: #f8fafc;
-  border-radius: var(--vdp-radius-lg);
-  padding: 32px;
-  margin-top: 40px;
-}
-
-.modern-review-submission h3 {
-  margin-top: 0;
-  margin-bottom: 24px;
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.modern-rating-selector-grid {
-  display: flex;
-  /* Single Row */
-  align-items: center;
-  gap: 40px;
-  /* Generous spacing */
-  flex-wrap: wrap;
-  margin-bottom: 24px;
-  padding: 24px;
-  background: white;
-  border: 1px solid var(--vdp-border);
-  border-radius: var(--vdp-radius-md);
-}
-
-.modern-rating-selector-row {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex: 1;
-  /* Distribute space evenly */
-}
-
-.modern-rating-selector-row span {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--vdp-text-secondary);
-}
-
-.modern-submission-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.modern-input-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.modern-submission-form input,
-.modern-submission-form textarea {
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid var(--vdp-border);
-  border-radius: var(--vdp-radius-md);
-  background: white;
-  font-size: 15px;
-}
-
-.modern-submission-form textarea {
-  min-height: 100px;
-}
-
-.modern-submit-btn {
-  background: var(--vdp-accent);
-  color: white;
-  font-weight: 600;
-  padding: 14px;
-  border-radius: var(--vdp-radius-md);
-  border: none;
-  cursor: pointer;
-  align-self: flex-start;
+  .vdp-tag {
+    font-size: 10px;
+    padding: 5px 10px;
+  }
 }

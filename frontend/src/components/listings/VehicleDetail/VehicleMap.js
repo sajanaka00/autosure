@@ -31,7 +31,7 @@ const VehicleMap = () => {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                style={{ height: '400px', width: '100%', borderRadius: '16px', overflow: 'hidden', border: '1px solid var(--vdp-border)' }}
+                style={{ height: 'clamp(220px, 40vw, 420px)', width: '100%', borderRadius: '16px', overflow: 'hidden', border: '1px solid var(--vdp-border)' }}
             >
                 <iframe {...MAP_CONFIG} title="BMW Dealership Location Map" />
             </motion.div>
