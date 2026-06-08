@@ -426,14 +426,6 @@ const VehicleListPage = () => {
                 </select>
               </div>
 
-              <button
-                className="vehicles-sale-add-btn"
-                onClick={handleAddVehicle}
-                title="Add Vehicle"
-              >
-                <Plus className="vehicles-sale-add-icon" />
-                <span className="vehicles-sale-add-text">Add Vehicle</span>
-              </button>
             </div>
           </div>
 

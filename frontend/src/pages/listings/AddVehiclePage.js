@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Upload, X, Star, Image as ImageIcon, Plus, Info, CheckCircle, ChevronRight, ChevronLeft, Camera, LayoutGrid, Settings, Gauge, Sparkles } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { ArrowLeft, Upload, X, Star, Image as ImageIcon, Plus, Info, CheckCircle } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { api } from '../../services/api';
 import { tokenManager } from '../../utils/tokenManager';
 import './AddVehiclePage.css';
-import Navbar from '../../components/layout/Navbar';
-import Footer from '../../components/layout/Footer';
+import DashboardLayout from '../../components/layout/DashboardLayout';
 
 // Sub-components
 import SidebarStepper from '../../components/listings/add-vehicle/SidebarStepper';
@@ -103,6 +102,27 @@ export default function AddVehiclePage({ user: propUser }) {
   const [imagePreviews, setImagePreviews] = useState([]);
   const [featuredImageIndex, setFeaturedImageIndex] = useState(0);
   const [activeStep, setActiveStep] = useState(1);
+  const location = useLocation();
+
+  // Handle Edit Mode
+  useEffect(() => {
+    if (location.state?.editMode && location.state?.vehicleData) {
+      const data = location.state.vehicleData;
+      setFormData(prev => ({
+        ...prev,
+        ...data,
+        // Map any mismatching fields if necessary
+        category: data.category || prev.category,
+        price: data.price || prev.price
+      }));
+      // If images exist, dealing with them is complex (they are URLs, file inputs need Files).
+      // For now, we might skip image pre-filling or handle it via a separate 'urls' state if supported.
+      if (data.image) {
+        // Mocking image preview
+        setImagePreviews([{ url: data.image, caption: 'Existing Image' }]);
+      }
+    }
+  }, [location.state]);
 
   // Predefined options
   const makeOptions = ['BMW', 'Mercedes-Benz', 'Toyota', 'Honda', 'Ford', 'Tesla', 'Audi', 'Jeep', 'Nissan', 'Hyundai'];
@@ -336,14 +356,27 @@ export default function AddVehiclePage({ user: propUser }) {
     }
   };
 
-  return (
-    <div className="titanium-layout">
-      <Navbar user={user} onLogout={() => navigate('/login')} />
+  const backToDash = (
+    <button
+      onClick={() => navigate('/dealer-dashboard')}
+      style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '8px', border: '1px solid #e2e8f0', background: 'white', cursor: 'pointer', fontSize: '0.875rem' }}
+    >
+      <ArrowLeft size={16} />
+      Back to Dashboard
+    </button>
+  );
 
-      <div className="titanium-content">
+  return (
+    <DashboardLayout
+      title="Add New Listing"
+      subtitle="Create a thorough listing to attract potential buyers."
+      actions={backToDash}
+    >
+      <div className="add-vehicle-content-wrapper">
+        {/* We keep the SidebarStepper but style it to fit the content area */}
         <SidebarStepper steps={stepNames} activeStep={activeStep} />
 
-        <main className="titanium-main">
+        <main className="add-vehicle-main-form">
           <div className="titanium-form-container">
             {/* Messages */}
             <AnimatePresence>
@@ -447,8 +480,6 @@ export default function AddVehiclePage({ user: propUser }) {
           </div>
         </main>
       </div>
-
-      <Footer />
-    </div>
+    </DashboardLayout>
   );
 }
