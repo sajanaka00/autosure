@@ -15,7 +15,7 @@ router.post('/', blogUpload.fields([
   try {
     // Parse the blog data from the form
     const blogData = JSON.parse(req.body.blogData);
-    
+
     // Handle uploaded images
     if (req.files) {
       if (req.files.heroImage) {
@@ -27,20 +27,20 @@ router.post('/', blogUpload.fields([
         blogData.images.content = `/uploads/blogs/${req.files.contentImage[0].filename}`;
       }
     }
-    
+
     const blog = new Blog(blogData);
     await blog.save();
-    
-    res.status(201).json({ 
-      success: true, 
+
+    res.status(201).json({
+      success: true,
       message: 'Blog created successfully',
-      data: blog 
+      data: blog
     });
   } catch (error) {
     if (error.code === 11000) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Blog with this slug already exists' 
+      return res.status(400).json({
+        success: false,
+        message: 'Blog with this slug already exists'
       });
     }
     res.status(400).json({
@@ -56,17 +56,17 @@ router.post('/json', asyncHandler(async (req, res) => {
   try {
     const blog = new Blog(req.body);
     await blog.save();
-    
-    res.status(201).json({ 
-      success: true, 
+
+    res.status(201).json({
+      success: true,
       message: 'Blog created successfully',
-      data: blog 
+      data: blog
     });
   } catch (error) {
     if (error.code === 11000) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Blog with this slug already exists' 
+      return res.status(400).json({
+        success: false,
+        message: 'Blog with this slug already exists'
       });
     }
     res.status(400).json({
@@ -84,7 +84,7 @@ router.post('/upload-only', blogUpload.fields([
 ]), asyncHandler(async (req, res) => {
   try {
     const uploadedFiles = {};
-    
+
     if (req.files) {
       if (req.files.heroImage) {
         uploadedFiles.heroImage = `/uploads/blogs/${req.files.heroImage[0].filename}`;
@@ -93,7 +93,7 @@ router.post('/upload-only', blogUpload.fields([
         uploadedFiles.contentImage = `/uploads/blogs/${req.files.contentImage[0].filename}`;
       }
     }
-    
+
     res.json({
       success: true,
       message: 'Blog images uploaded successfully',
@@ -193,7 +193,7 @@ router.get('/tags', asyncHandler(async (req, res) => {
 }));
 
 // GET /api/blogs/slug/:slug - Get blog by slug
-router.get('/slug/:slug', 
+router.get('/slug/:slug',
   param('slug').trim().isLength({ min: 1 }).withMessage('Invalid slug'),
   asyncHandler(async (req, res) => {
     const errors = validationResult(req);
@@ -211,15 +211,15 @@ router.get('/slug/:slug',
     // Get related blogs
     const relatedBlogs = await Blog.findSimilar(blog._id, blog.category, blog.tags, 3);
 
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       data: {
         ...blog.toObject(),
         approvedComments: blog.getApprovedComments(),
         related: relatedBlogs
       }
     });
-}));
+  }));
 
 // GET /api/blogs/:id/related - Related blogs
 router.get('/:id/related',
@@ -235,7 +235,7 @@ router.get('/:id/related',
     const relatedBlogs = await Blog.findSimilar(currentBlog._id, currentBlog.category, currentBlog.tags, parseInt(limit));
 
     res.json({ success: true, data: relatedBlogs });
-}));
+  }));
 
 // POST /api/blogs/:id/comments - Add comment
 router.post('/:id/comments',
@@ -273,12 +273,12 @@ router.post('/:id/comments',
     blog.comments.push(newComment);
     await blog.save();
 
-    res.status(201).json({ 
-      success: true, 
+    res.status(201).json({
+      success: true,
       message: 'Comment submitted successfully. It will be visible after approval.',
       data: newComment
     });
-}));
+  }));
 
 // PUT /api/blogs/:id/like - Like a blog post
 router.put('/:id/like',
@@ -292,11 +292,11 @@ router.put('/:id/like',
     blog.likes += 1;
     await blog.save();
 
-    res.json({ 
-      success: true, 
-      data: { likes: blog.likes } 
+    res.json({
+      success: true,
+      data: { likes: blog.likes }
     });
-}));
+  }));
 
 // PUT /api/blogs/:id/share - Track social shares
 router.put('/:id/share',
@@ -310,7 +310,7 @@ router.put('/:id/share',
 
     const { platform } = req.body;
     const blog = await Blog.findById(req.params.id);
-    
+
     if (!blog) {
       return res.status(404).json({ success: false, message: 'Blog not found' });
     }
@@ -318,11 +318,11 @@ router.put('/:id/share',
     blog.socialShares[platform] += 1;
     await blog.save();
 
-    res.json({ 
-      success: true, 
-      data: { socialShares: blog.socialShares } 
+    res.json({
+      success: true,
+      data: { socialShares: blog.socialShares }
     });
-}));
+  }));
 
 // GET /api/blogs/:id - Blog detail by ID
 router.get('/:id',
@@ -341,17 +341,22 @@ router.get('/:id',
     await blog.save();
 
     // Get related blogs
-    const relatedBlogs = await Blog.findSimilar(blog._id, blog.category, blog.tags, 3);
+    let relatedBlogs = [];
+    try {
+      relatedBlogs = await Blog.findSimilar(blog._id, blog.category, blog.tags, 3);
+    } catch (err) {
+      console.error('Error fetching related blogs:', err.message);
+    }
 
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       data: {
         ...blog.toObject(),
         approvedComments: blog.getApprovedComments(),
         related: relatedBlogs
       }
     });
-}));
+  }));
 
 // Error handling middleware
 router.use((error, req, res, next) => {

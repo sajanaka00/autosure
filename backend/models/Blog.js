@@ -48,16 +48,16 @@ const blogSchema = new mongoose.Schema({
     trim: true,
     maxlength: 200
   },
-  slug: { 
-    type: String, 
-    unique: true 
+  slug: {
+    type: String,
+    unique: true
   },
   category: {
     type: String,
     required: true,
-    enum: ['Sound', 'Accessories', 'Exterior', 'Body Kit', 'Fuel Systems', 
-           'Oil & Filters', 'Interior', 'Performance', 'Safety', 'Technology',
-           'Executive', 'Luxury', 'SUV', 'Sedan', 'Reviews']
+    enum: ['Sound', 'Accessories', 'Exterior', 'Body Kit', 'Fuel Systems',
+      'Oil & Filters', 'Interior', 'Performance', 'Safety', 'Technology',
+      'Executive', 'Luxury', 'SUV', 'Sedan', 'Reviews']
   },
   author: {
     name: {
@@ -166,7 +166,7 @@ const blogSchema = new mongoose.Schema({
   metaDescription: {
     type: String,
     trim: true,
-    maxlength: 160
+    maxlength: 300
   },
   featured: {
     type: Boolean,
@@ -211,12 +211,12 @@ blogSchema.index({ tags: 1 });
 blogSchema.index({ createdAt: -1 });
 
 // Virtual for comment count
-blogSchema.virtual('commentCount').get(function() {
+blogSchema.virtual('commentCount').get(function () {
   return this.comments.filter(comment => comment.approved).length;
 });
 
 // Pre-save middleware to auto-generate slug from title
-blogSchema.pre('save', function(next) {
+blogSchema.pre('save', function (next) {
   // Always generate slug from title if slug is empty
   if (!this.slug || this.isModified('title')) {
     this.slug = this.title
@@ -226,32 +226,33 @@ blogSchema.pre('save', function(next) {
       .replace(/-+/g, '-')
       .trim('-');
   }
-  
+
   if (this.isModified() && !this.isNew) {
     this.updatedAt = Date.now();
   }
-  
+
   next();
 });
 
 // Method to get approved comments
-blogSchema.methods.getApprovedComments = function() {
+blogSchema.methods.getApprovedComments = function () {
   return this.comments.filter(comment => comment.approved);
 };
 
 // Static method to find similar blogs
-blogSchema.statics.findSimilar = function(blogId, category, tags, limit = 3) {
+blogSchema.statics.findSimilar = function (blogId, category, tags, limit = 3) {
+  const searchTags = Array.isArray(tags) ? tags : [];
   return this.find({
     _id: { $ne: blogId },
     published: true,
     $or: [
       { category: category },
-      { tags: { $in: tags } }
+      { tags: { $in: searchTags } }
     ]
   })
-  .sort('-createdAt')
-  .limit(limit)
-  .select('-comments -content');
+    .sort('-createdAt')
+    .limit(limit)
+    .select('-comments -content');
 };
 
 module.exports = mongoose.model('Blog', blogSchema);
