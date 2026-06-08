@@ -9,6 +9,7 @@ import CreateBlogPage from './pages/blog/CreateBlogPage';
 import BlogDetailPage from './pages/blog/BlogDetailPage';
 import AboutUsPage from './pages/about/AboutUsPage';
 import ContactUsPage from './pages/contact/ContactUsPage';
+import DealerDashboardPage from './pages/dashboard/DealerDashboardPage';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
 
           {/* Contact US route */}
           <Route path="/contact-us" element={<ContactUsPage />} />
+          <Route path="/dealer-dashboard" element={<DealerDashboardPage />} />
 
           {/* Blog routes */}
           <Route path="/blog" element={<BlogListPage />} />
