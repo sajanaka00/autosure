@@ -1,0 +1,463 @@
+/* src/pages/dashboard/DealerDashboardPage.css */
+
+.dealer-dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8fafc;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Sidebar Styles */
+.dashboard-sidebar {
+    width: 280px;
+    background-color: #1a1a1a;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+    transition: all 0.3s ease;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 3rem;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #fff 0%, #e2e8f0 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    color: #a3a3a3;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+}
+
+.sidebar-item:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-item.active {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-profile-mini {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #3b82f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: white;
+}
+
+.user-info h4 {
+    font-size: 0.9rem;
+    margin: 0;
+    color: #fff;
+}
+
+.user-info p {
+    font-size: 0.8rem;
+    margin: 0;
+    color: #a3a3a3;
+}
+
+/* Main Content Styles */
+.dashboard-main {
+    flex: 1;
+    padding: 2rem 3rem;
+    overflow-y: auto;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+}
+
+.header-title h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 0.5rem 0;
+}
+
+.header-title p {
+    color: #64748b;
+    margin: 0;
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: #0f172a;
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #1e293b;
+    transform: translateY(-1px);
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
+    border-color: #cbd5e1;
+}
+
+.stat-info h3 {
+    font-size: 0.875rem;
+    color: #64748b;
+    font-weight: 500;
+    margin: 0 0 0.5rem 0;
+}
+
+.stat-info .value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.stat-info .trend {
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.trend.up {
+    color: #10b981;
+}
+
+.trend.down {
+    color: #ef4444;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Content Area */
+.dashboard-content-area {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    min-height: 400px;
+    padding: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .dashboard-sidebar {
+        width: 80px;
+        padding: 2rem 1rem;
+    }
+
+    .sidebar-logo span,
+    .sidebar-item span,
+    .user-info {
+        display: none;
+    }
+
+    .sidebar-item {
+        justify-content: center;
+        padding: 12px;
+    }
+
+    .dashboard-main {
+        padding: 2rem 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .dealer-dashboard-container {
+        flex-direction: column;
+    }
+
+    .dashboard-sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 1rem;
+        align-items: center;
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+    }
+}
+
+/* Listings Styles */
+.dashboard-listings-container {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+}
+
+.listings-table-header {
+    display: flex;
+    padding: 1rem 1.5rem;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    font-weight: 600;
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+.listing-row {
+    display: flex;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #f1f5f9;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.listing-row:last-child {
+    border-bottom: none;
+}
+
+.listing-row:hover {
+    background: #f8fafc;
+}
+
+.col-image {
+    flex: 0 0 80px;
+    margin-right: 1rem;
+}
+
+.col-image img {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.col-details {
+    flex: 2;
+    min-width: 0;
+}
+
+.col-details h4 {
+    margin: 0 0 4px 0;
+    font-size: 1rem;
+    color: #0f172a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.col-details p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.col-price {
+    flex: 0 0 120px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.col-status {
+    flex: 0 0 100px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-badge.active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-badge.pending {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.col-actions {
+    flex: 0 0 120px;
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.action-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #64748b;
+}
+
+.action-icon:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+.action-icon.edit:hover {
+    color: #3b82f6;
+    background: #eff6ff;
+}
+
+.action-icon.delete:hover {
+    color: #ef4444;
+    background: #fef2f2;
+}
+
+.mobile-only-price {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .listings-table-header {
+        display: none;
+    }
+
+    .listing-row {
+        flex-wrap: wrap;
+        padding: 1rem;
+    }
+
+    .col-image {
+        flex: 0 0 60px;
+    }
+
+    .col-image img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .col-price,
+    .col-status {
+        display: none;
+        /* Hide standard columns, show in details or new layout */
+    }
+
+    .col-details {
+        flex: 1;
+        margin-right: 0;
+    }
+
+    .mobile-only-price {
+        display: block;
+        font-weight: 700;
+        margin-top: 4px;
+        color: #0f172a;
+    }
+
+    .col-actions {
+        flex: 0 0 100%;
+        margin-top: 1rem;
+        justify-content: flex-start;
+        border-top: 1px dashed #e2e8f0;
+        padding-top: 0.75rem;
+    }
+}
